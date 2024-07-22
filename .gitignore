@@ -2,6 +2,7 @@
 *.class
 .idea
 src/src.iml
+leetcode.iml
 
 # Log file
 *.log
