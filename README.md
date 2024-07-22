@@ -2,7 +2,7 @@
 
 ## Following the advice mentioned in # https://blog.algomaster.io/p/15-leetcode-patterns
 
-##Plan: 
+## Plan: 
 
 - Every day learn one or two problems and practice repeatedly using pen and paper or plain text editor
 - End of 15th day, repeat the same for another 7 days
