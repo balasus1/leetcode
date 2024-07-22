@@ -11,4 +11,4 @@
 
 #Day | #Date |  #Problem | #Practice (no.of times) | #FileName | #Feedback
 --- | --- | --- | --- |---|---
-|1|07/22|Prefix Sum|2
+|1|07/22|Prefix Sum|3|PrefixSum.java|Understood the approach and algorithm well
