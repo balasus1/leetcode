@@ -9,6 +9,7 @@
 - On 23rd day, start and try solving leedCode problems
 - Monitor your progress using below table.
 
-#Day | #Date |  #Problem | #Practice (no.of times) | #FileName | #Feedback
---- | --- | --- | --- |---|---
-|1|07/22|Prefix Sum|3|PrefixSum.java|Understood the approach and algorithm well
+|  #Day | #Date |  #Problem | #Practice (no.of times) | #FileName | #Feedback |
+-------|-------| --- | --- |---|---|
+| 1     | 07/22 |Prefix Sum|3|PrefixSum.java|Understood the approach and algorithm well |
+| 2     | 07/24 |Prefix Sum|3|PrefixSum.java|Covered 3 different usecases of prefix sum |
