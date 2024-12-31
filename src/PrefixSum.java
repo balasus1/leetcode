@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,6 +70,20 @@ public class PrefixSum {
         }
 
         return count;
+    }
+
+    public static void main(String[] args) {
+        int[] nums = { 1, 2, 3, 4, 5, 6, 7 };
+        int[] findMaxSubArray = new int[]{0, 1, 0, 1, 0, 1, 0, 1, 0};
+        int[] subArraySumArray = new int[]{0, -1, 5, -25, -21,-22};
+        int[] prefixSumArray = prefixSum(nums);
+        System.out.println("Prefix Array: " + Arrays.toString(prefixSumArray));
+        int rangeSum = rangeSum(prefixSumArray, 1, 3);
+        System.out.println("Find max subarray: " + rangeSum);
+        int maxSubArray = findMaxSubArray(findMaxSubArray);
+        System.out.println("Max SubArray: " + maxSubArray);
+        int subArraySum = subarraySum(subArraySumArray, 4);
+        System.out.println("SubArray Sum: " + subArraySum);
     }
 
 }

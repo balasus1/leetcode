@@ -13,3 +13,4 @@
 -------|-------| --- | --- |---|---|
 | 1     | 07/22 |Prefix Sum|3|PrefixSum.java|Understood the approach and algorithm well |
 | 2     | 07/24 |Prefix Sum|3|PrefixSum.java|Covered 3 different usecases of prefix sum |
+| 3     | 12/31 |Majority Vote|3|MajorityElement.java|Covered 3 approaches. Boyer-Moore, HashMap, brute force |
