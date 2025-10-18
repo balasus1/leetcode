@@ -18,12 +18,12 @@
  */
 public class ExcelSheetColumnTitle {
     public static void main(String[] args) {
-        System.out.println(convertToTitle(1)); 
-        System.out.println(convertToTitle(2));
-        System.out.println(convertToTitle(3));
-        System.out.println(convertToTitle(26));
-        System.out.println(convertToTitle(27));
-        System.out.println(convertToTitle(28));
+        System.out.print(convertToTitle(1));
+        System.out.print(convertToTitle(2));
+        System.out.print(convertToTitle(3));
+        System.out.print(convertToTitle(26));
+        System.out.print(convertToTitle(27));
+        System.out.print(convertToTitle(28));
     }
 
     public static String convertToTitle(int n) {
