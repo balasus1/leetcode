@@ -1,6 +1,8 @@
 ### Pattern-1: 
 pattern-1, for-loop
 
+#### hint: row=1, col=row
+
 ```
 *
 * *
@@ -9,6 +11,7 @@ pattern-1, for-loop
 * * * * * 
 ```
 ### pattern-1a, java streams
+#### hint: row=1, col=row
 ```
 *
 * *
@@ -18,6 +21,7 @@ pattern-1, for-loop
 ```
 
 ### pattern-1b
+#### hint: row=1, col=row, print(colIndex)
 ```
 1
 12
@@ -26,6 +30,7 @@ pattern-1, for-loop
 12345
 ```
 ### pattern-1c
+#### hint: row=1, col=n, print(colIndex)
 ```
 * * * * * 
 * * * * * 
@@ -35,6 +40,7 @@ pattern-1, for-loop
 ``` 
 
 ### pattern-1d
+#### hint: row=1, row=n-1, col <= n-row+1
 ```
 * * * * * 
 * * * * 
@@ -44,6 +50,7 @@ pattern-1, for-loop
 ```
 
 ### pattern-1e
+#### hint: row=0, row < 2 * n, int totColRow = row > n ? 2 * n - row : row; col < totColRow
 ```
 *
 * *
@@ -57,7 +64,7 @@ pattern-1, for-loop
 ```
 
 ### pattern-1e
-
+#### hint: row=0, row < 2 * n, int totColRow = row > n ? 2 * n - row : row; numSpace = n - totColRow; space=0; space < numSpace; col < totColRow;
 ```
     * 
    * *

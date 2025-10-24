@@ -117,7 +117,6 @@ public class Patterns {
         System.out.println("pattern1h");
         for (int row = 1; row <= 2 * n; row++) {
             int totColRow = row > n ? 2 * n - row : row;
-
             for(int space = 0; space < n - totColRow; space++) {
                 System.out.print("  ");
             }
