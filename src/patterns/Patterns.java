@@ -16,6 +16,9 @@ public class Patterns {
         pattern1d(5);
         pattern1e(5);
         pattern1f(5);
+        pattern1g(5);
+        pattern1h(5);
+        pattern1i(4);
     }
 
     static void pattern1(int n) {
@@ -89,6 +92,52 @@ public class Patterns {
             }
             for(int col = 0; col < totColRow; col++) {
                 System.out.print("* ");
+            }
+            System.out.println();
+        }
+    }
+
+    static void pattern1g(int n) {
+        System.out.println("pattern1g");
+        // outer loop
+        for(int row = 1; row <= n; row++){
+            for(int space = 0; space < n-row; space++ ){
+                System.out.print("  ");
+            }
+            for (int col = row; col >= 1; col--) {
+                System.out.print(col + " ");
+            }
+            for (int col = 2; col <= row; col++) {
+                System.out.print(col + " ");
+            }
+            System.out.println();
+        }
+    }
+    static void pattern1h(int n) {
+        System.out.println("pattern1h");
+        for (int row = 1; row <= 2 * n; row++) {
+            int totColRow = row > n ? 2 * n - row : row;
+
+            for(int space = 0; space < n - totColRow; space++) {
+                System.out.print("  ");
+            }
+            for(int col = totColRow; col >= 1; col--) {
+                System.out.print(col + " ");
+            }
+            for(int col = 2; col <= totColRow; col++) {
+                System.out.print(col + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    static void pattern1i(int n) {
+        int originalN = n;
+        n = 2 * n;
+        for (int row = 0; row <= n; row++) {
+            for (int col = 0; col <=n; col++) {
+                int atEveryIndex = originalN - Math.min(Math.min(row, col), Math.min(n-row, n-col));
+                System.out.print(atEveryIndex + " ");
             }
             System.out.println();
         }
