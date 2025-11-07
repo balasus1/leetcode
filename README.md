@@ -44,6 +44,21 @@
     - Has Deque properties. Acts as stack and queue
     - Operations: push(for stack), poll, peek(first/last), add, remove, offer(for queue)
 
+
+## Points to remember:
+
+#####  Binary search:
+    - O(log n)
+    - Works only on sorted arrays
+    - avoid overflow with mid = (low + (high - low))/2
+        - v = a[mid]. if(v<t) low = mid+1. if (v>t) high = mid - 1, else return mid. if not found return -1;
+#####  Interpolation search:
+    - O(log(log n))
+    - Works only on sorted arrays
+    - while(v >= a[l] && v <= a[h] && l <= h, probe = l + (h-l)*(v-a[l])/(a[h]-a[l])
+
+
+
 ## Plan: 
 
 - Every day learn one or two problems and practice repeatedly using pen and paper or plain text editor
