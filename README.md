@@ -5,7 +5,7 @@
 ### Before that I am understanding DSA from Bro code https://www.youtube.com/watch?v=CBYHwZcbD-s in 4 hrs.  Skipping and skimming few of the concepts which I already knew to complete them in 2 hrs.
 
 - Big O notation:
-  ![Common DS - Big-O notation](D:\bala\12_preparation\practice\backend\leetcode\leetcode\src\resources\commonDS_big-o-notation.PNG "Common DS Big-O notation") (./resources/commonDS_big-o-notation.PNG)
+  ![Common DS - Big-O notation](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*cQ78W0R0qxaSgYLosfYMxg.png)
     - O(1) : constant time
       - map fetch, array element fetch, insert at start/end in linkedlist
     - O(log n): logarithmic time
