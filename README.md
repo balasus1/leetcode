@@ -56,9 +56,11 @@
     - O(log(log n))
     - Works only on sorted arrays
     - while(v >= a[l] && v <= a[h] && l <= h, probe = l + (h-l)*(v-a[l])/(a[h]-a[l])
-
-
-
+#####  Bubble sort:
+    - O(n^2). Quadratic time due to outer and inner loop approach
+    - A template sort algorithm for beginners to start with. Also called comparison sort
+#####  Undirected graph:
+#####  Directed graph:
 ## Plan: 
 
 - Every day learn one or two problems and practice repeatedly using pen and paper or plain text editor
