@@ -35,7 +35,6 @@ public class Sorting {
         System.out.println("Descending order");
         employeeList.forEach(System.out::println);
 
-        employeeList.forEach(System.out::println);
         System.out.println("sort using streams");
         List<Employee> streamSorting = employeeList.stream().sorted(Comparator.comparing(Employee::getEmpName)).toList();
         streamSorting.forEach(System.out::println);
