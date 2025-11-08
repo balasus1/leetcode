@@ -10,6 +10,7 @@ public class RecursiveExample {
         System.out.println("PowerUsingInteger: "+power1(2, 31));
         BigInteger result = powerUsingBigInteger(BigInteger.valueOf(2), BigInteger.valueOf(100));
         System.out.println("PowerUsingBigInteger for power of " + BigInteger.valueOf(100) + " is " + result);
+        System.out.println("SafeIntPower: " + safeIntPower(2, 30));
     }
 
     static int factorial(int n) {
@@ -20,6 +21,18 @@ public class RecursiveExample {
     static int power(int base, int exponent) {
         if (exponent < 1) return 1; // base case
         return base * power(base, exponent-1); // recursive case
+    }
+
+    static int safeIntPower(int base, int exponent) {
+        if (exponent < 1) return 1;
+        long result = 1l;
+        for (int i = 1; i <= exponent; i++) {
+            if (result > Integer.MAX_VALUE / base) {
+                throw new ArithmeticException("Overflow");
+            }
+            result *= base;
+        }
+        return (int) result;
     }
 
     // neat and safe for Integer value limit
@@ -36,7 +49,7 @@ public class RecursiveExample {
 
     static BigInteger powerUsingBigInteger(BigInteger base, BigInteger exponent) {
         BigInteger result = BigInteger.ONE;
-        for(int i = 0; i < 100; i++){
+        for(int i = 0; i < exponent.intValue(); i++){
             result = result.multiply(base);
         }
         return result;
