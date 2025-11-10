@@ -13,6 +13,10 @@ public class ContainerWithMostWater {
         int leftIndex = 0;
         int rightIndex = height.length - 1;
 
+        // Base case: This is not a container
+        if(height.length < 2) {
+            return 0;
+        }
         while(leftIndex < rightIndex){
             /*
                 area of rectangle = width * height
