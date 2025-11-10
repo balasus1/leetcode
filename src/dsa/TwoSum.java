@@ -1,18 +1,19 @@
 package dsa;
 
+import java.util.*;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 public class TwoSum {
     public static void main(String[] args) {
-        int[] twoSumProblem = getTwoSum(new int[]{2,7,11,15}, 9);
+        int[] twoSumProblem = getTwoSum(new int[]{2,7,11,8,1,15}, 9);
         System.out.println("TwoSum: " + Arrays.toString(twoSumProblem));
+        System.out.println("TwoSum unique set: " + getTwoSumUniquePairs(new int[]{2,7,11,8,1,5,4,15}, 9));
         int[] sortedArrays = new int[]{2,3,5,7,8,9,10,14,24,38};
         int[] result = getTwoSumOnSortedArray(sortedArrays, 7);
         System.out.println("TwoSum 2: " + Arrays.toString(result));
     }
 
+    // simple scenario
     static int[] getTwoSum(int[] nums, int target){
         Map<Integer, Integer> map = new HashMap<>();
         for(int i=0; i<nums.length; i++) {
@@ -44,5 +45,21 @@ public class TwoSum {
             }
         }
         throw new IllegalArgumentException("No two sum solution found");
+    }
+
+    //Two Sum (All Unique Pairs)
+    static List<List<Integer>> getTwoSumUniquePairs(int[] nums, int target) {
+        List<List<Integer>> result = new ArrayList<>();
+        Map<Integer, Integer> map = new HashMap<>();
+        for(int eachNum : nums){
+            int complement = target - eachNum;
+            if(map.containsKey(complement) && map.get(complement) > 0){
+                result.add(Arrays.asList(complement, eachNum));
+                map.put(complement, map.get(complement) - 1);
+            } else {
+                map.put(eachNum, map.getOrDefault(eachNum, 0) + 1);
+            }
+        }
+        return  result;
     }
 }
