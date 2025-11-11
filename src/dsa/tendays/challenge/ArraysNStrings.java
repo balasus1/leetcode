@@ -6,8 +6,17 @@ import java.util.List;
 public class ArraysNStrings {
     static void main(String[] args) {
         int[] subArrayTestCase = {1,2,3,4};
-        System.out.println(List.of("subArraySum:" + subArraySum(subArrayTestCase, 9)));
+        int[][] subMinMaxArrayTestCases = {
+                {1,-3,2,1,-1},
+                {-2,1,-3,4,-1,2,1,-5,4},
+                {5,4,1,7,8},
+                {-5,-2,-1,-8}
+        };
+        int minSubArray = findArrrayIndexOfMinSubArray(subMinMaxArrayTestCases);
+        System.out.println("Minimum Sub Array Index: " + minSubArray);
+        System.out.println(List.of("subArraySumForLoop:" + subArraySum(subArrayTestCase, 9)));
         System.out.println(List.of("subArraySumWhileLoop:" + subArraySumWhileLoop(subArrayTestCase, 9)));
+        System.out.println("Sub Array sum - Kadane's Algorithm:" + findMaxContingencySubArray(subMinMaxArrayTestCases));
     }
 
     /*
@@ -40,6 +49,7 @@ public class ArraysNStrings {
         return Arrays.asList(-1, -1);
     }
 
+    // using while loop
     static List<Integer> subArraySumWhileLoop(int[] nums, int target) {
         int leftIndex = 0, rightIndex = 0, sum = 0;
         while (rightIndex < nums.length) {
@@ -54,6 +64,39 @@ public class ArraysNStrings {
             rightIndex++;
         }
         return Arrays.asList(-1, -1);
+    }
+
+    // flip the comparison to greater for the max. sum of subarray non-contiguous
+    static int findArrrayIndexOfMinSubArray(int[][] subArrays){
+        int minIndex = 0;
+        int minArray = Arrays.stream(subArrays[minIndex]).sum();
+        for(int i = 0; i < subArrays.length; i++){
+            int eachArray = Arrays.stream(subArrays[i]).sum();
+            System.out.println("Sum of all elements of array at index[" + i + "]:" + eachArray);
+            if(eachArray < minArray) {
+                minIndex = i;
+            }
+        }
+        return minIndex;
+    }
+
+    // Kadane's Algorithm: Fids the max sum of any contiguous subarray
+    static int findMaxContingencySubArray(int[][] subArrays){
+        int maxIndex = 0;
+        int maxSum = Integer.MIN_VALUE;
+        for(int i = 0; i < subArrays.length; i++){
+            int currentArray = subArrays[i][0];
+            int maxArray = subArrays[i][0];
+            for(int j = 1; j < subArrays[i].length; j++){
+                currentArray = Math.max(subArrays[i][j], currentArray + subArrays[i][j]);
+                maxArray = Math.max(maxArray, currentArray);
+            }
+            if(maxArray > maxSum){
+                maxSum = maxArray;
+                maxIndex = i;
+            }
+        }
+        return maxIndex;
     }
 
 }
