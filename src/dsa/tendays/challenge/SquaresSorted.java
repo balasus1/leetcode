@@ -32,13 +32,13 @@ public class SquaresSorted {
             int leftElement = arr[leftIndex] * arr[leftIndex];
             int rightElement = arr[rightIndex] * arr[rightIndex];
             if(leftElement > rightElement) {
-                result[pointerPosition--] = leftElement;
+                result[pointerPosition] = leftElement;
                 leftIndex++;
             } else {
-                result[pointerPosition--] = rightElement;
+                result[pointerPosition] = rightElement;
                 rightIndex--;
             }
-
+            pointerPosition--;
         }
         return result;
     }
