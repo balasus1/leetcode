@@ -17,6 +17,8 @@ public class ArraysNStrings {
         System.out.println(List.of("subArraySumForLoop:" + subArraySum(subArrayTestCase, 9)));
         System.out.println(List.of("subArraySumWhileLoop:" + subArraySumWhileLoop(subArrayTestCase, 9)));
         System.out.println("Sub Array sum - Kadane's Algorithm:" + findMaxContingencySubArray(subMinMaxArrayTestCases));
+        System.out.println("Array elements: " + Arrays.toString(subArrayTestCase));
+        System.out.println("Product except Self Array: " + Arrays.toString(productExceptSelfArray(subArrayTestCase)));
     }
 
     /*
@@ -97,6 +99,22 @@ public class ArraysNStrings {
             }
         }
         return maxIndex;
+    }
+
+    static int[] productExceptSelfArray(int[] nums) {
+        int length = nums.length;
+        int[] result = new int[length];
+        result[0] = 1;
+        int rightIndex = 1;
+        for(int i = 1; i < length; i++){
+            result[i] = result[i-1] *  nums[i-1];
+            System.out.println(result[i]+"="+result[i-1] + "*" + nums[i-1]);
+        }
+        for (int i = length-1; i >= 0; i--) {
+            result[i] = result[i] * rightIndex;
+            rightIndex = rightIndex * nums[i];
+        }
+        return result;
     }
 
 }
