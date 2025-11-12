@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ArraysNStrings {
-    static void main(String[] args) {
+    public static void main(String[] args) {
         int[] subArrayTestCase = {1,2,3,4};
         int[][] subMinMaxArrayTestCases = {
                 {1,-3,2,1,-1},
@@ -12,6 +12,8 @@ public class ArraysNStrings {
                 {5,4,1,7,8},
                 {-5,-2,-1,-8}
         };
+        int[] removeDuplicatesTestCase = {1,2,2,3,3,4,4,5,6};
+        System.out.println("RemoveDuplicates: " + Arrays.toString(removeDuplicatesInArray(removeDuplicatesTestCase)));
         int minSubArray = findArrrayIndexOfMinSubArray(subMinMaxArrayTestCases);
         System.out.println("Minimum Sub Array Index: " + minSubArray);
         System.out.println(List.of("subArraySumForLoop:" + subArraySum(subArrayTestCase, 9)));
@@ -111,10 +113,24 @@ public class ArraysNStrings {
             System.out.println(result[i]+"="+result[i-1] + "*" + nums[i-1]);
         }
         for (int i = length-1; i >= 0; i--) {
+            System.out.println("result[i] * rightIndex: " + result[i] + "," + rightIndex);
             result[i] = result[i] * rightIndex;
-            rightIndex = rightIndex * nums[i];
+           rightIndex = rightIndex * nums[i];
         }
         return result;
     }
 
+    static int[] removeDuplicatesInArray(int[] nums) {
+        int rd = 0;
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[rd] != nums[i]) {
+                rd++;
+                System.out.println("nums[rd] != nums[i]" + nums[rd] + "=" + nums[i] + ",rd:" + rd);
+                nums[rd] = nums[i];
+            }
+        }
+        int[] uniqueArray = new int[rd + 1];
+        System.arraycopy(nums, 0, uniqueArray, 0, uniqueArray.length);
+        return uniqueArray;
+    }
 }
