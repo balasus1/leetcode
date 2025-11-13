@@ -21,6 +21,7 @@ public class ArraysNStrings {
         System.out.println("Sub Array sum - Kadane's Algorithm:" + findMaxContingencySubArray(subMinMaxArrayTestCases));
         System.out.println("Array elements: " + Arrays.toString(subArrayTestCase));
         System.out.println("Product except Self Array: " + Arrays.toString(productExceptSelfArray(subArrayTestCase)));
+        System.out.println("Rotate array by k: " + Arrays.toString(rotateArrayByK(subArrayTestCase, 2)));
     }
 
     /*
@@ -132,5 +133,21 @@ public class ArraysNStrings {
         int[] uniqueArray = new int[rd + 1];
         System.arraycopy(nums, 0, uniqueArray, 0, uniqueArray.length);
         return uniqueArray;
+    }
+
+    static int[] rotateArrayByK(int[] nums, int k){
+        k %= nums.length;
+        reverseArray(nums, 0, k-1);
+        reverseArray(nums, k, nums.length-1);
+        reverseArray(nums, 0, nums.length-1);
+        return nums;
+    }
+
+    static void reverseArray(int[] nums, int start, int end) {
+        while(start < end) {
+            int temp = nums[start];
+            nums[start++] = nums[end];
+            nums[end--] = temp;
+        }
     }
 }
