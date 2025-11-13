@@ -6,6 +6,7 @@ import java.util.List;
 public class ArraysNStrings {
     public static void main(String[] args) {
         int[] subArrayTestCase = {1,2,3,4};
+        int[] zeroMoves = {1,0,4,0,9,0,5};
         int[][] subMinMaxArrayTestCases = {
                 {1,-3,2,1,-1},
                 {-2,1,-3,4,-1,2,1,-5,4},
@@ -22,6 +23,7 @@ public class ArraysNStrings {
         System.out.println("Array elements: " + Arrays.toString(subArrayTestCase));
         System.out.println("Product except Self Array: " + Arrays.toString(productExceptSelfArray(subArrayTestCase)));
         System.out.println("Rotate array by k: " + Arrays.toString(rotateArrayByK(subArrayTestCase, 2)));
+        System.out.println("Move zeros: " + Arrays.toString(moveZeros(zeroMoves)));
     }
 
     /*
@@ -149,5 +151,18 @@ public class ArraysNStrings {
             nums[start++] = nums[end];
             nums[end--] = temp;
         }
+    }
+
+    static int[] moveZeros(int[] nums) {
+        int zpos = 0;
+        for (int eachNum : nums){
+            if(eachNum != 0) {
+                nums[zpos++] = eachNum;
+            }
+        }
+        while(zpos < nums.length) {
+            nums[zpos++] = 0;
+        }
+        return nums;
     }
 }
