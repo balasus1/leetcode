@@ -1,6 +1,8 @@
 package dsa.tendays.challenge;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 public class ArraysNStrings {
@@ -13,6 +15,7 @@ public class ArraysNStrings {
                 {5,4,1,7,8},
                 {-5,-2,-1,-8}
         };
+        int [][] mergeIntervalTestCase = {{1,3},{2,6},{8,10},{15,18}};
         int[] removeDuplicatesTestCase = {1,2,2,3,3,4,4,5,6};
         System.out.println("RemoveDuplicates: " + Arrays.toString(removeDuplicatesInArray(removeDuplicatesTestCase)));
         int minSubArray = findArrrayIndexOfMinSubArray(subMinMaxArrayTestCases);
@@ -24,6 +27,7 @@ public class ArraysNStrings {
         System.out.println("Product except Self Array: " + Arrays.toString(productExceptSelfArray(subArrayTestCase)));
         System.out.println("Rotate array by k: " + Arrays.toString(rotateArrayByK(subArrayTestCase, 2)));
         System.out.println("Move zeros: " + Arrays.toString(moveZeros(zeroMoves)));
+        System.out.println("Merge Intervals: " + Arrays.deepToString(mergeIntervals(mergeIntervalTestCase)));
     }
 
     /*
@@ -164,5 +168,39 @@ public class ArraysNStrings {
             nums[zpos++] = 0;
         }
         return nums;
+    }
+
+    static int[][] mergeIntervals(int[][] intervals) {
+        // Step 1: Sort all intervals by start time
+        Arrays.sort(intervals, Comparator.comparingInt(interval -> interval[0]));
+
+        List<int[]> mergedIntervals = new ArrayList<>();
+
+        // Step 2: Process each interval one by one
+        for (int[] currentInterval : intervals) {
+            int currentStart = currentInterval[0];
+            int currentEnd = currentInterval[1];
+
+            // Case A: First interval - always add it
+            if (mergedIntervals.isEmpty()) {
+                mergedIntervals.add(currentInterval);
+                continue;
+            }
+
+            // Get the most recently merged interval
+            int[] lastMergedInterval = mergedIntervals.get(mergedIntervals.size() - 1);
+            int lastMergedEnd = lastMergedInterval[1];
+
+            // Case B: No overlap - current starts after last ends
+            if (lastMergedEnd < currentStart) {
+                mergedIntervals.add(currentInterval);
+            }
+            // Case C: Overlap - extend the end time
+            else {
+                lastMergedInterval[1] = Math.max(lastMergedEnd, currentEnd);
+            }
+        }
+
+        return mergedIntervals.toArray(new int[mergedIntervals.size()][]);
     }
 }
