@@ -17,6 +17,7 @@ public class ArraysNStrings {
         };
         int [][] mergeIntervalTestCase = {{1,3},{2,6},{8,10},{15,18}};
         int[] removeDuplicatesTestCase = {1,2,2,3,3,4,4,5,6};
+        int[] subArrayProduct = {-2,-4,0,-1};
         System.out.println("RemoveDuplicates: " + Arrays.toString(removeDuplicatesInArray(removeDuplicatesTestCase)));
         int minSubArray = findArrrayIndexOfMinSubArray(subMinMaxArrayTestCases);
         System.out.println("Minimum Sub Array Index: " + minSubArray);
@@ -28,6 +29,7 @@ public class ArraysNStrings {
         System.out.println("Rotate array by k: " + Arrays.toString(rotateArrayByK(subArrayTestCase, 2)));
         System.out.println("Move zeros: " + Arrays.toString(moveZeros(zeroMoves)));
         System.out.println("Merge Intervals: " + Arrays.deepToString(mergeIntervals(mergeIntervalTestCase)));
+        System.out.println("Max product subArray: " + maxProductSubArray(subArrayProduct));
     }
 
     /*
@@ -202,5 +204,26 @@ public class ArraysNStrings {
         }
 
         return mergedIntervals.toArray(new int[mergedIntervals.size()][]);
+    }
+
+    static int maxProductSubArray(int[] nums) {
+        int maxProd = Integer.MIN_VALUE;
+        int currentProd = 1;
+
+        // left subarray is covered, zero is also covered. O(n), but negative is not covered.
+        // so now move from right to left
+        for(int currentVal : nums) {
+            currentProd *= currentVal;
+            maxProd = Math.max(maxProd, currentProd);
+            if(currentProd == 0) currentProd = 1;
+        }
+        currentProd = 1;
+        // right subarray is covered, zero is also covered + negative numbers also covered O(n)
+        for (int i = nums.length-1; i >= 0; i--){
+            currentProd *= nums[i];
+            maxProd = Math.max(maxProd, currentProd);
+            if(currentProd == 0) currentProd = 1;
+        }
+        return maxProd;
     }
 }
