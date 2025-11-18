@@ -18,6 +18,7 @@ public class ArraysNStrings {
         int [][] mergeIntervalTestCase = {{1,3},{2,6},{8,10},{15,18}};
         int[] removeDuplicatesTestCase = {1,2,2,3,3,4,4,5,6};
         int[] subArrayProduct = {-2,-4,0,-1};
+        int[] reArrangeAlternateIntegers = {1,2,-3,-4,5,-6};
         System.out.println("RemoveDuplicates: " + Arrays.toString(removeDuplicatesInArray(removeDuplicatesTestCase)));
         int minSubArray = findArrrayIndexOfMinSubArray(subMinMaxArrayTestCases);
         System.out.println("Minimum Sub Array Index: " + minSubArray);
@@ -30,6 +31,7 @@ public class ArraysNStrings {
         System.out.println("Move zeros: " + Arrays.toString(moveZeros(zeroMoves)));
         System.out.println("Merge Intervals: " + Arrays.deepToString(mergeIntervals(mergeIntervalTestCase)));
         System.out.println("Max product subArray: " + maxProductSubArray(subArrayProduct));
+        System.out.println("Re-arrange alternatively: " + Arrays.toString(reArraneAlternatively(reArrangeAlternateIntegers)));
     }
 
     /*
@@ -225,5 +227,29 @@ public class ArraysNStrings {
             if(currentProd == 0) currentProd = 1;
         }
         return maxProd;
+    }
+
+    static int[] reArraneAlternatively(int[] nums) {
+        List<Integer> positiveIntegers = new ArrayList<>();
+        List<Integer> negativeIntegers = new ArrayList<>();
+        boolean isPositive;
+        for(int n : nums) {
+            isPositive = n >= 0 ? positiveIntegers.add(n) : negativeIntegers.add(n);
+        }
+        int i=0,j=0,k=0;
+        int[] result = new int[nums.length];
+
+        while (i < positiveIntegers.size() && j < negativeIntegers.size()) {
+            result[k++] = positiveIntegers.get(i++);
+            result[k++] = negativeIntegers.get(j++);
+        }
+        // handle remaining alternates
+        while(i < positiveIntegers.size()) {
+            result[k++] = positiveIntegers.get(i++);
+        }
+        while (j < negativeIntegers.size()) {
+            result[k++] = negativeIntegers.get(j++);
+        }
+        return result;
     }
 }
