@@ -82,7 +82,13 @@ public class TwoPointers {
     }
 
     static int[] reverseSubArrayInPlace(int[] nums, int leftIndex, int rightIndex) {
-
+        while(leftIndex < rightIndex) {
+            int temp = nums[leftIndex];
+            nums[leftIndex] = nums[rightIndex];
+            nums[rightIndex] = temp;
+            leftIndex++;
+            rightIndex--;
+        }
         return nums;
     }
 }
