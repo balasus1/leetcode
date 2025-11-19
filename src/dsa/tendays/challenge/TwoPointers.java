@@ -7,10 +7,13 @@ public class TwoPointers {
         int[][] twoSumTestData = new int[][]{{1,2,3,4,6}, {1,3,4,7,10}};
         int[] twoSumSortedTestCase = twoSumSorted(twoSumTestData[0], 6);
         int[] removeDuplicatesData = new int[] {0,0,1,1,2};
+        int[] negativePartitionData = new int[] {1,-2,3,-4};
         System.out.println("Two sum sorted: " + Arrays.toString(twoSumSortedTestCase));
         System.out.println("Closest target: " + Arrays.toString(closetSumTarget(twoSumTestData[0], 8)));
         System.out.println("Remove duplicates on sorted array: " +
                 Arrays.toString(removeDuplicatesSortedArray(removeDuplicatesData)));
+        System.out.println("Negative partitions: " +
+                Arrays.toString(partitionNegatives(negativePartitionData)));
     }
 
     static int[] twoSumSorted(int[] nums, int target) {
@@ -63,5 +66,23 @@ public class TwoPointers {
         int[] result = new int[newIndex];
         System.arraycopy(nums, 0, result, 0, newIndex);
         return result;
+    }
+
+    static int[] partitionNegatives(int[] nums) {
+        int i = 0;
+        for(int j=0;j<nums.length;j++) {
+            if(nums[j] < 0) {
+                int tmp = nums[i];
+                nums[i] = nums[j];
+                nums[j] = tmp;
+                i++;
+            }
+        }
+        return nums;
+    }
+
+    static int[] reverseSubArrayInPlace(int[] nums, int leftIndex, int rightIndex) {
+
+        return nums;
     }
 }
