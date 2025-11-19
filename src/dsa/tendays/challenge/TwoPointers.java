@@ -8,12 +8,16 @@ public class TwoPointers {
         int[] twoSumSortedTestCase = twoSumSorted(twoSumTestData[0], 6);
         int[] removeDuplicatesData = new int[] {0,0,1,1,2};
         int[] negativePartitionData = new int[] {1,-2,3,-4};
+        int[] reverseSubArrayInPlaceData = new int[] {1,2,3,4,6};
+        int[] trapRainWaterData = new int[] {4,5,0,3,2,5};
         System.out.println("Two sum sorted: " + Arrays.toString(twoSumSortedTestCase));
         System.out.println("Closest target: " + Arrays.toString(closetSumTarget(twoSumTestData[0], 8)));
         System.out.println("Remove duplicates on sorted array: " +
                 Arrays.toString(removeDuplicatesSortedArray(removeDuplicatesData)));
         System.out.println("Negative partitions: " +
                 Arrays.toString(partitionNegatives(negativePartitionData)));
+        System.out.println("Reverse subArray: " + Arrays.toString(reverseSubArrayInPlace(reverseSubArrayInPlaceData, 1,3)));
+        System.out.println("Trap rain water content: " + trapRainWater(trapRainWaterData));
     }
 
     static int[] twoSumSorted(int[] nums, int target) {
@@ -90,5 +94,39 @@ public class TwoPointers {
             rightIndex--;
         }
         return nums;
+    }
+
+    static int trapRainWater(int[] height) {
+        int leftIndex = 0, rightIndex = height.length-1;
+        int leftMax = 0, rightMax = 0, waterHoldingCapacity = 0;
+        while (leftIndex < rightIndex) {
+            if(height[leftIndex] < height[rightIndex]) {
+                System.out.println("leftIndex: " + leftIndex + ",Height[left]:" + height[leftIndex] + ",Height[right]:" + height[rightIndex]);
+                if(height[leftIndex] >= leftMax) {
+                    System.out.println("Height[left]:" + height[leftIndex] + ",leftMax:" + leftMax);
+                    leftMax = height[leftIndex];
+                    System.out.println("leftMax = " + leftMax);
+                } else {
+                    System.out.println("from left: waterHoldingCapacity:"
+                            + waterHoldingCapacity +", leftMax:" + leftMax +", height[left]:" +  height[leftIndex]);
+                    waterHoldingCapacity += leftMax - height[leftIndex];
+                    System.out.println("from left: waterHoldingCapacity: " + waterHoldingCapacity);
+                }
+                leftIndex++;
+            } else {
+                if(height[rightIndex] >= rightMax) {
+                    System.out.println("Height[rightIndex]:" + height[rightIndex] + ",rightMax:" + rightMax);
+                    rightMax = height[rightIndex];
+                    System.out.println("rightMax = " + rightMax);
+                } else {
+                    System.out.println("from right: waterHoldingCapacity:"
+                            + waterHoldingCapacity +", rightMax:" + rightMax +", height[rightIndex]:" +  height[rightIndex]);
+                    waterHoldingCapacity += rightMax - height[rightIndex];
+                    System.out.println("from right: waterHoldingCapacity: " + waterHoldingCapacity);
+                }
+                rightIndex--;
+            }
+        }
+        return waterHoldingCapacity;
     }
 }
