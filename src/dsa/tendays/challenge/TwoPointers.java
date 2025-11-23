@@ -10,6 +10,7 @@ public class TwoPointers {
         int[] negativePartitionData = new int[] {1,-2,3,-4};
         int[] reverseSubArrayInPlaceData = new int[] {1,2,3,4,6};
         int[] trapRainWaterData = new int[] {4,5,0,3,2,5};
+        int[] threeSumClosestData = new int[] {-1000, -2, -1, 0, 1, 2, 1000};
         System.out.println("Two sum sorted: " + Arrays.toString(twoSumSortedTestCase));
         System.out.println("Closest target: " + Arrays.toString(closetSumTarget(twoSumTestData[0], 8)));
         System.out.println("Remove duplicates on sorted array: " +
@@ -18,6 +19,7 @@ public class TwoPointers {
                 Arrays.toString(partitionNegatives(negativePartitionData)));
         System.out.println("Reverse subArray: " + Arrays.toString(reverseSubArrayInPlace(reverseSubArrayInPlaceData, 1,3)));
         System.out.println("Trap rain water content: " + trapRainWater(trapRainWaterData));
+        System.out.println("3 sum closest to target: " + threeSumClosest(threeSumClosestData, 9));
     }
 
     static int[] twoSumSorted(int[] nums, int target) {
@@ -128,5 +130,29 @@ public class TwoPointers {
             }
         }
         return waterHoldingCapacity;
+    }
+
+    static int threeSumClosest(int[] nums, int target) {
+        Arrays.sort(nums);
+        System.out.println("sorted array: " + Arrays.toString(nums));
+        int best = nums[0] + nums[1] + nums[2];
+        for (int i = 0; i < nums.length-2; i++) {
+            int leftIndex = 0, rightIndex = nums.length-1;
+            while(leftIndex < rightIndex) {
+                if(i >0 && nums[i] == nums[i-1]) continue;;
+                int sum = nums[i] + nums[leftIndex] + nums[rightIndex];
+                if(Math.abs(sum - target) < Math.abs(best - target)) {
+                    best = sum;
+                }
+                if(sum < target) {
+                    System.out.println("leftIndex: " + leftIndex + "Sum: "+ sum + ", target:" + target);
+                    leftIndex++;
+                } else {
+                    System.out.println("rightIndex: " + leftIndex + "Sum: "+ sum + ", target:" + target);
+                    rightIndex--;
+                }
+            }
+        }
+        return best;
     }
 }
