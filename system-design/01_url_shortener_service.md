@@ -1,5 +1,8 @@
 # System Design: Production-Grade Globally Distributed URL Shortener Service (TinyURL / Bitly)
 
+> **Architectural Reference Baseline**:
+> This system design strictly adopts the dimensional capacity equations, hardware latency thresholds, and cost modeling defined in the master [Capacity Planning & Cloud Cost Estimation Framework (00_capacity_planning_and_cost_estimation_framework.md)](file:///Volumes/Workspace/dev/github/personal/balasus1/leetcode/system-design/00_capacity_planning_and_cost_estimation_framework.md).
+
 ---
 
 ## 1. Fundamentals, Latency Metrics & Technical Glossary
@@ -70,6 +73,8 @@ Where $p$ is the probability of an individual microservice being slow (e.g., $p 
 ---
 
 ## 3. Back-of-the-Envelope Calculations & Capacity Planning
+
+*(Referencing mathematical formulas from `00_capacity_planning_and_cost_estimation_framework.md`)*
 
 ### 3.1 Baseline Assumptions
 - **Baseline Write Traffic**: $1\text{ Million (1,000,000)}$ new URL shortening requests per month.
@@ -151,9 +156,8 @@ Per Record Schema Breakdown:
 [3] Storage over 10 Years:
     120,000,000 records * 600 Bytes     = 72,000,000,000 Bytes = 72 GB
 
-Conclusion on Storage:
-    The dataset is compact (~36 GB for 5 years). An indexed RDBMS (PostgreSQL/MySQL)
-    with SSD/NVMe storage can comfortably keep the active working set and indices in RAM.
+[4] Replicated Production Storage (3x Multi-AZ + 50% Backup Snapshots):
+    36 GB * 3 (Replicas) + 18 GB (Snapshots) = 126 GB Usable Storage
 
 ================================================================================
 MEMORY & CACHING REQUIREMENTS (80-20 PARETO PRINCIPLE)
@@ -187,6 +191,24 @@ NETWORK BANDWIDTH ESTIMATION (INGRESS / EGRESS)
     - Read Egress: 3.86 reads/sec * 600 Bytes (HTTP 302 Header + Location) = 2,316 Bytes/sec
     Total Average Egress Bandwidth  = 117 + 2,316 = 2,433 Bytes/sec ≈ 2.43 KB/s ≈ 0.02 Mbps
     Peak Egress Bandwidth           ≈ 0.06 Mbps
+
+================================================================================
+MONTHLY CLOUD COST ESTIMATION (AWS US-EAST PRODUCTION DEPLOYMENT)
+================================================================================
+[1] Compute Tier:
+    - 2 x AWS c6i.large (2 vCPU, 4 GB RAM) for App Pods ($62.05/mo each) = $124.10 / mo
+[2] Database Tier:
+    - AWS RDS PostgreSQL db.t4g.medium Multi-AZ (2 vCPU, 4 GB RAM)      = $105.12 / mo
+[3] Cache Tier:
+    - AWS ElastiCache Redis cache.t4g.micro (0.5 GB RAM) Primary + Replica = $26.28 / mo
+[4] Storage & Snapshots:
+    - 150 GB EBS gp3 SSD ($12.00) + 100 GB S3 Snapshots ($2.30)        = $14.30 / mo
+[5] Network Egress & Edge CDN (Cloudflare Pro Plan):
+    - Base Plan + Bandwidth Tolls                                       = $25.00 / mo
+--------------------------------------------------------------------------------
+TOTAL ESTIMATED MONTHLY CLOUD SPEND                                     ≈ $294.80 / month
+TOTAL ESTIMATED ANNUAL CLOUD SPEND                                      ≈ $3,537.60 / year
+================================================================================
 ```
 
 ---
@@ -647,165 +669,69 @@ public class UrlShortenerService {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise URL Shortener</title>
+    <title>URL Shortener</title>
     <style>
-        :root {
-            --bg: #0f172a;
-            --card-bg: #1e293b;
-            --accent: #38bdf8;
-            --text: #f8fafc;
-            --text-dim: #94a3b8;
-            --success: #22c55e;
-            --error: #ef4444;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            background: var(--card-bg);
-            padding: 2.5rem;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5);
-            max-width: 500px;
-            width: 100%;
-        }
-        h1 { margin-top: 0; font-size: 1.8rem; text-align: center; }
-        .form-group { margin-bottom: 1.2rem; }
-        label { display: block; margin-bottom: 0.5rem; color: var(--text-dim); }
-        input {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            background: #0f172a;
-            border: 1px solid #334155;
-            border-radius: 8px;
-            color: #fff;
-            box-sizing: border-box;
-            font-size: 1rem;
-        }
-        input:focus { outline: none; border-color: var(--accent); }
-        button.btn-primary {
-            width: 100%;
-            padding: 0.85rem;
-            background: var(--accent);
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            color: #0f172a;
-            cursor: pointer;
-            transition: opacity 0.2s;
-        }
-        button.btn-primary:hover { opacity: 0.9; }
-        .result-box {
-            display: none;
-            margin-top: 1.5rem;
-            padding: 1rem;
-            background: #0f172a;
-            border-radius: 8px;
-            border: 1px dashed var(--accent);
-            align-items: center;
-            justify-content: space-between;
-        }
-        .result-link { color: var(--accent); font-weight: 600; word-break: break-all; }
-        .copy-btn {
-            background: #334155;
-            border: none;
-            color: #fff;
-            padding: 0.5rem 0.8rem;
-            border-radius: 6px;
-            cursor: pointer;
-            margin-left: 10px;
-            white-space: nowrap;
-        }
+        body { font-family: -apple-system, sans-serif; background: #0f172a; color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .card { background: #1e293b; padding: 2rem; border-radius: 12px; width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        input { width: 100%; padding: 0.75rem; margin: 0.5rem 0 1rem; background: #0f172a; border: 1px solid #334155; border-radius: 6px; color: #fff; box-sizing: border-box; }
+        button { width: 100%; padding: 0.75rem; background: #38bdf8; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; color: #0f172a; }
+        .result { display: none; margin-top: 1rem; padding: 0.75rem; background: #0f172a; border-radius: 6px; justify-content: space-between; align-items: center; }
+        .copy-btn { width: auto; padding: 0.4rem 0.8rem; background: #334155; color: #fff; }
     </style>
 </head>
 <body>
-
-<div class="container">
-    <h1>🚀 Shorten URL</h1>
-    <form id="shortenForm">
-        <div class="form-group">
-            <label for="longUrl">Destination Long URL *</label>
-            <input type="url" id="longUrl" required placeholder="https://very-long-url.com/something">
-        </div>
-        <div class="form-group">
-            <label for="customAlias">Custom Alias (Optional)</label>
-            <input type="text" id="customAlias" placeholder="e.g. system-design">
-        </div>
-        <button type="submit" class="btn-primary" id="submitBtn">Generate Short Link</button>
-    </form>
-
-    <div class="result-box" id="resultBox">
-        <a id="shortUrlLink" class="result-link" target="_blank" rel="noopener"></a>
-        <button class="copy-btn" id="copyBtn">Copy</button>
+<div class="card">
+    <h2>🚀 URL Shortener</h2>
+    <input type="url" id="longUrl" placeholder="https://example.com/very-long-url" required>
+    <input type="text" id="customAlias" placeholder="Custom alias (optional)">
+    <button id="submitBtn" onclick="shortenUrl()">Generate Link</button>
+    <div class="result" id="resultBox">
+        <a id="shortLink" target="_blank" style="color: #38bdf8; word-break: break-all;"></a>
+        <button class="copy-btn" id="copyBtn" onclick="copyLink()">Copy</button>
     </div>
 </div>
 
 <script>
-    const form = document.getElementById('shortenForm');
-    const resultBox = document.getElementById('resultBox');
-    const shortUrlLink = document.getElementById('shortUrlLink');
-    const copyBtn = document.getElementById('copyBtn');
-    const submitBtn = document.getElementById('submitBtn');
-
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const original_url = document.getElementById('longUrl').value.trim();
-        const custom_alias = document.getElementById('customAlias').value.trim();
+    async function shortenUrl() {
+        const longUrl = document.getElementById('longUrl').value.trim();
+        const customAlias = document.getElementById('customAlias').value.trim();
+        const submitBtn = document.getElementById('submitBtn');
+        if (!longUrl) return alert('Please enter a destination URL');
 
         submitBtn.disabled = true;
         submitBtn.innerText = 'Shortening...';
 
         try {
-            const response = await fetch('/api/v1/urls/shorten', {
+            const res = await fetch('/api/v1/urls/shorten', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    original_url,
-                    custom_alias: custom_alias || null
-                })
+                body: JSON.stringify({ original_url: longUrl, custom_alias: customAlias || null })
             });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message || 'Error shortening URL');
 
-            if (!response.ok) {
-                const errData = await response.json();
-                throw new Error(errData.message || 'Failed to shorten URL');
-            }
-
-            const data = await response.json();
-            shortUrlLink.href = data.short_url;
-            shortUrlLink.innerText = data.short_url;
-            resultBox.style.display = 'flex';
-            copyBtn.innerText = 'Copy';
-        } catch (err) {
-            alert('Error: ' + err.message);
+            document.getElementById('shortLink').href = data.short_url;
+            document.getElementById('shortLink').innerText = data.short_url;
+            document.getElementById('resultBox').style.display = 'flex';
+        } catch (e) {
+            alert('Error: ' + e.message);
         } finally {
             submitBtn.disabled = false;
-            submitBtn.innerText = 'Generate Short Link';
+            submitBtn.innerText = 'Generate Link';
         }
-    });
+    }
 
-    copyBtn.addEventListener('click', async () => {
-        try {
-            await navigator.clipboard.writeText(shortUrlLink.href);
-            copyBtn.innerText = 'Copied! ✓';
-            copyBtn.style.background = 'var(--success)';
-            setTimeout(() => {
-                copyBtn.innerText = 'Copy';
-                copyBtn.style.background = '#334155';
-            }, 2500);
-        } catch (err) {
-            alert('Failed to copy to clipboard.');
-        }
-    });
+    async function copyLink() {
+        const link = document.getElementById('shortLink').href;
+        await navigator.clipboard.writeText(link);
+        const copyBtn = document.getElementById('copyBtn');
+        copyBtn.innerText = 'Copied! ✓';
+        copyBtn.style.background = '#22c55e';
+        setTimeout(() => {
+            copyBtn.innerText = 'Copy';
+            copyBtn.style.background = '#334155';
+        }, 2000);
+    }
 </script>
 </body>
 </html>
