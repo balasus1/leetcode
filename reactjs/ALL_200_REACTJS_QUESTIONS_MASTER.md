@@ -1,21 +1,22 @@
-# React 19 Master Production Engineering & Technical Interview Guide (230 Questions)
+# React 19 Master Production Engineering & Technical Interview Guide (250 Questions)
 
-> An exhaustive, production-grade knowledge base covering React 19 Core Innovations (React Compiler / Forget, Actions, useActionState, useOptimistic, use() API), Fiber Architecture & Concurrency (Work Loop, Lane Model, Double Buffering, Time Slicing), Custom Hooks Internals, Modern State Management (Zustand, TanStack Query, Redux Toolkit), Rendering Architectures (RSC, Streaming SSR, Suspense, Partial Prerendering PPR), Performance Optimization & Profiling (DevTools Flamegraphs, Virtualization, Web Workers), Microfrontends & Module Federation, Design Patterns (Headless UI, Compound Components, A11y Focus Trap, XSS Security), Re-Render Elimination, Loading State Strategies, Cloudinary & Adaptive Media Delivery, and Enterprise SaaS Architecture.
+> An exhaustive, production-grade knowledge base with 100% CODE SNIPPETS covering React 19 Core Innovations (React Compiler / Forget, Actions, useActionState, useOptimistic, use() API), Fiber Architecture & Concurrency (Work Loop, Lane Model, Double Buffering, Time Slicing), Custom Hooks Internals, Modern State Management (Zustand, TanStack Query, Redux Toolkit), Rendering Architectures (RSC, Streaming SSR, Suspense, Partial Prerendering PPR), Performance Optimization & Profiling (DevTools Flamegraphs, Virtualization, Web Workers), Microfrontends & Module Federation, Design Patterns (Headless UI, Compound Components, A11y Focus Trap, XSS Security), Re-Render Elimination, Loading State Strategies, Cloudinary & Adaptive Media Delivery, External API Fetching, Re-Fetch Elimination, and Pagination Architectures.
 
 ---
 
 ## Table of Contents
 
-- **[Part 1: React 19 Core Innovations, React Compiler & Modern APIs (Q1 - Q25)](./01_react19_core_compiler_and_new_features.md)** (25 Questions)
-- **[Part 2: Fiber Architecture, Reconciliation & Concurrent Mode (Q26 - Q50)](./02_fiber_architecture_reconciliation_and_concurrent_mode.md)** (25 Questions)
-- **[Part 3: Hooks Deep Dive, Internals & Advanced Custom Hooks (Q51 - Q75)](./03_hooks_internals_and_advanced_custom_hooks.md)** (25 Questions)
-- **[Part 4: State Management, Server State & Optimistic UI (Q76 - Q100)](./04_state_management_server_state_and_optimistic_updates.md)** (25 Questions)
-- **[Part 5: Rendering Architectures, SSR, RSC, Streaming & PPR (Q101 - Q125)](./05_rendering_patterns_ssr_rsc_streaming_and_ppr.md)** (25 Questions)
-- **[Part 6: Performance Optimization, Profiling & Memory (Q126 - Q150)](./06_performance_optimization_memory_and_profiling.md)** (25 Questions)
-- **[Part 7: Code Splitting, Bundling & Microfrontends (Q151 - Q175)](./07_code_splitting_bundling_and_microfrontends.md)** (15 Questions)
-- **[Part 8: Design Patterns, Architecture, A11y & Security (Q176 - Q200)](./08_design_patterns_architecture_and_security.md)** (10 Questions)
-- **[Part 9: Production Scaling, Testing & Enterprise SaaS Architecture (Q201 - Q225)](./09_production_scaling_testing_and_enterprise_saas.md)** (10 Questions)
-- **[Part 10: Re-Render Elimination, Loading State Strategies & Cloudinary/Media Optimization (Q211 - Q230)](./10_rerender_elimination_and_media_optimization.md)** (20 Questions)
+- **[Part 1: React 19 Core Innovations, React Compiler & Modern APIs (Q1 - Q25)](./01_react19_core_compiler_and_new_features.md)** (25 Questions with Code Snippets)
+- **[Part 2: Fiber Architecture, Reconciliation & Concurrent Mode (Q26 - Q50)](./02_fiber_architecture_reconciliation_and_concurrent_mode.md)** (25 Questions with Code Snippets)
+- **[Part 3: Hooks Deep Dive, Internals & Advanced Custom Hooks (Q51 - Q75)](./03_hooks_internals_and_advanced_custom_hooks.md)** (25 Questions with Code Snippets)
+- **[Part 4: State Management, Server State & Optimistic UI (Q76 - Q100)](./04_state_management_server_state_and_optimistic_updates.md)** (25 Questions with Code Snippets)
+- **[Part 5: Rendering Architectures, SSR, RSC, Streaming & PPR (Q101 - Q125)](./05_rendering_patterns_ssr_rsc_streaming_and_ppr.md)** (25 Questions with Code Snippets)
+- **[Part 6: Performance Optimization, Profiling & Memory (Q126 - Q150)](./06_performance_optimization_memory_and_profiling.md)** (25 Questions with Code Snippets)
+- **[Part 7: Code Splitting, Bundling & Microfrontends (Q151 - Q175)](./07_code_splitting_bundling_and_microfrontends.md)** (15 Questions with Code Snippets)
+- **[Part 8: Design Patterns, Architecture, A11y & Security (Q176 - Q200)](./08_design_patterns_architecture_and_security.md)** (10 Questions with Code Snippets)
+- **[Part 9: Production Scaling, Testing & Enterprise SaaS Architecture (Q201 - Q210)](./09_production_scaling_testing_and_enterprise_saas.md)** (10 Questions with Code Snippets)
+- **[Part 10: Re-Render Elimination, Loading State Strategies & Cloudinary/Media Optimization (Q211 - Q230)](./10_rerender_elimination_and_media_optimization.md)** (20 Questions with Code Snippets)
+- **[Part 11: External API Fetching, Re-Fetch Elimination & Pagination Architectures (Q231 - Q250)](./11_api_fetching_refetch_elimination_and_pagination.md)** (20 Questions with Code Snippets)
 
 ---
 
@@ -454,31 +455,84 @@ function AutoResizeTextarea() {
 ### Q15: What is the new `hydration` error reporting improvement in React 19?
 **Answer:**
 Hydration mismatch errors (e.g. server rendered `<div>Server</div>`, client rendered `<div>Client</div>`) in older React displayed cryptic `Minified React error #418`.
-React 19 prints a **side-by-side colorized visual diff** directly in the browser console showing the exact mismatched DOM nodes and call site.
+React 19 prints a **side-by-side colorized visual diff** directly in the browser console showing the exact mismatched DOM nodes:
+
+```javascript
+// React 19 Hydration Mismatch Diff Log in Console:
+// Uncaught Error: Hydration failed because the initial UI does not match what was rendered on the server.
+//   <App>
+//     <div>
+// -     "Server Rendered Text"
+// +     "Client Rendered Text"
+//     </div>
+//   </App>
+```
 
 ---
 
 ### Q16: What is the difference between Server Actions and traditional REST/tRPC API routes?
 **Answer:**
 - **REST/tRPC**: Explicit endpoints requiring URL routing, serialization boilerplate, and separate client fetch code.
-- **Server Actions**: Remote Procedure Calls (RPC) generated transparently by the React bundler. You import and invoke a server function directly; React handles serialization, HTTP POST framing, CSRF token verification, and optimistic state synchronization automatically.
+- **Server Actions**: Remote Procedure Calls (RPC) generated transparently by the React bundler:
+
+```javascript
+// Server Action ('use server'):
+'use server';
+export async function updateEmail(userId, newEmail) {
+  await db.user.update({ where: { id: userId }, data: { email: newEmail } });
+  return { success: true };
+}
+
+// Client Component: Import and invoke directly like a local async function!
+'use client';
+import { updateEmail } from './actions';
+
+export function EmailForm({ userId }) {
+  return <button onClick={() => updateEmail(userId, 'alice@domain.com')}>Update</button>;
+}
+```
 
 ---
 
 ### Q17: How does React 19 handle Custom Elements / Web Components seamlessly?
 **Answer:**
-In React 18 and earlier, passing complex props or listening to custom events on Web Components required manual `ref` and `addEventListener` setup.
 In React 19, React checks if a prop exists on the Custom Element instance as a property:
-- Primitive attributes (`string`, `number`) are set via `setAttribute()`.
-- Complex data (`objects`, `arrays`, `functions`) are set directly as properties on the DOM instance.
+
+```javascript
+// React 19 Native Custom Element Integration:
+export function WebComponentWrapper() {
+  // Complex objects & custom events pass directly without manual ref.addEventListener:
+  return (
+    <my-custom-chart
+      chartData={[{ x: 1, y: 10 }, { x: 2, y: 20 }]} // Passed directly as property!
+      onchartclick={(e) => console.log('Custom event triggered:', e.detail)}
+    />
+  );
+}
+```
 
 ---
 
 ### Q18: What is Partial Prerendering (PPR) in the context of React 19 and Next.js?
 **Answer:**
 PPR combines Static Site Generation (SSG) and Dynamic Streaming Server-Side Rendering into a single HTTP response:
-1. The **Static Shell** (Navbar, Sidebar, Skeleton cards) is served instantly from edge CDN cache.
-2. The **Dynamic Holes** (Personalized user feed, live pricing) stream in over the same open HTTP stream via React `<Suspense>` without multiple roundtrips.
+
+```javascript
+// next.config.js - Partial Prerendering (PPR):
+export const experimental = { ppr: true };
+
+// Page Component:
+export default function Page() {
+  return (
+    <div>
+      <StaticNavbar /> {/* Instant static shell from Edge CDN */}
+      <Suspense fallback={<FeedSkeleton />}>
+        <DynamicPersonalizedFeed /> {/* Streams in dynamically over same HTTP stream */}
+      </Suspense>
+    </div>
+  );
+}
+```
 
 ---
 
@@ -509,12 +563,18 @@ function ChartContainer({ chartPromise }) {
 
 ### Q20: What are the memory and execution performance trade-offs of Server Components vs. Client Components?
 **Answer:**
-- **Server Components**:
-  - Memory cost is on the server (V8 Node/Edge runtime).
-  - 0 KB client bundle size, eliminating parsing, JIT compilation, and hydration overhead in the user's browser.
-- **Client Components**:
-  - Memory cost is on the client device (DOM nodes, V8 JS heap).
-  - Required for interactivity (`onClick`, `onChange`), browser APIs (`localStorage`, `window`), and client state (`useState`).
+- **Server Components**: Executed on server, 0 KB client JS.
+- **Client Components**: Downloaded, parsed, hydrated in browser RAM.
+
+```javascript
+// Server Component: 0KB JavaScript sent to client (Heavy markdown parser runs on server!)
+import { marked } from 'marked'; // 50KB library NEVER sent to browser!
+
+export async function ServerMarkdownViewer({ markdownText }) {
+  const html = marked.parse(markdownText);
+  return <div dangerouslySetInnerHTML={{ __html: html }} />;
+}
+```
 
 ---
 
@@ -544,21 +604,52 @@ export async function uploadAvatarAction(formData) {
 
 ### Q22: What happens when an error is thrown inside a Server Component vs. a Client Component?
 **Answer:**
-- **Client Component Error**: Caught by the nearest `<ErrorBoundary>` in the browser. Full component stack is available in DevTools.
-- **Server Component Error**: Sanitized by React in production to prevent leaking database credentials or server stack traces to the browser (`"An error occurred in the Server Components render"`). Caught by the client-side `<ErrorBoundary>` surrounding the Suspense boundary.
+Server errors are sanitized in production to avoid leaking database passwords:
+
+```javascript
+// Error Boundary surrounding Server Component Suspense boundary:
+<ErrorBoundary fallback={<p>Unable to load recommendations. Please try again.</p>}>
+  <Suspense fallback={<Skeleton />}>
+    <AsyncServerRecommendations /> {/* Sanitized server crash caught safely! */}
+  </Suspense>
+</ErrorBoundary>
+```
 
 ---
 
 ### Q23: How does React 19 deduplicate Promises passed into the `use()` Hook?
 **Answer:**
-If the same Promise instance is passed to multiple components in the same render tree, React 19 tracks the Promise reference and resolves all components simultaneously when the Promise settles, avoiding duplicate network queries.
+Passing the same Promise reference unwraps simultaneously across sibling components:
+
+```javascript
+// Shared Promise instance:
+const userPromise = fetchUser(userId);
+
+function SiblingA() {
+  const user = use(userPromise); // Unwraps shared promise
+  return <h1>{user.name}</h1>;
+}
+
+function SiblingB() {
+  const user = use(userPromise); // Reuses exact same settled value without duplicate network query!
+  return <p>{user.email}</p>;
+}
+```
 
 ---
 
 ### Q24: What is the difference between React 19 Actions and useEffect-based data mutation?
 **Answer:**
-- **`useEffect` mutation (Anti-pattern)**: Causes double-rendering, flash of stale content, manual race condition handling, and requires manual `isMounted` checks.
-- **React 19 Action (`useActionState` / `startTransition`)**: Integrates directly with React’s concurrent scheduler, manages pending UI transitions natively, and enables rollback on error.
+Actions integrate natively with Transitions and rollbacks:
+
+```javascript
+// React 19 Action: Clean pending state and error boundary integration
+const [state, formAction, isPending] = useActionState(async (prev, formData) => {
+  return await mutateData(formData);
+}, initial);
+
+return <form action={formAction}><button disabled={isPending}>Save</button></form>;
+```
 
 ---
 
@@ -596,45 +687,33 @@ export default defineConfig({
 **Answer:**
 The **Fiber Reconciler** is React’s core reconciliation engine.
 
-```
-Legacy Stack Reconciler (React <16):
-- Recursive synchronous call stack traversal.
-- Cannot be paused, aborted, or prioritized.
-- Heavy re-renders block the browser main thread (>16ms), causing dropped frames (jank).
-
-Fiber Architecture (React 16 -> 19):
-- Virtual stack frame implemented as a JavaScript object (Fiber Node).
-- Uses a Singly Linked List tree structure (child, sibling, return pointers).
-- Work can be paused, split into chunks, aborted, prioritized, and resumed!
-```
-
-**Structure of a Fiber Node:**
 ```javascript
+// Structure of an individual React Fiber Node:
 const fiberNode = {
-  tag: WorkTag,            // FunctionComponent, ClassComponent, HostRoot, etc.
+  tag: 0,                  // FunctionComponent = 0, HostRoot = 3, HostComponent = 5
   key: null,
   elementType: App,
   type: App,
-  stateNode: null,         // Real DOM node or Class instance
+  stateNode: null,         // Real DOM instance or Class instance
   
   // Singly Linked List Tree Pointers
-  child: FiberNode,        // First child
-  sibling: FiberNode,      // Next sibling
-  return: FiberNode,       // Parent fiber (where work returns)
+  child: null,             // Pointer to first child Fiber
+  sibling: null,           // Pointer to next sibling Fiber
+  return: null,            // Pointer to parent Fiber (where work returns)
   
-  // Work and State
+  // State and Work
   memoizedProps: {},
   pendingProps: {},
-  memoizedState: {},       // Hook linked list
+  memoizedState: null,     // Linked list of hook states
   updateQueue: null,
   
-  // Concurrency & Priority
-  lanes: Lane,             // Bitmask priority lanes
-  childLanes: Lane,
+  // Concurrency & Bitmask Priority
+  lanes: 0b0000000000000000000000000000001, // 31-bit Lane bitmask
+  childLanes: 0,
   
   // Double Buffering
-  alternate: FiberNode,    // Pointer to mirror fiber in workInProgress / current tree
-  flags: Flags,            // Side effects (Placement, Update, Deletion)
+  alternate: null,         // Mirror pointer in workInProgress / current tree
+  flags: 0b0000000000000000000000000000100  // Side effects: Placement, Update, Deletion
 };
 ```
 
@@ -642,114 +721,181 @@ const fiberNode = {
 
 ### Q27: How does Double Buffering work in React Fiber (`current` vs `workInProgress` tree)?
 **Answer:**
-Similar to graphics rendering (OpenGL/DirectX), React uses a **Double Buffering** strategy to prevent half-rendered, flickering UI states from appearing on the screen.
+React uses a **Double Buffering** strategy:
 
+```javascript
+// Double Buffering Pointer Swap in React Root Commit:
+function commitRoot(root) {
+  const finishedWork = root.current.alternate; // workInProgress tree
+  
+  // 1. Flush DOM mutations atomically to screen
+  commitMutationEffects(finishedWork);
+  
+  // 2. Atomic Pointer Swap (Instant transition to new screen state with 0 visual tearing)
+  root.current = finishedWork;
+}
 ```
-[Screen Display] <── Linked to ── [current Tree] (Committed, visible DOM)
-                                        │
-                                 alternate pointer
-                                        │
-[Background Render] ───────────> [workInProgress Tree] (Draft / Being computed)
-```
-
-1. **`current` Tree**: Represents the fibers currently mounted and visible on the screen.
-2. **`workInProgress` Tree**: Constructed in memory during the asynchronous render phase.
-3. When the `workInProgress` tree finishes and is committed to the real DOM, React simply swaps a single pointer (`root.current = workInProgress`), turning the draft tree into the visible tree in a single atomic operation!
 
 ---
 
 ### Q28: What are the two main phases of React rendering: The Render (Reconciliation) Phase vs. The Commit Phase?
 **Answer:**
 
-| Phase | Characteristics | Schedulable? | Side Effects Allowed? |
-|---|---|---|---|
-| **1. Render Phase**<br>(Reconciliation) | Computes JSX diffs, runs hooks, constructs `workInProgress` fiber tree, flags mutations (`Placement`, `Update`). | **Asynchronous & Interruptible** (Can pause or yield to high-priority user input). | **Pure computation only** (NO DOM mutations or network triggers). |
-| **2. Commit Phase** | Flushes DOM mutations, runs `useLayoutEffect`, paints DOM, runs `useEffect` asynchronously. | **Synchronous & Non-interruptible** (Executes in a single atomic tick to prevent visual tearing). | **Yes** (Mutates real DOM, binds event listeners). |
+```javascript
+// Phase 1: Render Phase (Asynchronous, pure computation, can be paused/aborted)
+function performUnitOfWork(fiber) {
+  const nextChild = beginWork(fiber); // Computes diffs, runs hooks, flags mutations
+  if (!nextChild) {
+    completeUnitOfWork(fiber);        // Bubbles up effects
+  }
+  return nextChild;
+}
+
+// Phase 2: Commit Phase (Synchronous, mutates real DOM, cannot be interrupted)
+function commitPhase(finishedWork) {
+  flushPassiveEffects();              // Cleans up previous useEffects
+  commitPlacementAndUpdate(finishedWork); // Real DOM appendChild / update
+  flushLayoutEffects(finishedWork);   // Runs useLayoutEffect synchronously
+}
+```
 
 ---
 
 ### Q29: What is the Lane Model in React and how does Bitmask Priority scheduling work?
 **Answer:**
-Prior to React 17, React used numeric priorities (Expiration Times). React modern Fiber uses a **31-bit Bitmask Lane Model** to represent task priorities and concurrent lanes.
 
 ```javascript
-// Internal Lane Constants (31-bit integer bitmasks)
-const TotalLanes = 31;
-const SyncLane               = 0b0000000000000000000000000000001; // Blocking User Input (Click, Type)
-const InputContinuousLane    = 0b0000000000000000000000000000010; // Drag, Scroll, MouseMove
-const DefaultLane            = 0b0000000000000000000000000010000; // Normal useState update
-const TransitionLanes        = 0b0000000000000011111111000000000; // startTransition updates
-const IdleLane               = 0b0100000000000000000000000000000; // Offscreen / Low priority
-```
+// 31-bit Priority Lanes in React Internals:
+const SyncLane            = 0b0000000000000000000000000000001; // User typing, click (Highest)
+const InputContinuousLane = 0b0000000000000000000000000000010; // Scroll, drag
+const DefaultLane         = 0b0000000000000000000000000010000; // Normal setState
+const TransitionLanes     = 0b0000000000000011111111000000000; // startTransition
+const IdleLane            = 0b0100000000000000000000000000000; // Low-priority background
 
-**Bitwise Efficiency:**
-- Combining lanes: `lanes = laneA | laneB`
-- Checking intersection: `(lanes & SyncLane) !== 0`
-- Selecting highest priority lane: `lanes & -lanes` (isolate lowest set bit in $O(1)$ assembly instructions).
+// Bitwise operations:
+const isHighPriority = (pendingLanes & (SyncLane | InputContinuousLane)) !== 0;
+const highestPriorityLane = pendingLanes & -pendingLanes; // O(1) isolation of lowest set bit
+```
 
 ---
 
 ### Q30: How does Time Slicing and Cooperative Scheduling work with `MessageChannel` and `requestHostCallback`?
 **Answer:**
-React avoids `window.requestIdleCallback` because of poor browser support and low 20fps refresh caps.
-Instead, React’s Scheduler uses **`MessageChannel`** (a micro-macrotask primitive with ~0ms delay):
 
-1. React sets a target frame budget of **5ms per work unit**.
-2. Inside `workLoopConcurrent()`, React checks `shouldYieldToHost()` after processing each fiber node:
-   ```javascript
-   function shouldYieldToHost() {
-     return performance.now() >= deadline; // 5ms budget exceeded!
-   }
-   ```
-3. If 5ms is exceeded and high-priority browser input is pending, React yields control back to the browser to paint and process mouse events, then posts a message on `MessageChannel` to resume work in the next frame.
+```javascript
+// Cooperative Work Loop in React Scheduler:
+let deadline = 0;
+const frameYieldMs = 5; // 5ms frame slice budget
+
+function shouldYieldToHost() {
+  return performance.now() >= deadline;
+}
+
+const channel = new MessageChannel();
+channel.port1.onmessage = function performWorkUntilDeadline() {
+  deadline = performance.now() + frameYieldMs;
+  
+  let hasMoreWork = true;
+  while (hasMoreWork && !shouldYieldToHost()) {
+    hasMoreWork = workLoopConcurrentStep();
+  }
+
+  // If work remains but 5ms budget expired -> Yield to browser paint, then schedule next tick:
+  if (hasMoreWork) {
+    channel.port2.postMessage(null);
+  }
+};
+```
 
 ---
 
 ### Q31: What is the Diffing Algorithm in React and what are the 3 foundational heuristic assumptions?
 **Answer:**
-A general tree comparison algorithm has $O(n^3)$ time complexity (1,000 nodes = 1 billion comparisons). React reduces this to **$O(n)$** using 3 heuristics:
 
-1. **Two elements of different types produce different trees**: If `<div>` changes to `<span>`, React destroys the entire subtree and builds a new one from scratch.
-2. **Component Identity via Keys**: Keys must be stable, unique, and predictable between renders to match child elements across list re-orderings.
-3. **Breadth-First Level-by-Level Diffing**: React only compares nodes at the same tree depth; it does not attempt to match nodes moved across different tree branches.
+```javascript
+// React Diffing Heuristics:
+// 1. Different element types destroy and rebuild entire subtree:
+// <div><Counter /></div> -> <span><Counter /></span> (Counter unmounts and remounts from scratch)
+
+// 2. Element identity preserved via stable keys across renders:
+// Old: [<li key="a">A</li>, <li key="b">B</li>]
+// New: [<li key="b">B</li>, <li key="a">A</li>] -> Reused without DOM destruction
+
+// 3. Level-by-level comparison:
+function reconcileChildren(current, workInProgress, nextChildren) {
+  if (current === null) {
+    workInProgress.child = mountChildFibers(workInProgress, null, nextChildren);
+  } else {
+    workInProgress.child = reconcileChildFibers(workInProgress, current.child, nextChildren);
+  }
+}
+```
 
 ---
 
 ### Q32: Why is using array index as a `key` dangerous in dynamic lists?
 **Answer:**
-Using index as a key confuses the reconciler when items are inserted, prepended, or deleted:
 
 ```javascript
-// Initial:
-[0: 'Item A', 1: 'Item B']
+// 🚨 BUGGY BEHAVIOR with Index Keys:
+// Initial state: [{ text: 'Task 1' }, { text: 'Task 2' }]
+// When prepending 'Task 0':
+// Index 0 receives 'Task 0', Index 1 receives 'Task 1', Index 2 receives 'Task 2'
+// Any local uncontrolled <input> or focus state on Index 0 stays stuck on the wrong item!
 
-// Prepend 'Item New':
-[0: 'Item New', 1: 'Item A', 2: 'Item B']
+// ✅ SECURE with Stable IDs:
+{items.map((item) => (
+  <TodoItem key={item.uniqueId} item={item} />
+))}
 ```
-React compares index `0` (`Item A` vs `Item New`). Because both share key `0`, React retains the old component instance and local DOM input states, causing **unintended state bleeding, incorrect input focus, and animation glitches**.
 
 ---
 
 ### Q33: How does React Reconciliation handle single-element vs. multi-child array diffing (`reconcileChildrenArray`)?
 **Answer:**
-When reconciling an array of children, React uses a **two-pass algorithm** to avoid nested loops:
 
-1. **Pass 1 (Fast-Path Sequential Match)**: Iterates through old and new child arrays in lockstep while keys match. Stops on the first mismatch.
-2. **Pass 2 (Map-Based Lookup for Reordering/Insertions)**:
-   - Remaining old fibers are placed into a `Map<key | index, FiberNode>`.
-   - React iterates through the remaining new elements, querying the Map in $O(1)$ time to reuse existing fibers and marking `Placement` flags for moved nodes.
-   - Any unused fibers remaining in the Map are marked with the `Deletion` flag.
+```javascript
+// Two-Pass Multi-Child Reconciliation in React Fiber:
+function reconcileChildrenArray(returnFiber, currentFirstChild, newChildren) {
+  let oldFiber = currentFirstChild;
+  let newIdx = 0;
+  
+  // Pass 1: Sequential lockstep match
+  for (; oldFiber !== null && newIdx < newChildren.length; newIdx++) {
+    if (oldFiber.key !== newChildren[newIdx].key) break;
+    oldFiber = oldFiber.sibling;
+  }
+
+  // Pass 2: Map-based lookup for inserted/reordered nodes
+  const existingChildrenMap = new Map();
+  while (oldFiber !== null) {
+    existingChildrenMap.set(oldFiber.key || oldFiber.index, oldFiber);
+    oldFiber = oldFiber.sibling;
+  }
+
+  // Re-use matching fibers in O(1) from Map:
+  for (; newIdx < newChildren.length; newIdx++) {
+    const matchedFiber = existingChildrenMap.get(newChildren[newIdx].key);
+    // Reuse matchedFiber and mark Placement flags for repositioned nodes
+  }
+}
+```
 
 ---
 
 ### Q34: What are Fiber WorkTags and what is the difference between `HostComponent`, `HostRoot`, and `FunctionComponent`?
 **Answer:**
-`fiber.tag` identifies the type of work unit:
-- **`HostRoot` (3)**: The root node of the React component tree mounted via `createRoot`.
-- **`HostComponent` (5)**: Native DOM elements (`<div>`, `<span>`, `<button>`).
-- **`FunctionComponent` (0)**: Functional React components.
-- **`SuspenseComponent` (13)**: Suspense boundary nodes.
-- **`OffscreenComponent` (22)**: Nodes hidden or pre-rendered offscreen.
+
+```javascript
+// React Internal WorkTag Constants:
+export const FunctionComponent = 0;
+export const ClassComponent = 1;
+export const HostRoot = 3;          // Mounted via ReactDOM.createRoot(container)
+export const HostComponent = 5;     // Native HTML nodes ('div', 'span')
+export const HostText = 6;          // Raw text strings
+export const SuspenseComponent = 13;// <Suspense> boundaries
+export const OffscreenComponent = 22; // <Activity mode="hidden">
+```
 
 ---
 
@@ -757,17 +903,17 @@ When reconciling an array of children, React uses a **two-pass algorithm** to av
 **Answer:**
 
 ```javascript
-// Synchronous Work Loop (Blocking, cannot be paused)
+// Synchronous Work Loop (Blocking execution)
 function workLoopSync() {
   while (workInProgress !== null) {
     performUnitOfWork(workInProgress);
   }
 }
 
-// Concurrent Work Loop (Time-sliced, cooperative multitasking)
+// Concurrent Work Loop (Time-sliced execution)
 function workLoopConcurrent() {
-  while (workInProgress !== null && !shouldYield()) {
-    performUnitOfWork(workInProgress); // Process 1 fiber node
+  while (workInProgress !== null && !shouldYieldToHost()) {
+    performUnitOfWork(workInProgress);
   }
 }
 ```
@@ -776,73 +922,91 @@ function workLoopConcurrent() {
 
 ### Q36: How does `beginWork` and `completeWork` traverse the Fiber tree in a Depth-First Search (DFS)?
 **Answer:**
-React traverses the Fiber tree using a two-phase DFS without recursion:
 
+```javascript
+// React Fiber DFS Traversal Engine:
+function performUnitOfWork(unitOfWork) {
+  const current = unitOfWork.alternate;
+  
+  // 1. Step Down (Evaluate component and return first child):
+  let next = beginWork(current, unitOfWork, renderLanes);
+  unitOfWork.memoizedProps = unitOfWork.pendingProps;
+
+  if (next === null) {
+    // 2. Leaf reached -> Step Right (siblings) or Step Up (parent return):
+    completeUnitOfWork(unitOfWork);
+  } else {
+    workInProgress = next;
+  }
+}
 ```
-                  Root
-                 /    \
-            Navbar     Sidebar
-            /    \
-        Logo     Links
-
-1. beginWork: Root -> Navbar -> Logo (Drills down via .child pointers)
-2. completeWork: Logo finishes, moves to sibling -> Links
-3. completeWork: Links finishes, bubbles up to Navbar via .return pointer
-4. beginWork: Navbar finishes, moves to sibling -> Sidebar
-```
-
-- **`beginWork(current, workInProgress, renderLanes)`**: Evaluates props, executes hook functions, runs reconciliation diff, and returns the next `.child` fiber.
-- **`completeWork(current, workInProgress, renderLanes)`**: Bubbles up from leaves, constructs real DOM instances, attaches event listeners, and aggregates subtree update flags.
 
 ---
 
 ### Q37: What is Selective Hydration and how does React prioritize user interactions on un-hydrated components?
 **Answer:**
-In traditional SSR, the entire HTML page is non-interactive until all JavaScript bundles download and hydrate.
-**Selective Hydration (React 18/19 with `<Suspense>`)**:
-1. Components wrapped in `<Suspense>` hydrate independently as their JS chunks load.
-2. If a user clicks on an **un-hydrated button**, React captures the click event, **immediately pauses ongoing background hydration, prioritizes and hydrates the clicked component synchronously**, and then replays the user's click event seamlessly!
+
+```javascript
+// Selective Hydration in React 18/19:
+// User clicks un-hydrated <CommentSection /> while <Navbar /> is hydrating:
+function dispatchDiscreteEvent(domEvent) {
+  const targetFiber = getFiberFromDOMNode(domEvent.target);
+  
+  if (isFiberUnmergedAndUnhydrated(targetFiber)) {
+    // 1. Intercept and hold click event in memory
+    // 2. Elevate targetFiber priority to SyncLane
+    // 3. Hydrate targetFiber immediately!
+    // 4. Replay click event on newly hydrated component!
+  }
+}
+```
 
 ---
 
 ### Q38: What are React Fiber Flags (formerly `effectTag`) and how are they committed to the DOM?
 **Answer:**
-During the render phase, React assigns bitmask flags to fibers describing the DOM operation needed:
-- `Placement (0b00000000000010)`: Insert new DOM node (`appendChild` / `insertBefore`).
-- `Update (0b00000000000100)`: Update attributes, styles, or text content.
-- `Deletion (0b00000000001000)`: Remove DOM node (`removeChild`).
 
-In the **Commit Phase**, React traverses only the fibers with flags and executes the minimal set of real DOM mutations.
+```javascript
+// Fiber Mutation Flags Bitmasks:
+export const NoFlags         = 0b00000000000000000000;
+export const Placement       = 0b00000000000000000010; // appendChild / insertBefore
+export const Update          = 0b00000000000000000100; // commitUpdate (props/text)
+export const Deletion        = 0b00000000000000001000; // removeChild
+export const Passive         = 0b00000000000010000000; // useEffect callback
+export const Layout          = 0b00000000000001000000; // useLayoutEffect callback
+```
 
 ---
 
 ### Q39: What is Tearing in Concurrent React and how does `useSyncExternalStore` prevent it?
 **Answer:**
-**Tearing** occurs in concurrent rendering when a non-React external store (e.g. Redux, Zustand, RxJS) updates *in the middle of an asynchronous render phase*. Component A renders with version 1 of the store, React yields, the store mutates to version 2, and Component B renders with version 2—causing visual inconsistencies on the same screen!
-
-**`useSyncExternalStore` Solution**:
-Forces synchronous consistency for external stores, guaranteeing zero tearing.
 
 ```javascript
 import { useSyncExternalStore } from 'react';
 
-function subscribe(callback) {
-  window.addEventListener('online', callback);
-  window.addEventListener('offline', callback);
-  return () => {
-    window.removeEventListener('online', callback);
-    window.removeEventListener('offline', callback);
+// Custom external store subscriber preventing concurrent tearing
+function createTearFreeStore(initialState) {
+  let state = initialState;
+  const listeners = new Set();
+
+  return {
+    getState: () => state,
+    setState: (next) => {
+      state = next;
+      listeners.forEach(l => l());
+    },
+    subscribe: (listener) => {
+      listeners.add(listener);
+      return () => listeners.delete(listener);
+    }
   };
 }
 
-function getSnapshot() {
-  return navigator.onLine;
-}
+const store = createTearFreeStore({ theme: 'dark' });
 
-export function NetworkStatusIndicator() {
-  // Tear-free synchronization with browser online status
-  const isOnline = useSyncExternalStore(subscribe, getSnapshot);
-  return <div>Status: {isOnline ? '🟢 Online' : '🔴 Offline'}</div>;
+export function ThemeWatcher() {
+  const state = useSyncExternalStore(store.subscribe, store.getState);
+  return <div>Current Theme: {state.theme}</div>;
 }
 ```
 
@@ -851,39 +1015,28 @@ export function NetworkStatusIndicator() {
 ### Q40: How does `useDeferredValue` differ from `useTransition` and standard Debouncing?
 **Answer:**
 
-```
-+─────────────────────────────────────────────────────────────────────────────+
-| Feature           | Debounce (setTimeout) | useTransition | useDeferredValue|
-+───────────────────┼───────────────────────┼───────────────┼─────────────────+
-| **Mechanism**     | Artificial fixed delay| Low-priority  | Low-priority    |
-|                   | (e.g. 300ms lag)      | State Update  | Derived Value   |
-+───────────────────┼───────────────────────┼───────────────┼─────────────────+
-| **CPU Awareness** | No (Fires blindly)    | Yes (Adapts to| Yes (Adapts to  |
-|                   |                       | device speed) | device speed)   |
-+───────────────────┼───────────────────────┼───────────────┼─────────────────+
-| **Access to State**| Direct setter        | Wraps setter  | Wraps value     |
-|                   |                       | (setCount)    | (query)         |
-+───────────────────┼───────────────────────┼───────────────┼─────────────────+
-| **Pending State** | Manual flag           | `isPending`   | `value !==      |
-|                   |                       | boolean       | deferredValue`  |
-+───────────────────┴───────────────────────┴───────────────┴─────────────────+
-```
-
 ```javascript
-import { useState, useDeferredValue } from 'react';
+import { useState, useDeferredValue, useTransition } from 'react';
 
-export function SearchFilter({ largeDataset }) {
+export function SearchDashboard({ fullData }) {
   const [query, setQuery] = useState('');
-  const deferredQuery = useDeferredValue(query); // Adapts rendering to frame budget
+  
+  // 1. useDeferredValue: Defers derived value rendering without blocking typing
+  const deferredQuery = useDeferredValue(query);
 
-  const isStale = query !== deferredQuery;
+  // 2. useTransition: Wraps state setter directly
+  const [isPending, startTransition] = useTransition();
+
+  const handleSelectTab = (tab) => {
+    startTransition(() => {
+      setActiveTab(tab);
+    });
+  };
 
   return (
     <div>
       <input value={query} onChange={e => setQuery(e.target.value)} />
-      <div style={{ opacity: isStale ? 0.5 : 1 }}>
-        <HeavyList query={deferredQuery} items={largeDataset} />
-      </div>
+      <HeavyList query={deferredQuery} items={fullData} />
     </div>
   );
 }
@@ -893,57 +1046,88 @@ export function SearchFilter({ largeDataset }) {
 
 ### Q41: How does React manage the Hook Linked List inside `fiber.memoizedState`?
 **Answer:**
-Hooks inside a component are stored as a **singly linked list** on `fiber.memoizedState`:
 
+```javascript
+// Hook Linked List Representation on Fiber Node:
+const hook = {
+  memoizedState: 0,         // Current state value
+  baseState: 0,
+  baseQueue: null,
+  queue: {
+    pending: null,          // Circular linked list of pending update actions
+    dispatch: null,
+    lastRenderedReducer: null,
+    lastRenderedState: null
+  },
+  next: null                // Pointer to next hook in component!
+};
 ```
-fiber.memoizedState ──> [Hook 1: useState]
-                               │ .next
-                               ▼
-                        [Hook 2: useEffect]
-                               │ .next
-                               ▼
-                        [Hook 3: useRef]
-```
-Each hook node has `{ memoizedState, baseState, queue, next }`.
-This is why **Hooks must never be called inside conditions or loops**: altering the call order breaks the fixed index pointers in the linked list!
 
 ---
 
 ### Q42: What is the Offscreen API / `<Activity>` component in React 19?
 **Answer:**
-`<Activity mode="hidden">` (formerly `<Offscreen>`) allows keeping a component mounted in memory while removing its DOM nodes from the visual screen.
-- Preserves local state, scroll position, and active focus.
-- Lowers priority of child fibers to `IdleLane`.
-- Perfect for instant multi-tab switching and virtualized view caching without re-mounting overhead.
+
+```javascript
+import { Activity, useState } from 'react';
+
+export function TabSwitcher() {
+  const [tab, setTab] = useState('home');
+
+  return (
+    <div>
+      <button onClick={() => setTab('home')}>Home</button>
+      <button onClick={() => setTab('profile')}>Profile</button>
+
+      {/* Keeps components mounted in RAM; DOM hidden and throttled to IdleLane */}
+      <Activity mode={tab === 'home' ? 'visible' : 'hidden'}>
+        <HeavyHomeFeed />
+      </Activity>
+
+      <Activity mode={tab === 'profile' ? 'visible' : 'hidden'}>
+        <UserProfileForm />
+      </Activity>
+    </div>
+  );
+}
+```
 
 ---
 
 ### Q43: How does React handle Synthetic Events and Event Delegation in React 18 & 19?
 **Answer:**
-- In React 16 and earlier, React attached global event listeners to `document`.
-- In React 17, 18, and 19, React attaches event listeners to the **Root DOM Container (`#root`)** where `createRoot()` was mounted.
-- **SyntheticEvent**: A cross-browser wrapper conforming to W3C standards with event pooling eliminated in modern React.
+
+```javascript
+// React 18 & 19 Event Delegation Root Attachment:
+function listenToAllSupportedEvents(rootContainerElement) {
+  const allNativeEvents = ['click', 'keydown', 'input', 'scroll', 'pointerdown'];
+  allNativeEvents.forEach(eventType => {
+    // Attached strictly to root DOM container node (#root), NOT document!
+    rootContainerElement.addEventListener(eventType, dispatchSyntheticEvent);
+  });
+}
+```
 
 ---
 
 ### Q44: What is the difference between `flushSync()` and automatic batching?
 **Answer:**
-- **Automatic Batching (Default in React 18/19)**: Multiple state updates across promises, `setTimeout`, or native event handlers are grouped into a single re-render.
-- **`flushSync(callback)`**: Forces React to synchronously re-render and flush DOM updates immediately (useful for measuring DOM elements immediately after state update).
 
 ```javascript
 import { useState } from 'react';
 import { flushSync } from 'react-dom';
 
-function ScrollToBottom() {
+export function AutoScrollChat() {
   const [messages, setMessages] = useState([]);
 
-  function handleSend(newMsg) {
+  function sendMessage(text) {
+    // Force immediate synchronous DOM render before executing next line:
     flushSync(() => {
-      setMessages(prev => [...prev, newMsg]); // Forces immediate synchronous DOM render!
+      setMessages(prev => [...prev, text]);
     });
-    // DOM is guaranteed to be updated here:
-    chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    
+    // Guaranteed that DOM contains new message element here:
+    chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
   }
 }
 ```
@@ -952,43 +1136,148 @@ function ScrollToBottom() {
 
 ### Q45: How does React Error Boundary catch errors and why can't it catch errors in async callbacks or SSR?
 **Answer:**
-- Error Boundaries catch errors thrown during **Render Phase, Lifecycle methods (`componentDidMount`), and Constructors**.
-- **Cannot catch**:
-  1. Errors in async callbacks (`setTimeout`, `onClick`) $\rightarrow$ Use `try/catch` or `useActionState`.
-  2. Server-Side Rendering (SSR) $\rightarrow$ Handled at server request level.
-  3. Errors thrown inside the Error Boundary component itself.
+
+```javascript
+import React from 'react';
+
+export class GlobalErrorBoundary extends React.Component {
+  state = { hasError: false, error: null };
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error('[Error Boundary Caught]', error, errorInfo.componentStack);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="error-fallback">
+          <h2>Application Crash Prevented</h2>
+          <p>{this.state.error?.message}</p>
+          <button onClick={() => this.setState({ hasError: false })}>Try Again</button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+```
 
 ---
 
 ### Q46: What is the difference between `useLayoutEffect` and `useEffect` execution timing?
 **Answer:**
-- **`useLayoutEffect`**: Runs **synchronously after DOM mutations but BEFORE the browser paints**. Used strictly for measuring DOM layouts (e.g. tooltips, popover positioning) to prevent visual flickering.
-- **`useEffect`**: Runs **asynchronously AFTER the browser paints**. Used for network requests, telemetry, and subscriptions.
+
+```javascript
+import { useState, useLayoutEffect, useEffect, useRef } from 'react';
+
+export function TooltipPositioner({ targetRect }) {
+  const tooltipRef = useRef(null);
+  const [coords, setCoords] = useState({ top: 0, left: 0 });
+
+  // Synchronous BEFORE Paint: Prevents tooltip from visibly jumping on screen!
+  useLayoutEffect(() => {
+    const height = tooltipRef.current.offsetHeight;
+    setCoords({
+      top: targetRect.top - height - 10,
+      left: targetRect.left
+    });
+  }, [targetRect]);
+
+  // Asynchronous AFTER Paint: Telemetry / Subscriptions
+  useEffect(() => {
+    analytics.track('tooltip_viewed');
+  }, []);
+
+  return <div ref={tooltipRef} style={{ position: 'fixed', top: coords.top, left: coords.left }}>Tooltip</div>;
+}
+```
 
 ---
 
 ### Q47: How does React deduplicate multiple setState calls inside the same tick?
 **Answer:**
-State updates are appended to the fiber's `updateQueue` circular linked list. During the render phase, React processes all pending updates in sequence, calculating the final `memoizedState` in a single pass.
+
+```javascript
+// Internal Update Queue processing in React Fiber:
+function processUpdateQueue(workInProgress, props, queue, renderLanes) {
+  let update = queue.firstBaseUpdate;
+  let newState = queue.baseState;
+
+  while (update !== null) {
+    // Process queued actions in sequence into final state value:
+    if (typeof update.action === 'function') {
+      newState = update.action(newState);
+    } else {
+      newState = update.action;
+    }
+    update = update.next;
+  }
+  workInProgress.memoizedState = newState; // Single state committed!
+}
+```
 
 ---
 
 ### Q48: What is the role of `React.Children` and why is it discouraged in modern React 19?
 **Answer:**
-`React.Children` (`map`, `forEach`, `toArray`) was used to manipulate child elements dynamically.
-**Discouraged in React 19** because it relies on inspecting opaque React elements, breaks server components, and is easily replaced by explicit render props or compound component Context.
+
+```javascript
+// ❌ Discouraged Legacy Pattern:
+function OldTabs({ children }) {
+  return React.Children.map(children, child => {
+    return React.cloneElement(child, { active: true }); // Opaque, fragile prop cloning!
+  });
+}
+
+// ✅ Modern React 19 Pattern (Compound Components with Context):
+const TabContext = createContext({ active: false });
+function ModernTabs({ children }) {
+  return <TabContext value={{ active: true }}>{children}</TabContext>;
+}
+```
 
 ---
 
 ### Q49: How does React 19 detect and warn about Infinite Re-render Loops?
 **Answer:**
-React caps consecutive synchronous re-renders at **50 iterations**. If a component triggers state updates during render without a terminating condition, React aborts and throws `Maximum update depth exceeded`.
+
+```javascript
+// React Re-render Guard in Fiber Work Loop:
+let nestedUpdateCount = 0;
+const NESTED_UPDATE_LIMIT = 50;
+
+function ensureRootIsScheduled(root) {
+  nestedUpdateCount++;
+  if (nestedUpdateCount > NESTED_UPDATE_LIMIT) {
+    nestedUpdateCount = 0;
+    throw new Error('Maximum update depth exceeded. This can happen when a component repeatedly calls setState inside render.');
+  }
+}
+```
 
 ---
 
 ### Q50: How does Concurrent Mode prioritize User Input over Data Fetching?
 **Answer:**
-User input (keyboard typing, clicks) is assigned to `SyncLane` (highest priority). When a keypress occurs while a low-priority `TransitionLane` (e.g. graph rendering) is computing, React **aborts the background work in progress, renders the keypress immediately in under 5ms, and restarts the graph render**.
+
+```javascript
+// Fiber Scheduler Priority Preemption:
+function requestUpdateLane(fiber) {
+  // If event triggered by user keyboard/click -> Assign SyncLane
+  if ((executionContext & DiscreteEventContext) !== 0) {
+    return SyncLane;
+  }
+  // If transition update -> Assign TransitionLane
+  if (currentTransition !== null) {
+    return TransitionLanes;
+  }
+  return DefaultLane;
+}
+```
 
 
 ---
@@ -1016,13 +1305,11 @@ const handleClickSafe = () => {
   // Final count will be 2!
 };
 ```
-When using functional updaters, React feeds the output of each reducer function into the next pending update in the queue.
 
 ---
 
 ### Q52: What is the Stale Closure problem in `useEffect` and how is it resolved in modern React?
 **Answer:**
-A closure captures variables from the render cycle in which it was created. If `useEffect` has an incomplete dependency array (`[]`), it retains stale values indefinitely.
 
 ```javascript
 // ❌ Stale Closure Bug:
@@ -1037,31 +1324,25 @@ function Counter() {
   }, []); // Missing count in dependencies!
 }
 
-// ✅ Fix 1: Functional State Updater
+// ✅ Fix: Functional State Updater
 useEffect(() => {
   const timer = setInterval(() => {
     setCount(c => c + 1); // Always gets freshest state
   }, 1000);
   return () => clearInterval(timer);
 }, []);
-
-// ✅ Fix 2: useRef for mutable latest value
-const countRef = useRef(count);
-countRef.current = count;
 ```
 
 ---
 
 ### Q53: What is `useId` and why is it required for Accessible (a11y) form controls in SSR/Streaming?
 **Answer:**
-Using `Math.random()` or global counters generates different IDs on the server vs. the client, causing **hydration mismatch errors**.
-`useId` generates a **stable, deterministic, unique ID** based on the component's position in the React Fiber tree hierarchy.
 
 ```javascript
 import { useId } from 'react';
 
 export function AccessibleInputField({ label }) {
-  const id = useId(); // Guaranteed identical on Server and Client (e.g. ":r1:")
+  const id = useId(); // Deterministic unique ID stable across SSR & Client (e.g. ":r1:")
 
   return (
     <div>
@@ -1077,40 +1358,20 @@ export function AccessibleInputField({ label }) {
 
 ### Q54: What is `useImperativeHandle` and how do you customize the exposed ref API of a child component?
 **Answer:**
-`useImperativeHandle` restricts and customizes the methods exposed to a parent component via `ref`, preventing the parent from accessing raw internal DOM nodes directly.
 
 ```javascript
 import { useImperativeHandle, useRef } from 'react';
 
-export function VideoPlayer({ ref }) {
-  const internalVideoRef = useRef(null);
+export function CustomVideoPlayer({ ref }) {
+  const videoRef = useRef(null);
 
-  // Expose ONLY play, pause, and reset methods to parent ref
   useImperativeHandle(ref, () => ({
-    play() {
-      internalVideoRef.current.play();
-    },
-    pause() {
-      internalVideoRef.current.pause();
-    },
-    seekTo(seconds) {
-      internalVideoRef.current.currentTime = seconds;
-    }
+    playVideo: () => videoRef.current.play(),
+    pauseVideo: () => videoRef.current.pause(),
+    getCurrentTime: () => videoRef.current.currentTime
   }));
 
-  return <video ref={internalVideoRef} src="/video.mp4" />;
-}
-
-// Parent Usage:
-function Controller() {
-  const playerRef = useRef(null);
-  return (
-    <div>
-      <VideoPlayer ref={playerRef} />
-      <button onClick={() => playerRef.current.play()}>Play Video</button>
-      <button onClick={() => playerRef.current.seekTo(0)}>Restart</button>
-    </div>
-  );
+  return <video ref={videoRef} src="/media/clip.mp4" />;
 }
 ```
 
@@ -1118,9 +1379,22 @@ function Controller() {
 
 ### Q55: What is `useInsertionEffect` and why is it used exclusively by CSS-in-JS libraries (Emotion / Styled-Components)?
 **Answer:**
-- `useInsertionEffect` runs **synchronously BEFORE all DOM mutations and before `useLayoutEffect`**.
-- It allows CSS-in-JS libraries to inject dynamic `<style>` tags into the `<head>` *before* React calculates layout or measures DOM elements in `useLayoutEffect`, avoiding layout recalculation thrashing (style invalidation).
-- **Rule**: Application code should never use `useInsertionEffect`; use `useEffect` or `useLayoutEffect`.
+
+```javascript
+import { useInsertionEffect } from 'react';
+
+// CSS-in-JS library runtime style injector:
+export function useDynamicCSS(className, cssRules) {
+  useInsertionEffect(() => {
+    // Injects <style> tags BEFORE DOM mutations & layout effects
+    const styleTag = document.createElement('style');
+    styleTag.textContent = `.${className} { ${cssRules} }`;
+    document.head.appendChild(styleTag);
+
+    return () => document.head.removeChild(styleTag);
+  }, [className, cssRules]);
+}
+```
 
 ---
 
@@ -1130,7 +1404,6 @@ function Controller() {
 ```typescript
 import { useState, useEffect, useRef } from 'react';
 
-// 1. useDebounce (Value Debounce)
 export function useDebounce<T>(value: T, delayMs: number = 300): T {
   const [debouncedValue, setDebouncedValue] = useState<T>(value);
 
@@ -1141,33 +1414,12 @@ export function useDebounce<T>(value: T, delayMs: number = 300): T {
 
   return debouncedValue;
 }
-
-// 2. useThrottle (Function Throttle with Leading/Trailing support)
-export function useThrottle<T extends (...args: any[]) => void>(fn: T, limitMs: number = 200): T {
-  const lastRan = useRef<number>(Date.now());
-  const handlerRef = useRef<NodeJS.Timeout | null>(null);
-
-  return ((...args: Parameters<T>) => {
-    const now = Date.now();
-    if (now - lastRan.current >= limitMs) {
-      fn(...args);
-      lastRan.current = now;
-    } else {
-      if (handlerRef.current) clearTimeout(handlerRef.current);
-      handlerRef.current = setTimeout(() => {
-        fn(...args);
-        lastRan.current = Date.now();
-      }, limitMs - (now - lastRan.current));
-    }
-  }) as T;
-}
 ```
 
 ---
 
 ### Q57: How do you build a `useAsync` / `useFetch` hook with Race Condition protection and AbortController?
 **Answer:**
-When a user switches search queries rapidly ("A" $\rightarrow$ "AB" $\rightarrow$ "ABC"), response "A" might return *after* "ABC", overwriting fresh data with stale results.
 
 ```javascript
 import { useState, useEffect } from 'react';
@@ -1178,7 +1430,6 @@ export function useFetchData(url) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Native AbortController cancels in-flight network request on prop change or unmount
     const controller = new AbortController();
     setLoading(true);
 
@@ -1190,20 +1441,14 @@ export function useFetchData(url) {
         setData(result);
         setError(null);
       } catch (err) {
-        if (err.name !== 'AbortError') {
-          setError(err.message);
-        }
+        if (err.name !== 'AbortError') setError(err.message);
       } finally {
         setLoading(false);
       }
     }
 
     fetchData();
-
-    // 🛡️ Cleanup: Aborts in-flight request when url changes or component unmounts
-    return () => {
-      controller.abort();
-    };
+    return () => controller.abort(); // Cancel on unmount/re-fetch!
   }, [url]);
 
   return { data, error, loading };
@@ -1231,10 +1476,7 @@ export function useIntersectionObserver(options = {}) {
     }, options);
 
     observer.observe(element);
-
-    return () => {
-      observer.disconnect();
-    };
+    return () => observer.disconnect();
   }, [options.root, options.rootMargin, options.threshold]);
 
   return [targetRef, isIntersecting];
@@ -1250,12 +1492,9 @@ export function useIntersectionObserver(options = {}) {
 import { useState, useEffect } from 'react';
 
 export function useMediaQuery(query) {
-  const [matches, setMatches] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return window.matchMedia(query).matches;
-    }
-    return false;
-  });
+  const [matches, setMatches] = useState(() => 
+    typeof window !== 'undefined' ? window.matchMedia(query).matches : false
+  );
 
   useEffect(() => {
     const mediaQueryList = window.matchMedia(query);
@@ -1280,7 +1519,6 @@ export function useMediaQuery(query) {
 import { useEffect, useRef } from 'react';
 
 export function useEventListener(eventName, handler, element = window) {
-  // Store latest handler in a ref to avoid re-binding event listener on handler changes
   const savedHandler = useRef(handler);
 
   useEffect(() => {
@@ -1294,9 +1532,7 @@ export function useEventListener(eventName, handler, element = window) {
     const eventListener = (event) => savedHandler.current(event);
     targetElement.addEventListener(eventName, eventListener);
 
-    return () => {
-      targetElement.removeEventListener(eventName, eventListener);
-    };
+    return () => targetElement.removeEventListener(eventName, eventListener);
   }, [eventName, element]);
 }
 ```
@@ -1305,11 +1541,12 @@ export function useEventListener(eventName, handler, element = window) {
 
 ### Q61: What is the difference between `useCallback(fn, deps)` and `useRef(fn)` for event handler callbacks?
 **Answer:**
-- `useCallback` returns a new function instance whenever dependencies change, triggering child re-renders if passed as props.
-- `useRef` retains a single stable function reference across all renders while always executing the freshest state:
 
 ```javascript
-function useEventCallback(fn) {
+import { useRef, useEffect, useCallback } from 'react';
+
+// useEventCallback: Retains 100% stable reference with freshest closure state:
+export function useEventCallback(fn) {
   const ref = useRef(fn);
   useEffect(() => { ref.current = fn; });
   return useCallback((...args) => ref.current(...args), []);
@@ -1335,21 +1572,14 @@ export function useLocalStorage(key, initialValue) {
   });
 
   const setValue = (value) => {
-    try {
-      const valueToStore = value instanceof Function ? value(storedValue) : value;
-      setStoredValue(valueToStore);
-      window.localStorage.setItem(key, JSON.stringify(valueToStore));
-    } catch (err) {
-      console.error(err);
-    }
+    const valueToStore = value instanceof Function ? value(storedValue) : value;
+    setStoredValue(valueToStore);
+    window.localStorage.setItem(key, JSON.stringify(valueToStore));
   };
 
-  // Synchronize across browser tabs
   useEffect(() => {
     const handleStorageChange = (e) => {
-      if (e.key === key && e.newValue) {
-        setStoredValue(JSON.parse(e.newValue));
-      }
+      if (e.key === key && e.newValue) setStoredValue(JSON.parse(e.newValue));
     };
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
@@ -1370,9 +1600,9 @@ import { useRef, useEffect } from 'react';
 export function usePrevious(value) {
   const ref = useRef();
   useEffect(() => {
-    ref.current = value; // Updated AFTER render cycle commits
+    ref.current = value;
   }, [value]);
-  return ref.current; // Returns value from previous render cycle
+  return ref.current;
 }
 ```
 
@@ -1380,22 +1610,18 @@ export function usePrevious(value) {
 
 ### Q64: What is `useReducer` and when should it be preferred over `useState`?
 **Answer:**
-`useReducer` is preferred when:
-1. State transitions involve **complex, interdependent sub-values** (`state.step === 2 && state.isValid`).
-2. The next state depends deeply on previous state logic.
-3. You want to pass `dispatch` down deep component trees (stable reference, zero prop-drilling re-renders).
 
 ```javascript
 import { useReducer } from 'react';
 
-function orderReducer(state, action) {
+function formReducer(state, action) {
   switch (action.type) {
-    case 'ADD_ITEM':
-      return { ...state, items: [...state.items, action.item], total: state.total + action.item.price };
-    case 'APPLY_DISCOUNT':
-      return { ...state, total: state.total * (1 - action.rate) };
+    case 'SET_FIELD':
+      return { ...state, [action.field]: action.value };
+    case 'SET_ERROR':
+      return { ...state, errors: { ...state.errors, [action.field]: action.error } };
     case 'RESET':
-      return { items: [], total: 0 };
+      return { values: {}, errors: {} };
     default:
       return state;
   }
@@ -1415,10 +1641,8 @@ export function useClickOutside(callback) {
 
   useEffect(() => {
     const listener = (event) => {
-      if (!ref.current || ref.current.contains(event.target)) {
-        return; // Click was inside target element
-      }
-      callback(event); // Click was outside!
+      if (!ref.current || ref.current.contains(event.target)) return;
+      callback(event);
     };
 
     document.addEventListener('mousedown', listener);
@@ -1438,30 +1662,35 @@ export function useClickOutside(callback) {
 
 ### Q66: What is the StrictMode double-invoking of effects in development and how do you handle it properly?
 **Answer:**
-In development, `React.StrictMode` deliberately mounts, unmounts, and re-mounts every component:
-`Mount -> Unmount -> Mount`.
-**Purpose:** Exposes missing cleanup functions in `useEffect` (e.g. forgotten event listeners, dangling WebSocket connections, duplicate subscriptions).
+
+```javascript
+// StrictMode mounts -> unmounts -> mounts in development:
+function ChatConnection({ roomId }) {
+  useEffect(() => {
+    const socket = connectSocket(roomId);
+    
+    // 🛡️ Proper cleanup prevents duplicate connections in StrictMode:
+    return () => {
+      socket.disconnect();
+    };
+  }, [roomId]);
+}
+```
 
 ---
 
 ### Q67: How do you implement a `useVirtualList` hook for rendering 100,000 items at 60 FPS?
 **Answer:**
-Calculates the slice of visible rows based on container scroll position and item height.
 
 ```javascript
-import { useState, useEffect } from 'react';
-
 export function useVirtualList({ itemCount, itemHeight, containerHeight, scrollTop }) {
   const totalHeight = itemCount * itemHeight;
-  const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - 2); // Buffer 2 rows
+  const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - 2);
   const endIndex = Math.min(itemCount - 1, Math.floor((scrollTop + containerHeight) / itemHeight) + 2);
 
   const visibleItems = [];
   for (let i = startIndex; i <= endIndex; i++) {
-    visibleItems.push({
-      index: i,
-      offsetTop: i * itemHeight
-    });
+    visibleItems.push({ index: i, offsetTop: i * itemHeight });
   }
 
   return { visibleItems, totalHeight };
@@ -1500,8 +1729,18 @@ export function useCopyToClipboard(resetDelayMs = 2000) {
 
 ### Q69: What is the difference between `useMemo` computation and Lazy State Initialization `useState(() => expensiveComputation())`?
 **Answer:**
-- **`useState(() => compute())`**: Runs `compute()` **exactly once** when component mounts. Value is stored in state permanently.
-- **`useMemo(() => compute(), [deps])`**: Re-computes whenever `deps` change. React reserves the right to "forget" memoized values under memory pressure.
+
+```javascript
+// 1. Lazy State Initialization (Executed ONCE on Mount only):
+const [state, setState] = useState(() => {
+  return parseLargeDataSchema(initialBlob); // Runs only once!
+});
+
+// 2. useMemo (Recomputes whenever dependencies change):
+const filteredList = useMemo(() => {
+  return items.filter(i => i.active);
+}, [items]);
+```
 
 ---
 
@@ -1542,11 +1781,7 @@ function subscribe(callback) {
 }
 
 export function useOnlineStatus() {
-  return useSyncExternalStore(
-    subscribe,
-    () => navigator.onLine,       // Client snapshot
-    () => true                   // Server snapshot (default online)
-  );
+  return useSyncExternalStore(subscribe, () => navigator.onLine, () => true);
 }
 ```
 
@@ -1560,16 +1795,11 @@ import { useEffect, useRef } from 'react';
 
 export function useInterval(callback, delayMs) {
   const savedCallback = useRef(callback);
-
-  useEffect(() => {
-    savedCallback.current = callback;
-  }, [callback]);
+  useEffect(() => { savedCallback.current = callback; }, [callback]);
 
   useEffect(() => {
     if (delayMs === null || delayMs === undefined) return;
-
-    const tick = () => savedCallback.current();
-    const id = setInterval(tick, delayMs);
+    const id = setInterval(() => savedCallback.current(), delayMs);
     return () => clearInterval(id);
   }, [delayMs]);
 }
@@ -1579,8 +1809,19 @@ export function useInterval(callback, delayMs) {
 
 ### Q73: What is the risk of Object / Array dependencies in `useEffect` and how is it fixed?
 **Answer:**
-Passing an inline object `useEffect(..., [{ id: 1 }])` causes the effect to run on **every single render** because `{ id: 1 } !== { id: 1 }` (referential inequality).
-**Fix**: Destructure primitives into dependencies `[user.id]` or use the React Compiler.
+
+```javascript
+// ❌ ANTI-PATTERN: [{ id }] creates new reference on every render -> Infinite Effect Loop!
+useEffect(() => {
+  fetchData(options);
+}, [{ id: 10 }]); 
+
+// ✅ FIX: Destructure primitive values in dependency array:
+const { id } = options;
+useEffect(() => {
+  fetchData(id);
+}, [id]);
+```
 
 ---
 
@@ -1599,16 +1840,10 @@ export function useWhyDidYouUpdate(name, props) {
       const changesObj = {};
       allKeys.forEach((key) => {
         if (previousProps.current[key] !== props[key]) {
-          changesObj[key] = {
-            from: previousProps.current[key],
-            to: props[key]
-          };
+          changesObj[key] = { from: previousProps.current[key], to: props[key] };
         }
       });
-
-      if (Object.keys(changesObj).length) {
-        console.log('[why-did-you-update]', name, changesObj);
-      }
+      if (Object.keys(changesObj).length) console.log('[WhyDidYouUpdate]', name, changesObj);
     }
     previousProps.current = props;
   });
@@ -1624,36 +1859,19 @@ export function useWhyDidYouUpdate(name, props) {
 import { useState, useEffect } from 'react';
 
 export function useGeolocation(options = {}) {
-  const [state, setState] = useState({
-    loading: true,
-    latitude: null,
-    longitude: null,
-    error: null
-  });
+  const [coords, setCoords] = useState({ latitude: null, longitude: null });
 
   useEffect(() => {
-    if (!navigator.geolocation) {
-      setState(s => ({ ...s, loading: false, error: 'Geolocation not supported' }));
-      return;
-    }
-
+    if (!navigator.geolocation) return;
     const watchId = navigator.geolocation.watchPosition(
-      (pos) => {
-        setState({
-          loading: false,
-          latitude: pos.coords.latitude,
-          longitude: pos.coords.longitude,
-          error: null
-        });
-      },
-      (err) => setState(s => ({ ...s, loading: false, error: err.message })),
+      (pos) => setCoords({ latitude: pos.coords.latitude, longitude: pos.coords.longitude }),
+      console.error,
       options
     );
-
     return () => navigator.geolocation.clearWatch(watchId);
   }, []);
 
-  return state;
+  return coords;
 }
 ```
 
@@ -1667,45 +1885,49 @@ export function useGeolocation(options = {}) {
 ### Q76: What is the fundamental difference between Server State and Client State?
 **Answer:**
 
-```
-+─────────────────────────────────────────────────────────────────────────────+
-| Feature              | Client State (UI State)      | Server State          |
-+──────────────────────┼──────────────────────────────┼───────────────────────+
-| **Ownership**        | Owned 100% by the browser    | Owned remotely by DB  |
-| **Persistence**      | Ephemeral (lost on refresh)  | Persistent in database|
-| **Concurrency**      | Synchronous, single-user     | Asynchronous, shared  |
-|                      |                              | across multiple users |
-| **Integrity**        | Always accurate & immediate  | Out of date (stale)   |
-|                      |                              | as soon as fetched    |
-| **Examples**         | Modal open, theme, tab index | User profile, cart,   |
-|                      | draft form inputs            | notifications, orders |
-| **Best Tool**        | useState, useReducer, Zustand| TanStack Query, SWR,  |
-|                      |                              | React 19 Actions      |
-+──────────────────────┴──────────────────────────────┴───────────────────────+
+```javascript
+// 1. Client State: Ephemeral UI interactions (Local ownership)
+const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+// 2. Server State: Remote data, cached and synchronized asynchronously
+const { data: userProfile } = useQuery({
+  queryKey: ['user', userId],
+  queryFn: () => fetch(`/api/users/${userId}`).then(r => r.json())
+});
 ```
 
 ---
 
 ### Q77: Why has the industry shifted from global Redux stores to Server State Managers (TanStack Query / SWR) + Minimal Client Stores (Zustand)?
 **Answer:**
-In early React applications, developers dumped everything into a massive monolithic Redux store:
-- Required writing 50+ lines of boilerplate per endpoint (`FETCH_START`, `FETCH_SUCCESS`, `FETCH_ERROR`, reducers, action creators).
-- Suffered from cache staleness, missing garbage collection, manual deduplication, and lack of automatic background refetching on window focus.
 
-**Modern Architecture**:
-1. **Server State (90% of app data)**: Delegated to **TanStack Query / SWR** (automatic caching, refetching, deduping, pagination, mutation rollbacks).
-2. **Client State (10% of app data)**: Kept in lightweight atomic/slice stores like **Zustand** or **Jotai**.
+```javascript
+// Modern Minimal Separation of Concerns:
+// Client Store (Zustand - only UI state):
+export const useUIStore = create((set) => ({
+  theme: 'dark',
+  sidebarOpen: true,
+  toggleSidebar: () => set(s => ({ sidebarOpen: !s.sidebarOpen }))
+}));
+
+// Server State (TanStack Query - handles async caching, refetching, deduping):
+export function useUserOrders(userId) {
+  return useQuery({
+    queryKey: ['orders', userId],
+    queryFn: () => api.getOrders(userId),
+    staleTime: 1000 * 60 * 5 // 5 min fresh
+  });
+}
+```
 
 ---
 
 ### Q78: How does Zustand implement high-performance state management without Context re-render bloat?
 **Answer:**
-Zustand lives outside the React component tree and uses **`useSyncExternalStore` with selective subscriptions**.
 
 ```javascript
 import { create } from 'zustand';
 
-// Store definition
 export const useCartStore = create((set) => ({
   items: [],
   isOpen: false,
@@ -1713,16 +1935,10 @@ export const useCartStore = create((set) => ({
   addItem: (item) => set((state) => ({ items: [...state.items, item] }))
 }));
 
-// Component A subscribes ONLY to isOpen:
-export function CartDrawer() {
-  const isOpen = useCartStore((state) => state.isOpen); // Re-renders ONLY when isOpen changes!
-  return isOpen ? <aside>Cart Drawer Content</aside> : null;
-}
-
-// Component B reads action without subscribing to any state (ZERO re-renders!):
-export function OpenCartButton() {
-  const toggleCart = useCartStore((state) => state.toggleCart);
-  return <button onClick={toggleCart}>Open Cart</button>;
+// Granular Selector: Component re-renders ONLY when items.length changes!
+export function CartBadge() {
+  const itemCount = useCartStore((state) => state.items.length);
+  return <span className="badge">{itemCount}</span>;
 }
 ```
 
@@ -1739,29 +1955,19 @@ export function useUpdateTodo() {
 
   return useMutation({
     mutationFn: (updatedTodo) => api.patchTodo(updatedTodo),
-    
-    // 1. When mutation is fired:
     onMutate: async (newTodo) => {
-      // Cancel outgoing refetches (so they don't overwrite optimistic update)
       await queryClient.cancelQueries({ queryKey: ['todos'] });
-
-      // Snapshot previous value for rollback
       const previousTodos = queryClient.getQueryData(['todos']);
 
-      // Optimistically update query cache
       queryClient.setQueryData(['todos'], (old = []) =>
-        old.map((todo) => (todo.id === newTodo.id ? { ...todo, ...newTodo } : todo))
+        old.map((t) => (t.id === newTodo.id ? { ...t, ...newTodo } : t))
       );
 
-      return { previousTodos }; // Return context with snapshot
+      return { previousTodos };
     },
-
-    // 2. If mutation fails, roll back to snapshot:
     onError: (err, newTodo, context) => {
-      queryClient.setQueryData(['todos'], context.previousTodos);
+      queryClient.setQueryData(['todos'], context.previousTodos); // Rollback!
     },
-
-    // 3. Always refetch after error or success to guarantee backend sync:
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['todos'] });
     }
@@ -1773,30 +1979,26 @@ export function useUpdateTodo() {
 
 ### Q80: What is State Normalization (Normalizr / Redux EntityAdapter) and why is it required in complex nested relational data?
 **Answer:**
-Storing nested arrays (e.g. `users -> posts -> comments -> author`) causes duplicate copies of the same entity in memory. If a user edits their name, updating every nested post/comment requires deep tree mutations.
 
-**Normalized Structure (Database Table format):**
 ```javascript
-{
-  entities: {
-    users: { 1: { id: 1, name: 'Alice' } },
-    posts: { 101: { id: 101, authorId: 1, commentIds: [201, 202] } },
-    comments: { 201: { id: 201, text: 'Great post!', userId: 1 } }
-  },
-  ids: [101]
-}
+import { createEntityAdapter, createSlice } from '@reduxjs/toolkit';
+
+const usersAdapter = createEntityAdapter();
+
+const usersSlice = createSlice({
+  name: 'users',
+  initialState: usersAdapter.getInitialState(),
+  reducers: {
+    userUpdated: usersAdapter.updateOne, // O(1) by ID update!
+    usersReceived: usersAdapter.setAll
+  }
+});
 ```
-Updating `users[1].name` updates the name across the entire application in $O(1)$ time.
 
 ---
 
 ### Q81: What is the difference between Redux Toolkit (RTK) and legacy Redux?
 **Answer:**
-- **Legacy Redux**: Required manual action types, switch-statement reducers, `redux-thunk` configuration, and manual immutable spread operators (`...state`).
-- **Redux Toolkit (`createSlice`, `createAsyncThunk`)**:
-  - Uses **Immer** under the hood, allowing "mutating" syntax (`state.count++`) that safely produces immutable updates.
-  - Generates action creators and action types automatically.
-  - Standardizes store configuration with good defaults (`configureStore`).
 
 ```javascript
 import { createSlice, configureStore } from '@reduxjs/toolkit';
@@ -1806,9 +2008,13 @@ const counterSlice = createSlice({
   initialState: { value: 0 },
   reducers: {
     increment: (state) => {
-      state.value += 1; // Immer safely handles immutable cloning!
+      state.value += 1; // Immer safely produces immutable updates
     }
   }
+});
+
+export const store = configureStore({
+  reducer: { counter: counterSlice.reducer }
 });
 ```
 
@@ -1816,22 +2022,18 @@ const counterSlice = createSlice({
 
 ### Q82: What are Atomic State Managers (Jotai / Recoil) and how do they differ from Slice-based stores (Zustand / Redux)?
 **Answer:**
-- **Slice/Store model (Zustand/Redux)**: Top-down state tree. Components select slices.
-- **Atomic model (Jotai)**: Bottom-up composition of discrete state cells (**atoms**).
-  - Atoms can depend on other atoms (Derived Atoms / Computed State).
-  - Eliminates context provider wrappers.
 
 ```javascript
 import { atom, useAtom } from 'jotai';
 
 export const countAtom = atom(0);
-export const doubleCountAtom = atom((get) => get(countAtom) * 2); // Derived read-only atom
+export const doubleCountAtom = atom((get) => get(countAtom) * 2); // Computed atom
 
 function Counter() {
   const [count, setCount] = useAtom(countAtom);
   const [doubleCount] = useAtom(doubleCountAtom);
 
-  return <button onClick={() => setCount(c => c + 1)}>Count: {count} (Double: {doubleCount})</button>;
+  return <button onClick={() => setCount(c => c + 1)}>Count: {count} ({doubleCount})</button>;
 }
 ```
 
@@ -1839,23 +2041,48 @@ function Counter() {
 
 ### Q83: How do you prevent Context Re-render Cascades in large React component trees?
 **Answer:**
-When a Context value object changes (`value={{ user, theme }}`), **every single component calling `useContext(MyContext)` re-renders**, even if it only uses `theme`!
 
-**Solutions:**
-1. **Split Contexts**: Separate frequently changing state (`UserContext`) from static state (`ThemeContext`).
-2. **Context Selectors** (`use-context-selector` or Zustand).
-3. **Memoize Context Value**:
-   ```javascript
-   const contextValue = useMemo(() => ({ user, setUser }), [user]);
-   return <UserContext value={contextValue}>{children}</UserContext>;
-   ```
+```javascript
+// Split Context values:
+const UserStateContext = createContext(null);
+const UserActionsContext = createContext(null);
+
+export function UserProvider({ children }) {
+  const [user, setUser] = useState(null);
+  const actions = useMemo(() => ({ login: () => {}, logout: () => {} }), []);
+
+  return (
+    <UserActionsContext value={actions}>
+      <UserStateContext value={user}>
+        {children}
+      </UserStateContext>
+    </UserActionsContext>
+  );
+}
+```
 
 ---
 
 ### Q84: What is the difference between Cache Invalidation (`queryClient.invalidateQueries`) and Cache Reset (`queryClient.resetQueries`)?
 **Answer:**
-- **`invalidateQueries`**: Marks queries as stale immediately. If the query is currently mounted/visible on the screen, it refetches in the background without clearing current UI data.
-- **`resetQueries`**: Resets query state back to its initial `initialData`, removing all cached values and showing loading skeletons.
+
+```javascript
+import { useQueryClient } from '@tanstack/react-query';
+
+function CacheManager() {
+  const queryClient = useQueryClient();
+
+  // 1. Invalidate: Marks stale; background refetch preserves visible data without flicker
+  const handleRefresh = () => {
+    queryClient.invalidateQueries({ queryKey: ['orders'] });
+  };
+
+  // 2. Reset: Wipes cached data immediately, restoring initial empty/skeleton state
+  const handleFullReset = () => {
+    queryClient.resetQueries({ queryKey: ['orders'] });
+  };
+}
+```
 
 ---
 
@@ -1870,9 +2097,7 @@ export function useInfiniteFeed() {
     queryKey: ['feed'],
     queryFn: ({ pageParam = 1 }) => fetch(`/api/posts?page=${pageParam}&limit=20`).then(r => r.json()),
     initialPageParam: 1,
-    getNextPageParam: (lastPage, allPages) => {
-      return lastPage.hasMore ? allPages.length + 1 : undefined;
-    }
+    getNextPageParam: (lastPage, allPages) => lastPage.hasMore ? allPages.length + 1 : undefined
   });
 }
 ```
@@ -1881,23 +2106,17 @@ export function useInfiniteFeed() {
 
 ### Q86: How do you handle WebSocket / Server-Sent Events (SSE) live updates with TanStack Query Cache?
 **Answer:**
-Listen to incoming WebSocket messages and mutate the TanStack Query cache directly using `queryClient.setQueryData()`:
 
 ```javascript
 useEffect(() => {
-  const socket = new WebSocket('wss://api.domain.com/live');
+  const sse = new EventSource('/api/live-events');
 
-  socket.onmessage = (event) => {
-    const newNotification = JSON.parse(event.data);
-    
-    // Inject real-time update directly into query cache!
-    queryClient.setQueryData(['notifications'], (old = []) => [
-      newNotification,
-      ...old
-    ]);
+  sse.onmessage = (event) => {
+    const newRecord = JSON.parse(event.data);
+    queryClient.setQueryData(['liveFeed'], (oldData = []) => [newRecord, ...oldData]);
   };
 
-  return () => socket.close();
+  return () => sse.close();
 }, [queryClient]);
 ```
 
@@ -1905,48 +2124,127 @@ useEffect(() => {
 
 ### Q87: What is Finite State Machine (FSM) architecture with XState in complex UI workflows?
 **Answer:**
-Complex multi-step flows (e.g. Stripe checkout, multi-factor auth) suffer from "impossible states" (e.g. `isLoading: true, isError: true, isSuccess: true`).
-**XState FSM** guarantees that a component can only exist in exactly one deterministic state at a time with strict allowed transitions.
+
+```javascript
+import { createMachine } from 'xstate';
+import { useMachine } from '@xstate/react';
+
+const authFlowMachine = createMachine({
+  id: 'auth',
+  initial: 'idle',
+  states: {
+    idle: { on: { SUBMIT: 'authenticating' } },
+    authenticating: {
+      on: {
+        SUCCESS: 'authenticated',
+        FAILURE: 'error'
+      }
+    },
+    authenticated: { on: { LOGOUT: 'idle' } },
+    error: { on: { RETRY: 'authenticating' } }
+  }
+});
+```
 
 ---
 
 ### Q88: How do you build an Offline-First Sync queue in React?
 **Answer:**
-1. Intercept mutations when `navigator.onLine === false`.
-2. Persist failed mutation payloads to IndexedDB (via `idb-keyval`).
-3. Listen to `window.addEventListener('online', ...)` and replay queued mutations in sequential order.
+
+```javascript
+import { get, set } from 'idb-keyval';
+
+async function queueOfflineMutation(mutation) {
+  const queue = (await get('offline_queue')) || [];
+  queue.push(mutation);
+  await set('offline_queue', queue);
+}
+
+// Replay on network online:
+window.addEventListener('online', async () => {
+  const queue = (await get('offline_queue')) || [];
+  for (const item of queue) {
+    await fetch(item.url, { method: item.method, body: JSON.stringify(item.body) });
+  }
+  await set('offline_queue', []);
+});
+```
 
 ---
 
 ### Q89: How do you synchronize state between URL Search Parameters and React state (Nuqs / React Router)?
 **Answer:**
-Storing filter and pagination state in URL search parameters (`?tab=billing&page=2`) ensures that links are bookmarkable, shareable, and support browser back/forward history navigation seamlessly.
+
+```javascript
+import { useSearchParams } from 'react-router-dom';
+
+export function TabbedFilter() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentTab = searchParams.get('tab') || 'overview';
+
+  return (
+    <div>
+      <button onClick={() => setSearchParams({ tab: 'overview' })}>Overview</button>
+      <button onClick={() => setSearchParams({ tab: 'billing' })}>Billing</button>
+      <p>Active view: {currentTab}</p>
+    </div>
+  );
+}
+```
 
 ---
 
 ### Q90: What is the Single Source of Truth principle and how do derived state anti-patterns violate it?
 **Answer:**
-- **Anti-Pattern**: Copying props into local state (`const [email, setEmail] = useState(props.email)`). If `props.email` changes from the parent, the local state becomes out of sync!
-- **Best Practice**: Compute derived values on the fly during render:
-  ```javascript
-  function UserCard({ user }) {
-    const fullName = `${user.firstName} ${user.lastName}`; // Derived on the fly!
-  }
-  ```
+
+```javascript
+// ❌ ANTI-PATTERN: Duplicating prop in local state
+function UserCard({ user }) {
+  const [fullName, setFullName] = useState(`${user.firstName} ${user.lastName}`); // Stale if prop changes!
+}
+
+// ✅ CLEAN DERIVED STATE:
+function UserCardClean({ user }) {
+  const fullName = `${user.firstName} ${user.lastName}`; // Always 100% in sync!
+}
+```
 
 ---
 
 ### Q91: How does Redux Saga compare with Redux Thunk for asynchronous side effects?
 **Answer:**
-- **Redux Thunk**: Simple functions returning async/await. Harder to test and cancel.
-- **Redux Saga**: Uses ES6 Generator functions (`yield takeEvery`, `yield race`). Provides declarative, cancellable side effects suitable for complex financial/orchestration flows.
+
+```javascript
+// Redux Saga Cancellable Side Effect:
+import { takeLatest, call, put } from 'redux-saga/effects';
+
+function* fetchUserSaga(action) {
+  try {
+    const user = yield call(api.fetchUser, action.payload.userId);
+    yield put({ type: 'USER_FETCH_SUCCEEDED', user });
+  } catch (e) {
+    yield put({ type: 'USER_FETCH_FAILED', message: e.message });
+  }
+}
+
+export function* rootSaga() {
+  yield takeLatest('USER_FETCH_REQUESTED', fetchUserSaga); // Automatically cancels previous in-flight requests!
+}
+```
 
 ---
 
 ### Q92: What is Stale-While-Revalidate caching policy inside TanStack Query (`staleTime` vs `gcTime`)?
 **Answer:**
-- **`staleTime` (Default: 0)**: How long fetched data is considered "fresh". Queries with active staleTime will **not** trigger a background refetch when components mount.
-- **`gcTime` / `cacheTime` (Default: 5 minutes)**: How long unused/unmounted query data stays in memory before being garbage collected from the cache.
+
+```javascript
+const { data } = useQuery({
+  queryKey: ['products'],
+  queryFn: fetchProducts,
+  staleTime: 1000 * 60 * 5, // 5 min: considered fresh, 0 network calls on component remount
+  gcTime: 1000 * 60 * 30    // 30 min: unused cache persists in RAM before garbage collection
+});
+```
 
 ---
 
@@ -1956,23 +2254,19 @@ Storing filter and pagination state in URL search parameters (`?tab=billing&page
 ```javascript
 import { create } from 'zustand';
 
-const authBroadcast = new BroadcastChannel('auth_channel');
+const channel = new BroadcastChannel('app_auth');
 
-export const useAuthStore = create((set) => ({
-  token: null,
-  login: (token) => {
-    set({ token });
-    authBroadcast.postMessage({ type: 'LOGIN', token });
-  },
-  logout: () => {
-    set({ token: null });
-    authBroadcast.postMessage({ type: 'LOGOUT' });
+export const useAuth = create((set) => ({
+  user: null,
+  setUser: (user) => {
+    set({ user });
+    channel.postMessage({ type: 'SYNC_USER', user });
   }
 }));
 
-authBroadcast.onmessage = (event) => {
-  if (event.data.type === 'LOGOUT') {
-    useAuthStore.setState({ token: null });
+channel.onmessage = (event) => {
+  if (event.data.type === 'SYNC_USER') {
+    useAuth.setState({ user: event.data.user });
   }
 };
 ```
@@ -1981,62 +2275,142 @@ authBroadcast.onmessage = (event) => {
 
 ### Q94: What is Server-Sent Query Hydration (`HydrationBoundary` / `dehydrate`) in TanStack Query?
 **Answer:**
-Allows prefetching queries on the server inside Next.js/Remix Server Components, serializing (`dehydrate`) the cache into the HTML stream, and rehydrating on the client with zero initial client-side network fetch.
+
+```javascript
+// Next.js / Remix Server Component prefetching:
+import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
+
+export default async function Page() {
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery({ queryKey: ['posts'], queryFn: getPosts });
+
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <PostsListClientComponent />
+    </HydrationBoundary>
+  );
+}
+```
 
 ---
 
 ### Q95: How do you manage Form State at scale: React Hook Form vs. Formik vs. Native React 19 Actions?
 **Answer:**
-- **Formik**: Controlled components (re-renders form on every keystroke). Slow on forms with >30 fields.
-- **React Hook Form**: Uncontrolled components via refs with isolated subscription rendering (Sub-millisecond typing performance).
-- **React 19 Actions (`useActionState`)**: Native progressive enhancement with zero bundle dependency.
+
+```javascript
+import { useForm } from 'react-hook-form';
+
+export function HighPerformanceForm() {
+  const { register, handleSubmit, formState: { errors } } = useForm();
+
+  // Uncontrolled inputs with refs -> 0 re-renders while typing!
+  return (
+    <form onSubmit={handleSubmit(data => console.log(data))}>
+      <input {...register('username', { required: true })} />
+      {errors.username && <span>Username is required</span>}
+      <button type="submit">Submit</button>
+    </form>
+  );
+}
+```
 
 ---
 
 ### Q96: What is Selector Memoization in Reselect (`createSelector`)?
 **Answer:**
-`createSelector` creates memoized selectors that only recompute expensive transformations (e.g. filtering 10,000 items) when the input arguments change referentially.
+
+```javascript
+import { createSelector } from '@reduxjs/toolkit';
+
+const selectItems = (state) => state.cart.items;
+const selectTaxRate = (state) => state.cart.taxRate;
+
+// Recomputes ONLY when items or taxRate change referentially:
+export const selectCartTotal = createSelector(
+  [selectItems, selectTaxRate],
+  (items, taxRate) => items.reduce((sum, item) => sum + item.price, 0) * (1 + taxRate)
+);
+```
 
 ---
 
 ### Q97: How do you implement Undo / Redo Time-Travel state in React?
 **Answer:**
-Maintain a triple state: `{ past: [], present: value, future: [] }`.
-- **Undo**: Move `present` to `future`, pop last item from `past` to `present`.
-- **Redo**: Move `present` to `past`, pop first item from `future` to `present`.
+
+```javascript
+import { useState } from 'react';
+
+export function useTimeTravel(initialPresent) {
+  const [history, setHistory] = useState({ past: [], present: initialPresent, future: [] });
+
+  const set = (newPresent) => setHistory(h => ({
+    past: [...h.past, h.present],
+    present: newPresent,
+    future: []
+  }));
+
+  const undo = () => setHistory(h => {
+    if (h.past.length === 0) return h;
+    const previous = h.past[h.past.length - 1];
+    return {
+      past: h.past.slice(0, -1),
+      present: previous,
+      future: [h.present, ...h.future]
+    };
+  });
+
+  return { state: history.present, set, undo };
+}
+```
 
 ---
 
 ### Q98: How do you handle Global Modals and Notifications without Context re-renders?
 **Answer:**
-Use an imperatively callable event store (Zustand or EventBus) where `<ToastContainer />` subscribes exclusively to toast queues, allowing any function `toast.success('Done')` to trigger toasts without wrapping root components in heavy contexts.
+
+```javascript
+// Standalone Toast Store (Zero Context re-render cascades):
+import { create } from 'zustand';
+
+export const useToast = create((set) => ({
+  toasts: [],
+  notify: (msg) => set(s => ({ toasts: [...s.toasts, { id: Date.now(), msg }] })),
+  dismiss: (id) => set(s => ({ toasts: s.toasts.filter(t => t.id !== id) }))
+}));
+
+// Any function can call: useToast.getState().notify('Order Saved!')
+```
 
 ---
 
 ### Q99: What is the Immutability requirement in React state and why does direct mutation break React?
 **Answer:**
-React relies on **shallow object reference equality (`oldState === newState`)** to detect state changes.
-Mutating an object directly (`state.items.push(x)`) preserves the same memory address reference, so React’s reconciler concludes that nothing changed and **skips re-rendering completely**!
+
+```javascript
+// ❌ WRONG: Mutating object preserves memory pointer -> React skips re-render!
+user.name = 'Bob';
+setUser(user);
+
+// ✅ CORRECT: New object reference triggers re-render:
+setUser({ ...user, name: 'Bob' });
+```
 
 ---
 
 ### Q100: How do you handle State Persistence with Versioning and Migrations in Zustand / Redux Persist?
 **Answer:**
-When updating application data structures, old persisted schemas in user browsers will crash the app. Use migration schemas:
 
 ```javascript
-import { persist, createJSONStorage } from 'zustand/middleware';
+import { persist } from 'zustand/middleware';
 
-export const useSettingsStore = create(
+export const useSettings = create(
   persist(
-    (set) => ({ theme: 'dark', fontSize: 14 }),
+    (set) => ({ theme: 'dark', layout: 'grid' }),
     {
-      name: 'app-settings',
-      version: 2, // Incremented version
+      name: 'user_settings',
+      version: 2,
       migrate: (persistedState, version) => {
-        if (version === 0) {
-          persistedState.fontSize = 14; // Add missing key in v2
-        }
+        if (version === 1) persistedState.layout = 'grid'; // Add missing migration field
         return persistedState;
       }
     }
@@ -2054,62 +2428,29 @@ export const useSettingsStore = create(
 ### Q101: What are the fundamental Rendering Architectures in modern React and how do they compare?
 **Answer:**
 
-```
-+──────────────────────────────────────────────────────────────────────────────────────────────────────────+
-| Architecture           | Render Location  | Initial Page Load | SEO / TTFB | Client JS Overhead          |
-+────────────────────────┼──────────────────┼───────────────────┼────────────┼─────────────────────────────+
-| **CSR (Client-Side)**  | Browser          | Slow (Blank HTML) | Poor       | Heavy (All app code)        |
-+────────────────────────┼──────────────────┼───────────────────┼────────────┼─────────────────────────────+
-| **SSR (Server-Side)**  | Node/Edge Server | Fast HTML paint   | Excellent  | Heavy (Full Hydration)      |
-+────────────────────────┼──────────────────┼───────────────────┼────────────┼─────────────────────────────+
-| **SSG (Static Gen)**   | Build Time       | Instant (CDN)     | Perfect    | Heavy (Full Hydration)      |
-+────────────────────────┼──────────────────┼───────────────────┼────────────┼─────────────────────────────+
-| **ISR (Incremental)**  | Server on demand | Instant (CDN)     | Perfect    | Heavy (Full Hydration)      |
-+────────────────────────┼──────────────────┼───────────────────┼────────────┼─────────────────────────────+
-| **Streaming SSR**      | Server Stream    | Progressive       | Excellent  | Hydrates incrementally      |
-| (with Suspense)        | (Chunk by Chunk) | (Shell -> Chunks) | (Low TTFB) | via Selective Hydration     |
-+────────────────────────┼──────────────────┼───────────────────┼────────────┼─────────────────────────────+
-| **RSC (Server Comp)**  | Server Only      | Instant Stream    | Excellent  | ZERO JS for Server comps    |
-+────────────────────────┼──────────────────┼───────────────────┼────────────┼─────────────────────────────+
-| **PPR (Partial Prerender)| Build + Stream  | Instant Static    | Optimal    | Only interactive islands    |
-+────────────────────────┴──────────────────┴───────────────────┴────────────┴─────────────────────────────+
+```javascript
+// Architecture Matrix in Next.js / React 19:
+// 1. Static (SSG): export const dynamic = 'force-static';
+// 2. Dynamic (SSR): export const dynamic = 'force-dynamic';
+// 3. ISR: export const revalidate = 60; // 60s cache
+// 4. Client Island (CSR): 'use client';
 ```
 
 ---
 
 ### Q102: How does React Streaming SSR with HTML Suspense (`renderToPipeableStream`) work in Node.js?
 **Answer:**
-`renderToPipeableStream` replaces legacy `renderToString` (which was blocking and all-or-nothing).
-
-**How it Works:**
-1. **Immediate Initial Shell**: React immediately flushes the static HTML wrapper (`<html>`, `<head>`, Navbar, Skeleton loaders) to the browser in the first HTTP chunk.
-2. **Suspended Trees**: Components wrapped in `<Suspense>` are paused while data is fetched.
-3. **Out-of-Order Inlined Streaming**: As soon as slow data arrives from the DB, React emits a `<template>` chunk containing the rendered HTML, followed by an inline `<script>` tag that swaps the skeleton placeholder with the real DOM in-place!
 
 ```javascript
-// Node.js Express Server
 import { renderToPipeableStream } from 'react-dom/server';
 import App from './App';
 
 app.get('/', (req, res) => {
-  let didError = false;
-
   const stream = renderToPipeableStream(<App />, {
     bootstrapScripts: ['/bundle.js'],
     onShellReady() {
-      // Shell is ready (Headers, Navbar, Fallbacks) -> Send HTTP 200 immediately!
-      res.statusCode = didError ? 500 : 200;
       res.setHeader('Content-type', 'text/html');
-      stream.pipe(res);
-    },
-    onShellError(err) {
-      // Error in static shell -> Fallback to client-side rendering
-      res.statusCode = 500;
-      res.send('<!doctype html><p>Loading error...</p>');
-    },
-    onError(err) {
-      didError = true;
-      console.error('Streaming SSR Error:', err);
+      stream.pipe(res); // Stream HTML shell immediately!
     }
   });
 });
@@ -2119,55 +2460,53 @@ app.get('/', (req, res) => {
 
 ### Q103: What is the RSC Wire Format (Flight Protocol) and how are Server Components serialized?
 **Answer:**
-React Server Components do **not** return HTML; they return a compact JSON-like serialized stream (**RSC Payload / Flight Format**).
 
-**Example Wire Format Stream:**
+```javascript
+// RSC Flight Wire Format Stream:
+// M1:{"id":"./components/Button.js","chunks":["client-1"],"name":"Button"}
+// J0:["$","div",null,{"className":"card","children":["$L1",{"label":"Buy Now"}]]
 ```
-M1:{"id":"./components/BuyButton.js","chunks":["client-1"],"name":"BuyButton"}
-J0:["$","div",null,{"className":"product-card","children":[["$","h1",null,{"children":"iPhone 16"}],["$","$L1",null,{"price":999}]]}]
-```
-- Lines prefixed with `M`: Client Component Module references (pointers to client bundle chunks).
-- Lines prefixed with `J`: Serialized virtual DOM element trees.
-- Allows re-rendering the server tree dynamically while **preserving all existing client component state (input focus, open accordions)**!
 
 ---
 
 ### Q104: What is the "Poisoning" problem in Server Components and how does the `server-only` package prevent it?
 **Answer:**
-If a developer accidentally imports a server file containing secret API keys or private DB queries into a Client Component (`'use client'`), the private database code will be compiled into the public browser JavaScript bundle!
 
-**Solution (`server-only`)**:
 ```javascript
-// lib/db.js
-import 'server-only'; // 🛡️ Throws a build error if imported in client code!
-import { PrismaClient } from '@prisma/client';
+// lib/secrets.js
+import 'server-only'; // Throws compile error if imported in 'use client' bundle!
 
-export const db = new PrismaClient();
+export const PRIVATE_API_KEY = process.env.STRIPE_SECRET_KEY;
 ```
 
 ---
 
 ### Q105: How does Hydration work and what are the primary causes of Hydration Mismatches?
 **Answer:**
-Hydration is the process where React in the browser attaches event listeners and builds the internal Fiber tree on top of existing server-rendered HTML.
 
-**Common Causes of Hydration Mismatch:**
-1. Using browser-only APIs during render (`window.innerWidth`, `localStorage.getItem()`).
-2. Timestamps / Dates rendered without fixed timezone (`new Date().toLocaleTimeString()`).
-3. Invalid HTML nesting (e.g. `<p><div>Block</div></p>` where the browser auto-corrects the DOM, breaking React's matching index).
-4. Browser extensions modifying DOM (e.g. Password managers injecting `<svg>` into inputs).
+```javascript
+// ❌ Hydration Mismatch (Server renders one date, client renders another):
+// <div>{new Date().toLocaleTimeString()}</div>
+
+// ✅ Fix: Render on client only after mount:
+export function SafeClientTime() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
+  return <span>{new Date().toLocaleTimeString()}</span>;
+}
+```
 
 ---
 
 ### Q106: How do you suppress Hydration Mismatch warnings safely when differences are intentional?
 **Answer:**
-Use `suppressHydrationWarning` on the specific element (e.g. for dynamic client timestamps):
 
 ```javascript
-export function LiveClock() {
+export function DynamicTimestamp() {
   return (
     <time dateTime="2026-09-05" suppressHydrationWarning>
-      {new Date().toLocaleTimeString()}
+      {new Date().toLocaleDateString()}
     </time>
   );
 }
@@ -2177,48 +2516,46 @@ export function LiveClock() {
 
 ### Q107: What is the Island Architecture (Astro / Fresh) and how does it compare to React Server Components?
 **Answer:**
-- **Islands Architecture**: Static HTML page by default. Interactive React components are isolated "islands" hydrated independently with separate JavaScript bundles.
-- **React Server Components (RSC)**: A unified component tree where Server and Client components can be deeply interleaved (Server component can render a Client component which renders a Server component via `children`).
+
+```html
+<!-- Astro Island Architecture: HTML static page + isolated interactive island -->
+<header>Static Company Header (0KB JS)</header>
+<main>
+  <ReactInteractiveCart client:visible /> <!-- Hydrates ONLY when scrolled into view -->
+</main>
+```
 
 ---
 
 ### Q108: How can a Server Component pass data to a Client Component, and what are the serialization rules?
 **Answer:**
-Props passed across the Server $\rightarrow$ Client boundary must be **JSON-serializable** or supported primitives:
-- **Allowed**: Strings, Numbers, Booleans, Arrays, Plain Objects, Sets, Maps, TypedArrays, Buffers, Promises, React Elements (`JSX`), and Server Actions (`'use server'`).
-- **Forbidden**: JavaScript Functions, Symbols, Class instances, DOM elements.
+
+```javascript
+// Server Component (app/page.js)
+import { ClientCard } from './ClientCard';
+
+export default async function Page() {
+  const user = await db.user.findFirst();
+  // Safe: Passing JSON-serializable plain object across network boundary:
+  return <ClientCard user={{ id: user.id, name: user.name }} />;
+}
+```
 
 ---
 
 ### Q109: How does Interleaving Server Components inside Client Components work via the `children` prop pattern?
 **Answer:**
-A Client Component cannot directly `import` and instantiate a Server Component.
-However, a Client Component can receive a Server Component as a **`children` prop**!
 
 ```javascript
-// components/ClientCollapsible.jsx ('use client')
+// Client Component ('use client')
 'use client';
-import { useState } from 'react';
-
-export function ClientCollapsible({ children }) {
+export function ClientAccordion({ children }) {
   const [open, setOpen] = useState(false);
   return (
     <div>
-      <button onClick={() => setOpen(!open)}>Toggle Details</button>
-      {open && children} {/* Render server-rendered children with 0KB client JS! */}
+      <button onClick={() => setOpen(!open)}>Toggle</button>
+      {open && children} {/* Server Component rendered inside Client Component! */}
     </div>
-  );
-}
-
-// app/page.jsx (Server Component)
-import { ClientCollapsible } from './ClientCollapsible';
-import { HeavyServerDataWidget } from './HeavyServerDataWidget'; // Server Component
-
-export default function Page() {
-  return (
-    <ClientCollapsible>
-      <HeavyServerDataWidget /> {/* Executed on server, passed as pre-rendered JSX prop */}
-    </ClientCollapsible>
   );
 }
 ```
@@ -2227,8 +2564,6 @@ export default function Page() {
 
 ### Q110: What is Edge Rendering (Cloudflare Workers / Vercel Edge) and how does `renderToReadableStream` function?
 **Answer:**
-Edge rendering runs React SSR on V8 isolates located at CDN edge points (within 10ms of users worldwide) without standard Node.js APIs (`fs`, `net`).
-Uses standard Web API **`renderToReadableStream`**:
 
 ```javascript
 import { renderToReadableStream } from 'react-dom/server';
@@ -2236,12 +2571,8 @@ import App from './App';
 
 export default {
   async fetch(request) {
-    const stream = await renderToReadableStream(<App />, {
-      bootstrapScripts: ['/main.js']
-    });
-    return new Response(stream, {
-      headers: { 'content-type': 'text/html; charset=utf-8' }
-    });
+    const stream = await renderToReadableStream(<App />);
+    return new Response(stream, { headers: { 'content-type': 'text/html' } });
   }
 };
 ```
@@ -2250,56 +2581,58 @@ export default {
 
 ### Q111: What is Incremental Static Regeneration (ISR) and On-Demand Revalidation (`revalidatePath` / `revalidateTag`)?
 **Answer:**
-ISR generates static pages at build time and updates them in the background when requested after a revalidation period.
-- **Time-based ISR**: `export const revalidate = 60;` (Regenerates every 60s).
-- **On-Demand ISR**: Triggered via webhooks when CMS updates:
-  ```javascript
-  'use server';
-  import { revalidateTag, revalidatePath } from 'next/cache';
 
-  export async function onProductUpdated(productId) {
-    revalidateTag('products'); // Purges edge cache for all product pages instantly
-  }
-  ```
+```javascript
+// Server Action triggering instant ISR Cache Purge:
+'use server';
+import { revalidateTag } from 'next/cache';
+
+export async function updateArticle(id, data) {
+  await db.article.update({ where: { id }, data });
+  revalidateTag('articles'); // Purges cached static HTML instantly across Edge CDNs!
+}
+```
 
 ---
 
 ### Q112: How do you prevent Waterfall Requests in React Server Component architectures?
 **Answer:**
-- **Waterfall Anti-pattern (Sequential Awaits)**:
-  ```javascript
-  const user = await db.getUser(); // Takes 50ms
-  const orders = await db.getOrders(user.id); // Takes 50ms (Total: 100ms)
-  ```
-- **Parallel Fetching**:
-  ```javascript
-  const [user, globalConfig] = await Promise.all([
+
+```javascript
+// ✅ Parallel Data Fetching in Server Components:
+export default async function DashboardPage() {
+  const [userPromise, statsPromise] = [
     db.getUser(),
-    db.getGlobalConfig()
-  ]);
-  ```
+    db.getStats()
+  ];
+  const [user, stats] = await Promise.all([userPromise, statsPromise]);
+  return <DashboardView user={user} stats={stats} />;
+}
+```
 
 ---
 
 ### Q113: What is the difference between `<Suspense>` on the Server vs. `<Suspense>` on the Client?
 **Answer:**
-- **Client `<Suspense>`**: Displays a fallback spinner in the DOM while a dynamic import (`React.lazy`) or client fetch (`use()`) resolves in the browser.
-- **Server `<Suspense>`**: Flushes the surrounding page HTML shell immediately, pauses the suspended branch, and streams the finished HTML chunk down the open HTTP connection when ready.
+
+```javascript
+// Streaming Suspense on Server:
+<Suspense fallback={<NavbarSkeleton />}>
+  <AsyncServerNavbar /> {/* Streams HTML chunk as soon as DB finishes */}
+</Suspense>
+```
 
 ---
 
 ### Q114: How does React Server Component Caching (`React.cache`) work and what is its request lifecycle?
 **Answer:**
-`React.cache()` creates a **per-request memoized function**.
-If 5 different components call `getUser(id)` during the same server render pass, the database query executes **only once**.
-The cache is automatically garbage collected at the end of the server request, preventing memory leaks between different users.
 
 ```javascript
 import { cache } from 'react';
 import db from '@/lib/db';
 
-export const getUser = cache(async (id) => {
-  return await db.user.findUnique({ where: { id } });
+export const getSiteConfig = cache(async () => {
+  return await db.config.findFirst(); // Memoized for the lifetime of 1 server request
 });
 ```
 
@@ -2307,26 +2640,38 @@ export const getUser = cache(async (id) => {
 
 ### Q115: What is the impact of CSS Delivery on Streaming SSR (Critical CSS Inlining)?
 **Answer:**
-If HTML chunks stream to the browser before corresponding CSS stylesheets arrive, the user experiences **Flash of Unstyled Content (FOUC)**.
-React 19 native `<link rel="stylesheet" precedence="default">` pauses rendering of the streamed HTML chunk until the corresponding CSS has loaded, eliminating FOUC.
+
+```html
+<!-- React 19 Stylesheet Precedence: Inlined before streamed HTML chunk -->
+<link rel="stylesheet" href="/styles/streamed-widget.css" precedence="high" />
+```
 
 ---
 
 ### Q116: How do you handle Authentication and Cookies inside React Server Components?
 **Answer:**
-Server Components can read request cookies and headers (read-only), but **cannot set cookies directly** during render (headers are already flushed in streaming).
-Setting cookies must be performed inside **Server Actions** or **Route Handlers / Middleware**.
+
+```javascript
+import { cookies } from 'next/headers';
+
+export default async function ProfileServerComponent() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get('auth_token')?.value;
+  const user = await verifyJwtAndGetUser(token);
+
+  return <div>Welcome back, {user.name}</div>;
+}
+```
 
 ---
 
 ### Q117: What is Static Site Generation (SSG) with Dynamic Route Parameters (`generateStaticParams`)?
 **Answer:**
-Pre-renders dynamic parameterized routes at build time (e.g. `/blog/post-1`, `/blog/post-2`):
 
 ```javascript
 export async function generateStaticParams() {
-  const posts = await db.posts.findMany({ select: { slug: true } });
-  return posts.map(p => ({ slug: p.slug }));
+  const products = await db.products.findMany({ select: { id: true } });
+  return products.map(p => ({ id: String(p.id) }));
 }
 ```
 
@@ -2334,56 +2679,112 @@ export async function generateStaticParams() {
 
 ### Q118: How does Server-Side Request Deduplication work across `fetch()` calls?
 **Answer:**
-Modern React frameworks (Next.js) monkey-patch or wrap the global `fetch()` to automatically deduplicate identical `GET` requests within the same render tree pass.
+
+```javascript
+// Next.js automatic fetch deduplication:
+// Calling fetch() with same URL in 5 separate server components fires 1 single HTTP request:
+const res = await fetch('https://api.domain.com/user', { next: { revalidate: 3600 } });
+```
 
 ---
 
 ### Q119: What are Client-Side Navigations in an RSC Application and why is it faster than standard MPAs?
 **Answer:**
-On link click (`<Link href="/dashboard">`):
-1. Browser does **not** perform a full page reload.
-2. React fetches the new route's **RSC Payload stream** over `fetch()`.
-3. Merges the new Server Components into the existing DOM tree, preserving client state (e.g. audio player continues playing without interruption!).
+
+```javascript
+import Link from 'next/link';
+
+// Navigates via fetch('/rsc-payload') without full browser page reload:
+<Link href="/analytics" prefetch={true}>Analytics</Link>
+```
 
 ---
 
 ### Q120: How do you handle Flash of Layout Shift (CLS) when streaming with Suspense?
 **Answer:**
-Ensure that the `<Suspense fallback={<Skeleton />}>` skeleton component matches the **exact pixel dimensions and aspect ratio** of the loaded content to prevent layout shifts when the HTML chunk arrives.
+
+```javascript
+// Dimension-Locked Skeleton matching exact pixel height of final grid:
+<Suspense fallback={<div style={{ height: '350px', width: '100%' }} className="skeleton-box" />}>
+  <AsyncProductGrid />
+</Suspense>
+```
 
 ---
 
 ### Q121: What is the difference between Static Export (`output: 'export'`) and Server Runtimes?
 **Answer:**
-- **Static Export**: Generates purely static HTML/CSS/JS files hostable on GitHub Pages or S3/Nginx (No Node.js server, No Server Actions, No dynamic SSR).
-- **Server Runtime**: Requires Node.js or Edge runtime to process Server Actions and streaming on demand.
+
+```javascript
+// next.config.js - Static HTML export mode:
+module.exports = {
+  output: 'export', // Produces pure static HTML/JS/CSS files in /out directory
+  images: { unoptimized: true }
+};
+```
 
 ---
 
 ### Q122: How do you build an SEO-optimized Dynamic Open Graph (OG) Image Generator in React?
 **Answer:**
-Use `@vercel/og` (or Satori) to render standard JSX into PNG images at the Edge dynamically for `<meta property="og:image">`.
+
+```javascript
+import { ImageResponse } from 'next/og';
+
+export async function GET(request) {
+  const { searchParams } = new URL(request.url);
+  const title = searchParams.get('title') || 'Default Title';
+
+  return new ImageResponse(
+    (
+      <div style={{ fontSize: 48, background: '#111', color: '#fff', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        {title}
+      </div>
+    ),
+    { width: 1200, height: 630 }
+  );
+}
+```
 
 ---
 
 ### Q123: What is the role of React Server Actions in Form Progressive Enhancement?
 **Answer:**
-Forms with native `<form action={serverAction}>` work even if JavaScript is completely disabled or fails to load on a mobile device (executes standard HTTP POST and redirects), and hydrates to smooth AJAX when JS is active.
+
+```javascript
+// Works with 0 JavaScript enabled in browser via standard HTTP POST:
+<form action={myServerAction}>
+  <input name="email" required />
+  <button type="submit">Subscribe</button>
+</form>
+```
 
 ---
 
 ### Q124: How do you handle Stale Search Crawlers and Social Media Bots with Streaming SSR?
 **Answer:**
-Crawlers (Googlebot, Bingbot) do not always handle streaming HTML well.
-Server framework inspects `user-agent` header:
-- If Bot: Wait for `onAllReady` to flush the entire completed HTML in one single blocking response.
-- If User Browser: Use `onShellReady` for fast progressive streaming.
+
+```javascript
+const isBot = /bot|googlebot|crawler|spider/i.test(req.headers['user-agent'] || '');
+const stream = renderToPipeableStream(<App />, {
+  [isBot ? 'onAllReady' : 'onShellReady']() {
+    stream.pipe(res); // Bots receive 100% complete HTML before status code is sent!
+  }
+});
+```
 
 ---
 
 ### Q125: What is the future roadmap of React Server Functions beyond HTTP (WebSockets / gRPC)?
 **Answer:**
-React is abstracting Server Actions into protocol-agnostic Remote Procedure Calls, allowing Server Actions to execute across WebSocket connections, worker threads, and IPC channels.
+
+```javascript
+// Protocol-agnostic Server Action Invocation:
+'use server';
+export async function executeDistributedAction(rpcPayload) {
+  return await grpcClient.dispatch(rpcPayload);
+}
+```
 
 
 ---
@@ -2395,84 +2796,70 @@ React is abstracting Server Actions into protocol-agnostic Remote Procedure Call
 ### Q126: How do you read and interpret a React DevTools Profiler Flamegraph and Ranked Chart?
 **Answer:**
 
-```
-+─────────────────────────────────────────────────────────────────────────────+
-|                        React DevTools Profiler Views                        |
-+──────────────────────────────────────┬──────────────────────────────────────+
-| 1. Flamegraph View                   | Visualizes component hierarchy tree; |
-|                                      | width = time taken, color = intensity|
-|                                      | (Yellow/Orange = Slow, Grey = Skipped|
-+──────────────────────────────────────┼──────────────────────────────────────+
-| 2. Ranked Chart View                 | Sorts all rendered components in     |
-|                                      | order of execution duration (Fastest |
-|                                      | way to find bottleneck components)   |
-+──────────────────────────────────────┼──────────────────────────────────────+
-| 3. "Why did this render?" Tooltip    | Explains exact cause: props changed, |
-|                                      | state changed, context changed, or   |
-|                                      | parent re-rendered.                  |
-+──────────────────────────────────────┴──────────────────────────────────────+
+```javascript
+// Programmatic Profiling Callback:
+function onProfileRender(id, phase, actualDuration, baseDuration) {
+  console.log(`[Profiler] ${id} - ${phase}: ${actualDuration.toFixed(2)}ms (Base: ${baseDuration.toFixed(2)}ms)`);
+}
 ```
 
 ---
 
 ### Q127: What is the difference between Component Render Time (Self Duration) and Subtree Duration (Base Duration)?
 **Answer:**
-- **Self Duration**: The time spent rendering this specific component alone (excluding time spent in child components). High self duration indicates heavy synchronous computation in the component body.
-- **Base Duration**: The estimated time it would take to re-render the entire component subtree without any memoization (worst-case cost).
+
+```javascript
+// Profiler duration breakdown:
+// Self Duration: Pure computation inside this component alone
+// Base Duration: Estimated worst-case time to render all children without memoization
+<Profiler id="UserFeed" onRender={(id, phase, actualDuration, baseDuration) => {
+  if (actualDuration > 16) console.warn('Frame dropped: took > 16ms');
+}}>
+  <UserFeed />
+</Profiler>
+```
 
 ---
 
 ### Q128: What are the primary causes of Unnecessary Re-Renders in React applications?
 **Answer:**
 
-1. **Parent Re-rendering Unmemoized Children**: When a parent re-renders, all child components re-render by default.
-2. **Inline Object / Array Prop Literals**: Passing `<Component config={{ theme: 'dark' }} />` creates a new object reference every render.
-3. **Anonymous Inline Arrow Functions**: `<button onClick={() => handleClick(id)} />` creates a new function pointer every render.
-4. **Context Value Object Thrashing**: Passing `value={{ user, theme }}` without `useMemo`.
-5. **Missing or Volatile Keys in Lists**: Using `key={Math.random()}` forces full component unmount and remount.
+```javascript
+// ❌ Re-render Trap: Inline object reference constructed every render:
+<UserProfile config={{ theme: 'dark', role: 'admin' }} />
+
+// ✅ Fix: Move static objects outside component or use React Compiler:
+const STATIC_CONFIG = { theme: 'dark', role: 'admin' };
+<UserProfile config={STATIC_CONFIG} />
+```
 
 ---
 
 ### Q129: How do you implement List Virtualization using `@tanstack/react-virtual` for 100,000 items?
 **Answer:**
-Rendering 10,000 DOM nodes creates 10,000 physical DOM tree elements, consuming 500MB+ RAM and lagging scroll performance.
-**Virtualization** renders ONLY the 15-20 DOM nodes currently inside the visible viewport.
 
 ```javascript
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { useRef } from 'react';
 
-export function VirtualizedUserList({ users }) {
+export function VirtualizedList({ items }) {
   const parentRef = useRef(null);
 
-  const rowVirtualizer = useVirtualizer({
-    count: users.length,
+  const virtualizer = useVirtualizer({
+    count: items.length,
     getScrollElement: () => parentRef.current,
-    estimateSize: () => 60, // Estimated row height in px
-    overscan: 5             // Render 5 buffer items outside viewport
+    estimateSize: () => 50,
+    overscan: 5
   });
 
   return (
-    <div ref={parentRef} style={{ height: '500px', overflow: 'auto', border: '1px solid #ccc' }}>
-      <div style={{ height: `${rowVirtualizer.getTotalSize()}px`, width: '100%', position: 'relative' }}>
-        {rowVirtualizer.getVirtualItems().map((virtualRow) => {
-          const user = users[virtualRow.index];
-          return (
-            <div
-              key={virtualRow.index}
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: `${virtualRow.size}px`,
-                transform: `translateY(${virtualRow.start}px)`
-              }}
-            >
-              <strong>{user.name}</strong> - {user.email}
-            </div>
-          );
-        })}
+    <div ref={parentRef} style={{ height: '400px', overflow: 'auto' }}>
+      <div style={{ height: `${virtualizer.getTotalSize()}px`, position: 'relative' }}>
+        {virtualizer.getVirtualItems().map(virtualRow => (
+          <div key={virtualRow.index} style={{ position: 'absolute', top: 0, transform: `translateY(${virtualRow.start}px)` }}>
+            {items[virtualRow.index].name}
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -2483,42 +2870,12 @@ export function VirtualizedUserList({ users }) {
 
 ### Q130: How do you offload heavy CPU computation (e.g. Data Parsing, Image Processing) to Web Workers in React?
 **Answer:**
-Heavy synchronous loops block the browser main thread and freeze user typing. Web Workers run in an isolated background thread.
 
 ```javascript
-// worker.js (Dedicated Web Worker)
-self.onmessage = (event) => {
-  const { data } = event;
-  // Heavy computation: Sort and filter 1,000,000 records
-  const result = data.filter(item => item.value > 500).sort((a, b) => b.value - a.value);
-  self.postMessage(result);
-};
-
-// React Component
-import { useState, useEffect, useRef } from 'react';
-
-export function HeavyDataView({ rawData }) {
-  const [processedData, setProcessedData] = useState([]);
-  const workerRef = useRef(null);
-
-  useEffect(() => {
-    workerRef.current = new Worker(new URL('./worker.js', import.meta.url));
-    workerRef.current.onmessage = (e) => setProcessedData(e.data);
-
-    return () => workerRef.current.terminate();
-  }, []);
-
-  const handleCompute = () => {
-    workerRef.current.postMessage(rawData); // Offload to background thread
-  };
-
-  return (
-    <div>
-      <button onClick={handleCompute}>Process 1M Items</button>
-      <p>Processed items: {processedData.length}</p>
-    </div>
-  );
-}
+// Web Worker Bridge:
+const worker = new Worker(new URL('./filterWorker.js', import.meta.url));
+worker.postMessage({ dataset: raw100kRows, query: 'searchTerm' });
+worker.onmessage = (e) => setFilteredResults(e.data);
 ```
 
 ---
@@ -2526,80 +2883,57 @@ export function HeavyDataView({ rawData }) {
 ### Q131: What are the most common Memory Leaks in React and how do you diagnose them?
 **Answer:**
 
-1. **Uncleared Event Listeners**: Adding `window.addEventListener` inside `useEffect` without a cleanup function.
-2. **Dangling Timers / Intervals**: `setInterval` continuing to run and retain closures after component unmounts.
-3. **Un-aborted Async Requests**: Updating state on unmounted components.
-4. **Global Subscriptions / Event Emitters**: Subscribing to an external store without un-subscribing.
-5. **Retained DOM Node References in Refs**: Keeping detached DOM references in global variables.
-
-**Diagnosis in Chrome DevTools:**
-1. Open DevTools -> "Memory" tab.
-2. Record **Allocation Instrumentation on Timeline**.
-3. Mount and unmount the component 10 times. Blue allocation spikes that are not garbage-collected represent leaking objects.
+```javascript
+// ❌ Memory Leak: Uncleared global listener retaining component scope:
+useEffect(() => {
+  window.addEventListener('resize', onResize);
+  // Missing return () => window.removeEventListener('resize', onResize);
+}, []);
+```
 
 ---
 
 ### Q132: What is the "Children as Props" / Element Lifting optimization and why does it prevent child re-renders without `memo`?
 **Answer:**
-When a parent component re-renders, components passed via the **`children` prop do NOT re-render** because their JSX element reference was created outside the parent's scope!
 
 ```javascript
-// ❌ Slower: HeavyChild re-renders whenever count updates:
-function ExpensiveParent() {
+// ✅ HeavyChild NEVER re-renders on count state updates:
+function CounterWrapper({ children }) {
   const [count, setCount] = useState(0);
   return (
     <div onClick={() => setCount(c => c + 1)}>
-      <p>Count: {count}</p>
-      <HeavyChild />
+      <span>{count}</span>
+      {children} {/* Element reference is identical! */}
     </div>
   );
 }
-
-// ✅ 100% Faster: HeavyChild NEVER re-renders on count updates (Lifted Element):
-function OptimizedWrapper({ children }) {
-  const [count, setCount] = useState(0);
-  return (
-    <div onClick={() => setCount(c => c + 1)}>
-      <p>Count: {count}</p>
-      {children} {/* React reuses same element reference! */}
-    </div>
-  );
-}
-
-// Usage:
-<OptimizedWrapper>
-  <HeavyChild />
-</OptimizedWrapper>
 ```
 
 ---
 
 ### Q133: How does React Batching work in React 18 & 19 and how does it optimize network rendering?
 **Answer:**
-React groups multiple state updates into a single re-render pass, reducing layout recalcs and DOM repaints:
 
 ```javascript
-// In React 18/19, automatic batching applies everywhere:
+// Automatic Batching across all async callbacks:
 setTimeout(() => {
-  setCount(c => c + 1);
-  setFlag(f => !f);
+  setCount(1);
   setUser('Alice');
-  // Exactly 1 re-render occurs for all 3 state updates!
-}, 1000);
+  setTheme('dark');
+  // Exactly 1 re-render pass!
+}, 100);
 ```
 
 ---
 
 ### Q134: What is CSS `content-visibility: auto` and how does it supercharge large React page rendering?
 **Answer:**
-CSS `content-visibility: auto` tells the browser rendering engine to **skip layout and painting for off-screen DOM elements** until the user scrolls near them.
-- Reduces Initial Render time by up to **70%**.
-- Requires `contain-intrinsic-size: 0 500px` to prevent scrollbar jumping.
 
 ```css
-.react-card-item {
+/* Skips layout & painting for offscreen React DOM nodes: */
+.react-virtual-card {
   content-visibility: auto;
-  contain-intrinsic-size: 0 350px;
+  contain-intrinsic-size: 0 400px;
 }
 ```
 
@@ -2607,9 +2941,16 @@ CSS `content-visibility: auto` tells the browser rendering engine to **skip layo
 
 ### Q135: What is the Core Web Vitals (INP, LCP, CLS) metric impact of React components?
 **Answer:**
-- **INP (Interaction to Next Paint)**: Measures UI responsiveness to user clicks/taps. Degraded by heavy synchronous render loops. Solved by `useTransition` and time-slicing.
-- **LCP (Largest Contentful Paint)**: Main hero image/text render speed. Optimized by SSR streaming and `<link rel="preload">`.
-- **CLS (Cumulative Layout Shift)**: Unexpected visual jumps. Prevented by fixed aspect-ratio skeleton loaders in `<Suspense>`.
+
+```javascript
+// Optimize INP with startTransition:
+function onSearchTyping(text) {
+  setImmediateInput(text); // Fast SyncLane
+  startTransition(() => {
+    setFilteredResults(filterDataset(text)); // Low priority TransitionLane
+  });
+}
+```
 
 ---
 
@@ -2617,70 +2958,91 @@ CSS `content-visibility: auto` tells the browser rendering engine to **skip layo
 **Answer:**
 
 ```javascript
-import { Profiler } from 'react';
-
-function onRenderCallback(id, phase, actualDuration, baseDuration, startTime, commitTime) {
-  if (actualDuration > 16) { // Flag render frames taking longer than 16ms (sub-60fps)
-    console.warn(`[Performance Alert] ${id} (${phase}) took ${actualDuration.toFixed(2)}ms`);
-    // Forward metric to Datadog / OpenTelemetry
-  }
-}
-
-export function MonitoredDashboard() {
-  return (
-    <Profiler id="AnalyticsGrid" onRender={onRenderCallback}>
-      <AnalyticsGrid />
-    </Profiler>
-  );
-}
+<Profiler id="CheckoutFlow" onRender={(id, phase, duration) => {
+  datadogRum.addDurationMetric(id, duration);
+}}>
+  <CheckoutForm />
+</Profiler>
 ```
 
 ---
 
 ### Q137: What is the cost of Anonymous Functions in JSX and when does it actually matter?
 **Answer:**
-- In small, leaf components (e.g. `<button onClick={() => doSomething()} />`), creating an inline arrow function has negligible cost ($<0.001\text{ms}$).
-- **When it matters**: When passed as a prop to a **memoized child or virtualized list row** (`<VirtualizedRow onClick={() => onSelect(id)} />`), the new function reference invalidates memoization, forcing 1,000 child rows to re-render!
+
+```javascript
+// When passing to memoized children in a list:
+// ❌ Inlined arrow creates new reference on every tick:
+<MemoizedListItem onClick={() => handleSelect(item.id)} />
+
+// ✅ Pass ID and stable handler:
+<MemoizedListItem onSelect={handleSelect} itemId={item.id} />
+```
 
 ---
 
 ### Q138: How do you optimize React SVGs: Inline SVG vs. Icon Fonts vs. Sprite Sheets?
 **Answer:**
-- **Inline JSX SVGs (Anti-pattern at scale)**: 500 inlined SVGs balloon JS bundle size by 300KB and increase React DOM node memory.
-- **SVG Sprite Sheet (`<svg><use href="#icon-star" /></svg>`)**: 1 cached `.svg` file loaded once over HTTP; references rendered with zero JS bundle overhead.
+
+```html
+<!-- SVG Sprite Sheet (0KB JS bundle overhead): -->
+<svg className="icon-star"><use href="/icons.svg#star" /></svg>
+```
 
 ---
 
 ### Q139: What is Tree-Shaking in modern bundlers (Rollup / Webpack / ESBuild) and why do Barrel Files (`index.js`) harm React performance?
 **Answer:**
-**Barrel File Problem**:
-`import { Button } from '@/components'` imports an `index.js` file that re-exports 200 components.
-- The bundler parses and includes code/dependencies for all 200 components (including heavy charts and date pickers) in the initial bundle!
-- **Fix**: Direct path imports `import { Button } from '@/components/Button'` or configure `sideEffects: false` in `package.json`.
+
+```javascript
+// ❌ Heavy Barrel File Import (Pulls all 100 icons into bundle):
+// import { StarIcon } from '@/icons';
+
+// ✅ Direct Path Import (Pulls ONLY StarIcon):
+import { StarIcon } from '@/icons/StarIcon';
+```
 
 ---
 
 ### Q140: How do you measure and prevent Memory Leaks with Detached DOM Nodes?
 **Answer:**
-A detached DOM node occurs when an element is removed from the DOM tree, but a JavaScript closure, Map, or Ref still holds a reference to it.
-**Prevention**: Always set `ref.current = null` in cleanup handlers when caching DOM nodes.
+
+```javascript
+// Ensure refs are cleaned up on unmount:
+useEffect(() => {
+  return () => {
+    cachedDOMElementRef.current = null; // Release pointer for V8 Garbage Collector!
+  };
+}, []);
+```
 
 ---
 
 ### Q141: What is the Performance Cost of Deep Context Nesting (`<Theme><Auth><Locale><Cart>...`)?
 **Answer:**
-Deeply nested Context providers increase Fiber tree depth. While the initial provider traversal is cheap, any context state mutation traverses all children down the branch. Keep context providers flat or combine them into a single composition root.
+
+```javascript
+// Combine multiple flat contexts into a single composition root:
+export function AppProviders({ children }) {
+  return (
+    <ThemeProvider>
+      <AuthProvider>
+        <CartProvider>{children}</CartProvider>
+      </AuthProvider>
+    </ThemeProvider>
+  );
+}
+```
 
 ---
 
 ### Q142: How do you optimize React State Updates during rapid drag-and-drop or scroll events?
 **Answer:**
-Never write to React state (`useState`) on 60fps mousemove or scroll events!
-**Solution**: Direct DOM mutation via `useRef` + `requestAnimationFrame`, or CSS transform manipulation:
 
 ```javascript
-function onMouseMove(e) {
-  dragRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+// Direct DOM transformation for 60fps animations:
+function onDrag(e) {
+  elementRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
 }
 ```
 
@@ -2688,13 +3050,10 @@ function onMouseMove(e) {
 
 ### Q143: What is the difference between `React.memo` custom comparator and standard shallow comparison?
 **Answer:**
-`React.memo(Component, arePropsEqual)`:
-- Returning `true` **skips** re-render.
-- Returning `false` **forces** re-render.
 
 ```javascript
-export const UserCard = React.memo(CardComponent, (prevProps, nextProps) => {
-  return prevProps.user.id === nextProps.user.id && prevProps.user.updatedAt === nextProps.user.updatedAt;
+export const MemoUserRow = React.memo(UserRow, (prev, next) => {
+  return prev.user.id === next.user.id && prev.user.version === next.user.version;
 });
 ```
 
@@ -2702,8 +3061,12 @@ export const UserCard = React.memo(CardComponent, (prevProps, nextProps) => {
 
 ### Q144: How does `useCallback` sometimes degrade performance instead of improving it?
 **Answer:**
-`useCallback(fn, deps)` requires allocating the inline function *and* allocating a dependencies array on every render, plus running array equality checks.
-If the child component is **not** memoized, `useCallback` adds pure overhead with zero benefit!
+
+```javascript
+// ❌ Wasteful: Child is not memoized, so useCallback adds pure array/closure allocation overhead:
+const handleClick = useCallback(() => console.log('clicked'), []);
+<StandardUnmemoizedButton onClick={handleClick} />
+```
 
 ---
 
@@ -2711,30 +3074,24 @@ If the child component is **not** memoized, `useCallback` adds pure overhead wit
 **Answer:**
 
 ```javascript
-import { useState, useEffect, useRef } from 'react';
-
-export function FPSMonitor() {
+export function useFPSMonitor() {
   const [fps, setFps] = useState(60);
-  const frameCount = useRef(0);
-  const lastTime = useRef(performance.now());
-
   useEffect(() => {
-    let animId;
+    let frame = 0, last = performance.now(), anim;
     const loop = () => {
-      frameCount.current++;
+      frame++;
       const now = performance.now();
-      if (now - lastTime.current >= 1000) {
-        setFps(Math.round((frameCount.current * 1000) / (now - lastTime.current)));
-        frameCount.current = 0;
-        lastTime.current = now;
+      if (now - last >= 1000) {
+        setFps(Math.round((frame * 1000) / (now - last)));
+        frame = 0;
+        last = now;
       }
-      animId = requestAnimationFrame(loop);
+      anim = requestAnimationFrame(loop);
     };
-    animId = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(animId);
+    anim = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(anim);
   }, []);
-
-  return <div style={{ position: 'fixed', bottom: 10, right: 10 }}>FPS: {fps}</div>;
+  return fps;
 }
 ```
 
@@ -2742,32 +3099,72 @@ export function FPSMonitor() {
 
 ### Q146: What is the impact of Unchecked Dependency Arrays on CPU and Memory?
 **Answer:**
-Omitting dependencies or passing newly constructed objects on every tick causes effects to fire constantly in tight loops, locking up the browser thread and preventing garbage collection.
+
+```javascript
+// ❌ Missing empty array causes infinite fetch on every single re-render:
+useEffect(() => {
+  fetchData(); // Runs on EVERY render cycle!
+}); // Missing [] !
+```
 
 ---
 
 ### Q147: How do you profile React Component Memory Footprints with Chrome DevTools Heap Snapshots?
 **Answer:**
-Take two Heap Snapshots (Before Action vs. After Action), filter by `FiberNode` or component constructor name, and inspect the **Retained Size** to detect un-freed instances.
+
+```javascript
+// Identify retained Fiber instances in Chrome Memory Profiler by constructor:
+// Filter by 'FiberNode' and inspect 'Retained Size'
+```
 
 ---
 
 ### Q148: What is the difference between Synchronous Layout Thrashing and Batched DOM Reads/Writes?
 **Answer:**
-Interleaving DOM reads (`offsetHeight`) and DOM writes (`style.height = ...`) forces the browser to synchronously recalculate layout multiple times per frame.
-Batch all reads first, then execute all writes inside `requestAnimationFrame`.
+
+```javascript
+// ❌ Layout Thrashing (Interleaving reads and writes):
+const w1 = el1.offsetWidth; // Read
+el1.style.width = w1 + 'px'; // Write (Invalidates layout!)
+const w2 = el2.offsetWidth; // Read (Forces layout recalculation!)
+
+// ✅ Batched (All reads first, then all writes):
+const w1 = el1.offsetWidth;
+const w2 = el2.offsetWidth;
+el1.style.width = w1 + 'px';
+el2.style.width = w2 + 'px';
+```
 
 ---
 
 ### Q149: How do you optimize React Animations using Framer Motion / Web Animations API (WAAPI)?
 **Answer:**
-Animate only GPU-accelerated CSS properties: **`transform` and `opacity`** (bypasses layout and paint stages). Avoid animating `width`, `height`, `top`, or `margin`.
+
+```javascript
+// GPU Accelerated CSS Transforms (Zero layout recalcs):
+<motion.div animate={{ x: 100, opacity: 1 }} transition={{ duration: 0.3 }} />
+```
 
 ---
 
 ### Q150: What is the React Compiler's impact on Runtime Profiling metrics?
 **Answer:**
-With the React Compiler active, component self-duration drops by 40-70% across medium-to-large apps, and ranked charts show near-zero time spent in unchanged leaf components.
+
+```javascript
+// React Compiler inlines auto-memoization cache check:
+function CompiledComponent(props) {
+  const $ = _c(2); // Memo cache slot
+  let formatted;
+  if ($[0] !== props.text) {
+    formatted = heavyFormat(props.text);
+    $[0] = props.text;
+    $[1] = formatted;
+  } else {
+    formatted = $[1];
+  }
+  return <div>{formatted}</div>;
+}
+```
 
 
 ---
@@ -2778,42 +3175,40 @@ With the React Compiler active, component self-duration drops by 40-70% across m
 
 ### Q151: What is a Microfrontend Architecture and what problems does it solve for large enterprise teams?
 **Answer:**
-A **Microfrontend** breaks a monolithic frontend application into independently developed, tested, and deployed frontend sub-applications owned by distinct cross-functional teams.
 
-```
-+─────────────────────────────────────────────────────────────────────────────+
-|                         Container / Shell Application                       |
-|          (Global Authentication, Top Navbar, Shell Router, Design Tokens)   |
-+──────────────────────────┬───────────────────────────┬──────────────────────+
-                           │                           │
-+──────────────────────────▼───+           +───────────▼──────────────────────+
-|   Billing Microfrontend      |           |     Analytics Microfrontend      |
-|   (Team A - React 19 / Vite) |           |     (Team B - React 18 / Next.js)|
-|   Deployed to: S3/CloudFront |           |     Deployed to: Vercel / Edge   |
-+──────────────────────────────+           +──────────────────────────────────+
-```
+```javascript
+// Microfrontend Container Mount Point:
+import { lazy, Suspense } from 'react';
 
-**Key Advantages:**
-1. **Independent CI/CD**: Team A can deploy a hotfix to the Billing page in 2 minutes without building or deploying the rest of the application.
-2. **Autonomous Tech Stacks**: Microfrontends can upgrade dependencies (e.g. React 19) independently.
-3. **Fault Isolation**: If the Analytics widget crashes, an Error Boundary prevents it from crashing the main checkout shell.
+const RemoteBillingApp = lazy(() => import('billing/App'));
+
+export function MainShell() {
+  return (
+    <div>
+      <GlobalNavbar />
+      <Suspense fallback={<p>Loading Microfrontend...</p>}>
+        <RemoteBillingApp />
+      </Suspense>
+    </div>
+  );
+}
+```
 
 ---
 
 ### Q152: How does Webpack 5 Module Federation work under the hood?
 **Answer:**
-Module Federation enables a JavaScript application to dynamically load asynchronous module chunks from a **remote build at runtime**, sharing common libraries (like `react`, `react-dom`) to avoid duplicate downloads.
 
 ```javascript
-// host (Shell App) - webpack.config.js
+// webpack.config.js - Module Federation Plugin:
 const { ModuleFederationPlugin } = require('webpack').container;
 
 module.exports = {
   plugins: [
     new ModuleFederationPlugin({
-      name: 'shell_app',
+      name: 'host',
       remotes: {
-        billingApp: 'billingApp@https://billing.enterprise.com/remoteEntry.js'
+        mfe_cart: 'mfe_cart@https://cdn.domain.com/cart/remoteEntry.js'
       },
       shared: {
         react: { singleton: true, requiredVersion: '^19.0.0' },
@@ -2822,65 +3217,63 @@ module.exports = {
     })
   ]
 };
-
-// Inside Shell React Component:
-import { lazy, Suspense } from 'react';
-const RemoteBillingInvoice = lazy(() => import('billingApp/InvoiceWidget'));
-
-export function BillingPage() {
-  return (
-    <Suspense fallback={<p>Loading remote billing widget...</p>}>
-      <RemoteBillingInvoice invoiceId="inv_9981" />
-    </Suspense>
-  );
-}
 ```
 
 ---
 
 ### Q153: What is the `shared: { singleton: true }` rule in Module Federation and why is it critical for React?
 **Answer:**
-If two microfrontends bundle separate copies of React into memory:
-- React's internal global Dispatcher (`ReactCurrentDispatcher`) will be initialized twice.
-- Calling hooks (`useState`, `useEffect`) across microfrontend boundaries throws:
-  `Invalid hook call. Hooks can only be called inside the body of a function component.`
-- **`singleton: true`** forces Webpack to load and initialize **exactly one shared copy of React** in browser memory.
+
+```javascript
+// Enforces exactly 1 shared copy of React runtime in memory:
+shared: {
+  react: { singleton: true, eager: false, requiredVersion: '^19.0.0' },
+  'react-dom': { singleton: true, eager: false, requiredVersion: '^19.0.0' }
+}
+```
 
 ---
 
 ### Q154: How does Single-SPA compare with Webpack Module Federation?
 **Answer:**
-- **Single-SPA**: A client-side router/orchestrator that mounts and unmounts microfrontends on URL route changes using life-cycle contracts (`bootstrap`, `mount`, `unmount`). Works across different frameworks (React + Vue + Angular on the same page).
-- **Module Federation**: A build-time/runtime module resolution protocol that allows sharing components, utilities, and stores at the component level inside the same React tree.
+
+```javascript
+// Single-SPA Lifecycle Contract:
+import React from 'react';
+import ReactDOMClient from 'react-dom/client';
+import singleSpaReact from 'single-spa-react';
+import App from './root.component';
+
+const lifecycles = singleSpaReact({
+  React,
+  ReactDOMClient,
+  rootComponent: App,
+  errorBoundary(err, info, props) {
+    return <div>Microfrontend error</div>;
+  }
+});
+
+export const { bootstrap, mount, unmount } = lifecycles;
+```
 
 ---
 
 ### Q155: How do Microfrontends communicate without Tight Coupling (EventBus / Custom Events / BroadcastChannel)?
 **Answer:**
-Microfrontends should **never** share direct in-memory JavaScript references or tightly coupled stores.
 
 ```javascript
-// Universal Custom Event Bus Pattern
-export const MicroAppEvents = {
-  emit(event, data) {
-    window.dispatchEvent(new CustomEvent(`mfe:${event}`, { detail: data }));
-  },
-  on(event, callback) {
-    const handler = (e) => callback(e.detail);
-    window.addEventListener(`mfe:${event}`, handler);
-    return () => window.removeEventListener(`mfe:${event}`, handler);
-  }
+// Decoupled Custom Event Bus:
+export const emitMfeEvent = (name, data) => {
+  window.dispatchEvent(new CustomEvent(`mfe:${name}`, { detail: data }));
 };
 
-// Microfrontend A emits:
-MicroAppEvents.emit('USER_LOGGED_IN', { userId: 'u_101', name: 'Alice' });
-
-// Microfrontend B listens in React:
-useEffect(() => {
-  return MicroAppEvents.on('USER_LOGGED_IN', (user) => {
-    console.log('Synchronized user in Microfrontend B:', user);
-  });
-}, []);
+export function useMfeListener(name, callback) {
+  useEffect(() => {
+    const handler = (e) => callback(e.detail);
+    window.addEventListener(`mfe:${name}`, handler);
+    return () => window.removeEventListener(`mfe:${name}`, handler);
+  }, [name, callback]);
+}
 ```
 
 ---
@@ -2892,18 +3285,15 @@ useEffect(() => {
 import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 
-// Split routes into separate network chunks
-const Dashboard = lazy(() => import('./routes/Dashboard'));
+const Analytics = lazy(() => import('./routes/Analytics'));
 const Settings = lazy(() => import('./routes/Settings'));
-const Billing = lazy(() => import('./routes/Billing'));
 
-export function AppRouter() {
+export function RouterConfig() {
   return (
-    <Suspense fallback={<div className="page-skeleton-loader" />}>
+    <Suspense fallback={<div className="skeleton-page" />}>
       <Routes>
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/analytics" element={<Analytics />} />
         <Route path="/settings" element={<Settings />} />
-        <Route path="/billing" element={<Billing />} />
       </Routes>
     </Suspense>
   );
@@ -2914,26 +3304,15 @@ export function AppRouter() {
 
 ### Q157: How do you implement Component-Level Dynamic Pre-fetching on Mouse Hover?
 **Answer:**
-Waiting for the user to click a link before starting to download the code chunk adds a 200–500ms delay.
-**Pre-fetch on Hover** initiates the chunk download the instant the user moves their mouse over the navigation button:
 
 ```javascript
-const loadModal = () => import('./HeavyAnalyticsModal');
+const prefetchModal = () => import('./HeavyModal');
 
-export function AnalyticsTriggerButton() {
-  const [showModal, setShowModal] = useState(false);
-
+export function NavLink() {
   return (
-    <div>
-      <button
-        onMouseEnter={loadModal} // Pre-fetch JS chunk when hovered!
-        onFocus={loadModal}      // Pre-fetch on keyboard focus
-        onClick={() => setShowModal(true)}
-      >
-        View Detailed Analytics
-      </button>
-      {showModal && <LazyAnalyticsModal onClose={() => setShowModal(false)} />}
-    </div>
+    <button onMouseEnter={prefetchModal} onFocus={prefetchModal}>
+      Open Analytics
+    </button>
   );
 }
 ```
@@ -2942,17 +3321,13 @@ export function AnalyticsTriggerButton() {
 
 ### Q158: What is Native Federation (ESM / Import Maps) and how does it work without Webpack?
 **Answer:**
-Modern browsers natively support ES Modules and **Import Maps**.
-**Native Federation** uses browser-native `import('https://cdn.../widget.mjs')` and import maps, allowing Microfrontends in **Vite, Rollup, and ESBuild** without Webpack runtime overhead.
 
 ```html
-<!-- Import Map in index.html -->
 <script type="importmap">
 {
   "imports": {
     "react": "https://esm.sh/react@19.0.0",
-    "react-dom": "https://esm.sh/react-dom@19.0.0",
-    "remoteOrderApp/Widget": "https://orders.enterprise.com/dist/widget.js"
+    "mfeOrder/Widget": "https://orders.domain.com/dist/widget.js"
   }
 }
 </script>
@@ -2963,29 +3338,24 @@ Modern browsers natively support ES Modules and **Import Maps**.
 ### Q159: How do you isolate CSS and prevent style collisions across Microfrontends (Shadow DOM, CSS Modules, Tailwind Prefix)?
 **Answer:**
 
-1. **Shadow DOM Encapsulation**: Completely isolates styles; host styles cannot penetrate shadow root.
-2. **Tailwind CSS Prefixing**: Configure `prefix: 'mfe-billing-'` in `tailwind.config.js`.
-3. **CSS Modules / Scoped BEM**: Automatically hashes class names (`button_mfe_billing__x8z`).
+```javascript
+// tailwind.config.js per microfrontend:
+module.exports = {
+  prefix: 'mfe-billing-', // Namespaces all generated utility classes!
+  content: ['./src/**/*.{js,jsx}']
+};
+```
 
 ---
 
 ### Q160: How do you handle Global Error Boundaries in Microfrontend architectures?
 **Answer:**
-Wrap **every remote microfrontend mount point** in an isolated `<ErrorBoundary>` with a retry fallback so that a crash in a third-party microfrontend does not break the host shell.
 
 ```javascript
-export function RemoteWidgetWrapper({ children, widgetName }) {
+export function IsolatedMicrofrontendWrapper({ children }) {
   return (
-    <ErrorBoundary
-      fallbackRender={({ error, resetErrorBoundary }) => (
-        <div className="widget-error-card">
-          <h4>Failed to load {widgetName}</h4>
-          <p>{error.message}</p>
-          <button onClick={resetErrorBoundary}>Retry</button>
-        </div>
-      )}
-    >
-      <Suspense fallback={<WidgetSkeleton />}>
+    <ErrorBoundary fallback={<div className="mfe-fallback">Widget Unavailable</div>}>
+      <Suspense fallback={<div className="mfe-skeleton" />}>
         {children}
       </Suspense>
     </ErrorBoundary>
@@ -2997,40 +3367,75 @@ export function RemoteWidgetWrapper({ children, widgetName }) {
 
 ### Q161: What is Chunk Splitting Strategy (`splitChunks`) in enterprise Webpack/Vite configs?
 **Answer:**
-Configure chunk boundaries:
-1. **`vendor` chunk**: Long-lived dependencies (`react`, `react-dom`, `lodash`) cached for months.
-2. **`common` chunk**: Code shared by 2 or more routes.
-3. **`async` / `route` chunks**: Code loaded strictly on demand.
+
+```javascript
+// Webpack SplitChunks Optimization:
+optimization: {
+  splitChunks: {
+    chunks: 'all',
+    cacheGroups: {
+      vendors: {
+        test: /[\\/]node_modules[\\/]/,
+        name: 'vendor-bundle',
+        priority: 10
+      }
+    }
+  }
+}
+```
 
 ---
 
 ### Q162: What is Version Skew and how do you handle backward compatibility in Microfrontend APIs?
 **Answer:**
-When Shell App is running version 1.0 and Remote App deploys version 2.0 with modified props:
-- Always pass versioned payload envelopes: `{ schemaVersion: '2.0', payload: { ... } }`.
-- Maintain backward-compatible prop defaults in remote components.
+
+```javascript
+// Versioned Event Payload Contract:
+emitMfeEvent('CART_UPDATED', {
+  schemaVersion: '2.1',
+  payload: { cartId: 'c_99', total: 150 }
+});
+```
 
 ---
 
 ### Q163: How do you test Microfrontends in isolation vs. End-to-End integration?
 **Answer:**
-- **Unit / Isolation Test**: Run tests inside the microfrontend repo with mock container shell props.
-- **E2E Integration Test**: Run Playwright/Cypress against a local Docker-compose environment running all microfrontends together.
+
+```javascript
+// Vitest Isolated Unit Test for MFE Component:
+import { render, screen } from '@testing-library/react';
+import { BillingWidget } from './BillingWidget';
+
+test('renders standalone MFE widget with mocked shell props', () => {
+  render(<BillingWidget tenantId="tenant_123" />);
+  expect(screen.getByText(/invoice/i)).toBeInTheDocument();
+});
+```
 
 ---
 
 ### Q164: What is the overhead of Microfrontends and when is it an ANTI-PATTERN?
 **Answer:**
-**Anti-Pattern when**:
-- Small teams (<20 engineers).
-- Simple applications that don't need independent deployments.
-- Microfrontends lead to duplicated network bundles, complex CI/CD orchestration, CSS bleed, and increased debugging complexity.
+
+```javascript
+// Anti-Pattern: Single small team splitting 5 pages into 5 separate repos:
+// Monorepo (Turborepo / Nx) with shared packages is 10x faster and simpler!
+```
 
 ---
 
 ### Q165: How do you implement Cross-Microfrontend Global Authentication state?
 **Answer:**
-Store JWT tokens in `httpOnly` secure cookies on the root domain (`.enterprise.com`), or share an in-memory authentication broadcast manager in the Container Shell that passes tokens via custom events or top-level props.
+
+```javascript
+// Broadcast Channel Auth Token Sharing:
+const authBroadcast = new BroadcastChannel('mfe_auth');
+
+export function loginAcrossMfes(token) {
+  authBroadcast.postMessage({ type: 'TOKEN_UPDATED', token });
+}
+```
 
 
 ---
@@ -3041,14 +3446,12 @@ Store JWT tokens in `httpOnly` secure cookies on the root domain (`.enterprise.c
 
 ### Q176: What is the Compound Component Pattern and how do you implement an Accessible Accordion / Tabs component in React 19?
 **Answer:**
-Compound Components work together to share implicit state and logic while giving consumers full declarative control over JSX layout (similar to HTML `<select>` and `<option>`).
 
 ```javascript
 import { createContext, useContext, useState } from 'react';
 
 const TabsContext = createContext(null);
 
-// 1. Root Container Component
 export function Tabs({ defaultValue, children }) {
   const [activeTab, setActiveTab] = useState(defaultValue);
   return (
@@ -3058,16 +3461,12 @@ export function Tabs({ defaultValue, children }) {
   );
 }
 
-// 2. Tab Trigger Button
 Tabs.Trigger = function TabTrigger({ value, children }) {
   const { activeTab, setActiveTab } = useContext(TabsContext);
-  const isActive = activeTab === value;
-
   return (
     <button
       role="tab"
-      aria-selected={isActive}
-      className={isActive ? 'tab-active' : 'tab-inactive'}
+      aria-selected={activeTab === value}
       onClick={() => setActiveTab(value)}
     >
       {children}
@@ -3075,140 +3474,99 @@ Tabs.Trigger = function TabTrigger({ value, children }) {
   );
 };
 
-// 3. Tab Content Panel
 Tabs.Content = function TabContent({ value, children }) {
   const { activeTab } = useContext(TabsContext);
   if (activeTab !== value) return null;
-  return <div role="tabpanel" className="tab-panel">{children}</div>;
+  return <div role="tabpanel">{children}</div>;
 };
-
-// Consumer Usage (Clean & Declarative):
-function App() {
-  return (
-    <Tabs defaultValue="overview">
-      <div className="tabs-header">
-        <Tabs.Trigger value="overview">Overview</Tabs.Trigger>
-        <Tabs.Trigger value="analytics">Analytics</Tabs.Trigger>
-      </div>
-      <Tabs.Content value="overview"><OverviewContent /></Tabs.Content>
-      <Tabs.Content value="analytics"><AnalyticsContent /></Tabs.Content>
-    </Tabs>
-  );
-}
 ```
 
 ---
 
 ### Q177: What is the Headless Component / Hook Pattern (Radix UI / TanStack Table / React Aria)?
 **Answer:**
-**Headless UI** separates **logic, state, keyboard navigation, and accessibility (WAI-ARIA)** from **visual styling**.
-- The library provides pure hooks or unstyled primitives (`useTable`, `useDialog`, `<Dialog.Root>`).
-- The developer applies their own custom styles (Tailwind, CSS Modules) without battling predefined theme CSS.
+
+```javascript
+// Headless Table Hook (100% logic, 0% forced styles):
+import { useReactTable, getCoreRowModel } from '@tanstack/react-table';
+
+export function HeadlessGrid({ data, columns }) {
+  const table = useReactTable({ data, columns, getCoreRowModel: getCoreRowModel() });
+  return (
+    <table>
+      <tbody>
+        {table.getRowModel().rows.map(row => (
+          <tr key={row.id}>
+            {row.getVisibleCells().map(cell => (
+              <td key={cell.id}>{cell.renderValue()}</td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+```
 
 ---
 
 ### Q178: How do you build a Polymorphic Component in React with TypeScript (`as` prop)?
 **Answer:**
-A Polymorphic Component can render as different underlying HTML elements or components (e.g. `<Button as="a" href="..." />` or `<Button as="button" />`) while maintaining strict TypeScript type safety.
 
 ```typescript
 import React from 'react';
 
-type AsProp<C extends React.ElementType> = {
-  as?: C;
-};
+type PolymorphicProps<C extends React.ElementType, Props = {}> = React.PropsWithChildren<Props & { as?: C }> &
+  Omit<React.ComponentPropsWithoutRef<C>, keyof (Props & { as?: C })>;
 
-type PolymorphicProps<C extends React.ElementType, Props = {}> = React.PropsWithChildren<Props & AsProp<C>> &
-  Omit<React.ComponentPropsWithoutRef<C>, keyof (Props & AsProp<C>)>;
-
-export function Button<C extends React.ElementType = 'button'>({
-  as,
-  children,
-  ...restProps
-}: PolymorphicProps<C, { variant?: 'primary' | 'secondary' }>) {
+export function Button<C extends React.ElementType = 'button'>({ as, children, ...props }: PolymorphicProps<C>) {
   const Component = as || 'button';
-  return <Component {...restProps}>{children}</Component>;
+  return <Component {...props}>{children}</Component>;
 }
-
-// Usage with 100% Type Safety:
-<Button as="a" href="https://google.com" target="_blank">External Link</Button>
-<Button as="button" onClick={() => console.log('clicked')}>Action Button</Button>
 ```
 
 ---
 
 ### Q179: How do XSS (Cross-Site Scripting) vulnerabilities happen in React and how do you prevent them?
 **Answer:**
-By default, React escapes all strings inside JSX expressions (`<div>{userInput}</div>`), converting `<script>` to `&lt;script&gt;`.
 
-**Vulnerabilities occur when:**
-1. **`dangerouslySetInnerHTML`**:
-   ```javascript
-   // 🚨 VULNERABLE:
-   <div dangerouslySetInnerHTML={{ __html: userSuppliedMarkdown }} />
+```javascript
+import DOMPurify from 'dompurify';
 
-   // ✅ SECURE: Sanitize with DOMPurify first:
-   import DOMPurify from 'dompurify';
-   <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(userSuppliedMarkdown) }} />
-   ```
-2. **`javascript:` URLs in href attributes**:
-   ```javascript
-   // 🚨 VULNERABLE: <a href="javascript:stealData()">
-   <a href={userLink}>Profile</a>
-
-   // ✅ SECURE: Validate URL protocol
-   const isSafeUrl = /^https?:\/\//i.test(userLink);
-   <a href={isSafeUrl ? userLink : '#'}>Profile</a>
-   ```
+// 🛡️ XSS Prevention:
+export function SafeHtmlViewer({ userSuppliedHtml }) {
+  return (
+    <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(userSuppliedHtml) }} />
+  );
+}
+```
 
 ---
 
 ### Q180: What is Focus Management and how do you implement a Focus Trap for Accessible Modal Dialogs?
 **Answer:**
-When an accessible modal opens:
-1. Focus must move to the modal container.
-2. Pressing `Tab` or `Shift+Tab` must cycle **only through elements inside the modal** (cannot escape to background page).
-3. Pressing `Escape` must close the modal and return focus to the trigger button.
 
 ```javascript
-import { useEffect, useRef } from 'react';
-
-export function useFocusTrap(isActive) {
-  const containerRef = useRef(null);
-
+export function useFocusTrap(modalRef, isOpen) {
   useEffect(() => {
-    if (!isActive || !containerRef.current) return;
+    if (!isOpen || !modalRef.current) return;
+    const focusable = modalRef.current.querySelectorAll('button, [href], input, [tabindex="0"]');
+    focusable[0]?.focus();
 
-    const element = containerRef.current;
-    const focusableElements = element.querySelectorAll(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    );
-    const firstElement = focusableElements[0];
-    const lastElement = focusableElements[focusableElements.length - 1];
-
-    firstElement?.focus();
-
-    const handleKeyDown = (e) => {
-      if (e.key !== 'Tab') return;
-
-      if (e.shiftKey) {
-        if (document.activeElement === firstElement) {
-          lastElement?.focus();
+    const handleKey = (e) => {
+      if (e.key === 'Tab') {
+        if (e.shiftKey && document.activeElement === focusable[0]) {
+          focusable[focusable.length - 1].focus();
           e.preventDefault();
-        }
-      } else {
-        if (document.activeElement === lastElement) {
-          firstElement?.focus();
+        } else if (!e.shiftKey && document.activeElement === focusable[focusable.length - 1]) {
+          focusable[0].focus();
           e.preventDefault();
         }
       }
     };
-
-    element.addEventListener('keydown', handleKeyDown);
-    return () => element.removeEventListener('keydown', handleKeyDown);
-  }, [isActive]);
-
-  return containerRef;
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [isOpen, modalRef]);
 }
 ```
 
@@ -3216,24 +3574,48 @@ export function useFocusTrap(isActive) {
 
 ### Q181: What is the Render Props Pattern and when is it still useful in modern React?
 **Answer:**
-A component passes dynamic internal state to a child function: `<DataProvider render={(data) => <View data={data} />} />`.
-While custom hooks have replaced 90% of render props, Render Props are still valuable for **flexible UI slot customization in headless component libraries**.
+
+```javascript
+export function MouseTracker({ render }) {
+  const [pos, setPos] = useState({ x: 0, y: 0 });
+  return (
+    <div onMouseMove={e => setPos({ x: e.clientX, y: e.clientY })}>
+      {render(pos)}
+    </div>
+  );
+}
+```
 
 ---
 
 ### Q182: What is Prop Drilling and what are the best techniques to eliminate it?
 **Answer:**
-Passing props down 5+ levels of intermediate components that don't need them.
-**Solutions:**
-1. **Component Composition**: Pass fully formed elements via `children` or named slots (`<Layout sidebar={<UserSidebar />} />`).
-2. **Context / Slice Stores**: Use Zustand or Context for deeply nested state.
+
+```javascript
+// ✅ Component Composition (Slot Pattern) completely eliminates prop drilling:
+function Layout({ header, content, sidebar }) {
+  return (
+    <div className="layout">
+      <header>{header}</header>
+      <aside>{sidebar}</aside>
+      <main>{content}</main>
+    </div>
+  );
+}
+```
 
 ---
 
 ### Q183: What is the Controlled vs. Uncontrolled Component pattern in React forms?
 **Answer:**
-- **Controlled Component**: Form input value is driven strictly by React state (`value={state}` + `onChange={setState}`). Re-renders on every keystroke.
-- **Uncontrolled Component**: Form input value is managed directly by the browser DOM (`defaultValue="init"`). Read on submit via `useRef` or `FormData`. Faster for huge forms.
+
+```javascript
+// 1. Controlled (State driven):
+<input value={text} onChange={e => setText(e.target.value)} />
+
+// 2. Uncontrolled (DOM driven - 0 re-renders):
+<input ref={inputRef} defaultValue="Initial" />
+```
 
 ---
 
@@ -3241,14 +3623,9 @@ Passing props down 5+ levels of intermediate components that don't need them.
 **Answer:**
 
 ```javascript
-export function LiveAnnouncer({ message, politeness = 'polite' }) {
+export function LiveAnnouncer({ message }) {
   return (
-    <div
-      role="status"
-      aria-live={politeness}
-      aria-atomic="true"
-      style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0,0,0,0)' }}
-    >
+    <div role="status" aria-live="polite" aria-atomic="true" style={{ position: 'absolute', clip: 'rect(0 0 0 0)' }}>
       {message}
     </div>
   );
@@ -3259,19 +3636,27 @@ export function LiveAnnouncer({ message, politeness = 'polite' }) {
 
 ### Q185: What is the Higher-Order Component (HOC) Pattern and what are its drawbacks?
 **Answer:**
-A function that takes a component and returns an enhanced component (`withAuth(Dashboard)`).
-**Drawbacks**: Prop name collisions, wrapper hell in DevTools, complex TypeScript typing. Replaced almost entirely by Custom Hooks.
+
+```javascript
+// Higher-Order Component with Authentication Guard:
+export function withAuth(Component) {
+  return function AuthenticatedWrapper(props) {
+    const { isAuthenticated } = useAuth();
+    if (!isAuthenticated) return <Navigate to="/login" />;
+    return <Component {...props} />;
+  };
+}
+```
 
 
 ---
 
-# Part 9: Production Scaling, Testing & Enterprise SaaS Architecture (Q201 - Q225)
+# Part 9: Production Scaling, Testing & Enterprise SaaS Architecture (Q201 - Q210)
 
 ---
 
 ### Q201: How do you write robust Unit and Integration Tests using Vitest and React Testing Library (RTL)?
 **Answer:**
-RTL tests components **from the end-user perspective** (interacting with rendered buttons, labels, and roles) rather than testing internal implementation details (state, hooks).
 
 ```javascript
 import { render, screen } from '@testing-library/react';
@@ -3286,20 +3671,11 @@ describe('LoginForm Component', () => {
 
     render(<LoginForm onSubmit={handleSubmit} />);
 
-    // Query by Accessible Roles and Labels (User Perspective)
-    const emailInput = screen.getByLabelText(/email/i);
-    const passwordInput = screen.getByLabelText(/password/i);
-    const submitBtn = screen.getByRole('button', { name: /sign in/i });
-
-    await user.type(emailInput, 'alice@enterprise.com');
-    await user.type(passwordInput, 'SecretPassword123!');
-    await user.click(submitBtn);
+    await user.type(screen.getByLabelText(/email/i), 'alice@enterprise.com');
+    await user.type(screen.getByLabelText(/password/i), 'SecretPassword123!');
+    await user.click(screen.getByRole('button', { name: /sign in/i }));
 
     expect(handleSubmit).toHaveBeenCalledTimes(1);
-    expect(handleSubmit).toHaveBeenCalledWith({
-      email: 'alice@enterprise.com',
-      password: 'SecretPassword123!'
-    });
   });
 });
 ```
@@ -3308,7 +3684,6 @@ describe('LoginForm Component', () => {
 
 ### Q202: How do you mock network requests cleanly using Mock Service Worker (MSW v2)?
 **Answer:**
-MSW intercepts network requests at the **browser/Node network service worker layer**, allowing exact same fetch/axios code to run during tests without mocking API modules.
 
 ```javascript
 import { http, HttpResponse } from 'msw';
@@ -3317,10 +3692,6 @@ import { setupServer } from 'msw/node';
 export const handlers = [
   http.get('https://api.domain.com/user/profile', () => {
     return HttpResponse.json({ id: 'u_1', name: 'Alice', plan: 'Enterprise' });
-  }),
-  http.post('https://api.domain.com/checkout', async ({ request }) => {
-    const body = await request.json();
-    return HttpResponse.json({ orderId: 'ord_99', status: 'PAID' }, { status: 201 });
   })
 ];
 
@@ -3340,7 +3711,6 @@ import { useCounter } from './useCounter';
 describe('useCounter Hook', () => {
   it('increments counter correctly', () => {
     const { result } = renderHook(() => useCounter(10));
-
     expect(result.current.count).toBe(10);
 
     act(() => {
@@ -3360,22 +3730,12 @@ describe('useCounter Hook', () => {
 ```typescript
 import { test, expect } from '@playwright/test';
 
-test('User can complete multi-step checkout with optimistic update', async ({ page }) => {
+test('User can complete checkout with optimistic update', async ({ page }) => {
   await page.goto('https://staging.store.com/products/iphone-16');
-
-  // Verify LCP hero loaded
   await expect(page.getByRole('heading', { name: 'iPhone 16' })).toBeVisible();
 
-  // Add to cart (Triggers React 19 Action)
   await page.getByRole('button', { name: 'Add to Cart' }).click();
-
-  // Verify Optimistic UI badge updates immediately
-  const cartBadge = page.getByTestId('cart-count');
-  await expect(cartBadge).toHaveText('1');
-
-  // Navigate to checkout
-  await page.getByRole('link', { name: 'Checkout' }).click();
-  await expect(page).toHaveURL(/.*checkout/);
+  await expect(page.getByTestId('cart-count')).toHaveText('1');
 });
 ```
 
@@ -3383,20 +3743,16 @@ test('User can complete multi-step checkout with optimistic update', async ({ pa
 
 ### Q205: How do you build an Enterprise Multi-Tenant White-Label Design System with CSS Variables and Design Tokens?
 **Answer:**
-Use semantic design tokens (`--color-primary`, `--radius-card`) mapped to tenant themes.
-Tenants inject a dynamic theme configuration on load; the entire component library adapts without altering React component code:
 
 ```css
-/* Base Theme */
 :root {
-  --primary: 220 90% 56%;
-  --radius: 8px;
+  --theme-primary: #3b82f6;
+  --theme-radius: 8px;
 }
 
-/* Tenant A Brand */
-[data-tenant="tenant-acme"] {
-  --primary: 142 76% 36%;
-  --radius: 16px;
+[data-tenant="acme"] {
+  --theme-primary: #10b981;
+  --theme-radius: 16px;
 }
 ```
 
@@ -3404,20 +3760,17 @@ Tenants inject a dynamic theme configuration on load; the entire component libra
 
 ### Q206: How do you monitor Real-User Monitoring (RUM) metrics and Sentry error tracking in React?
 **Answer:**
-Wrap the root tree in Sentry ErrorBoundary and monitor interaction transactions:
 
 ```javascript
 import * as Sentry from '@sentry/react';
 
 Sentry.init({
   dsn: 'https://key@sentry.io/123',
-  integrations: [Sentry.browserTracingIntegration(), Sentry.replayIntegration()],
-  tracesSampleRate: 0.1,
-  replaysSessionSampleRate: 0.1
+  integrations: [Sentry.browserTracingIntegration()]
 });
 
-export const AppWithErrorTracking = Sentry.withErrorBoundary(App, {
-  fallback: <p>An unexpected error occurred. Our engineering team has been notified.</p>
+export const RootApp = Sentry.withErrorBoundary(App, {
+  fallback: <p>Something went wrong.</p>
 });
 ```
 
@@ -3425,7 +3778,6 @@ export const AppWithErrorTracking = Sentry.withErrorBoundary(App, {
 
 ### Q207: How do you implement Feature Flags and Canary Rollouts (LaunchDarkly) in React?
 **Answer:**
-Evaluate feature flags inside custom hooks or server components:
 
 ```javascript
 import { useFlags } from 'launchdarkly-react-client-sdk';
@@ -3440,46 +3792,51 @@ export function CheckoutButton() {
 
 ### Q208: How do you optimize React Bundle Size with Bundle Analyzers (`vite-bundle-visualizer` / `webpack-bundle-analyzer`)?
 **Answer:**
-Run bundle visualizers in CI/CD. Identify:
-1. Accidental duplicate packages (e.g. `lodash` and `lodash-es`).
-2. Heavy libraries (`moment.js` $\rightarrow$ replace with `date-fns` / native `Intl`).
-3. Large icons / animations bundled in the main entry chunk.
+
+```javascript
+// vite.config.js with Visualizer Plugin:
+import { visualizer } from 'rollup-plugin-visualizer';
+
+export default {
+  plugins: [visualizer({ open: true, filename: 'bundle-report.html' })]
+};
+```
 
 ---
 
 ### Q209: What is the difference between Shallow Rendering and Full DOM Rendering in tests?
 **Answer:**
-- **Shallow Rendering (Enzyme - Obsolete)**: Renders only the component itself, without rendering any of its children. Fragile and tests implementation details.
-- **Full DOM Rendering (React Testing Library)**: Renders the complete child tree in a simulated jsdom environment, verifying real user interactions and output.
+
+```javascript
+// React Testing Library executes Full DOM rendering inside simulated JSDOM:
+import { render, screen } from '@testing-library/react';
+
+test('Full DOM render mounts nested child elements', () => {
+  render(<ParentWithChildren />);
+  expect(screen.getByRole('button')).toBeInTheDocument(); // Real button is rendered!
+});
+```
 
 ---
 
 ### Q210: What are the Architectural Best Practices for designing a Production-Grade, Fault-Tolerant Enterprise React 19 Application?
 **Answer:**
 
-```
-+─────────────────────────────────────────────────────────────────────────────+
-|                         Enterprise React 19 Blueprint                       |
-+──────────────────────────────────────┬──────────────────────────────────────+
-| 1. Compiler-Driven Core              | React Compiler enabled for automatic |
-|                                      | fine-grained memoization             |
-+──────────────────────────────────────┼──────────────────────────────────────+
-| 2. Hybrid RSC & Streaming SSR        | Server Components for 0KB DB queries |
-|                                      | Streaming Suspense for instant TTFB  |
-+──────────────────────────────────────┼──────────────────────────────────────+
-| 3. Action-Driven Mutations           | useActionState + useOptimistic for   |
-|                                      | instant UI and automatic rollbacks   |
-+──────────────────────────────────────┼──────────────────────────────────────+
-| 4. Bifurcated State Architecture     | Server State: TanStack Query         |
-|                                      | Client State: Lightweight Zustand    |
-+──────────────────────────────────────┼──────────────────────────────────────+
-| 5. Resilient Microfrontends / Modular| Module Federation / Single-SPA with  |
-|                                      | isolated ErrorBoundaries and shared  |
-|                                      | singletons                           |
-+──────────────────────────────────────┼──────────────────────────────────────+
-| 6. Rigorous Observability & Testing  | RTL + Vitest + Playwright E2E with   |
-|                                      | Core Web Vitals RUM telemetry        |
-+──────────────────────────────────────┴──────────────────────────────────────+
+```javascript
+// Enterprise Composition Root Blueprint:
+export function EnterpriseApp() {
+  return (
+    <ErrorBoundary fallback={<FatalCrashScreen />}>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider>
+          <AuthProvider>
+            <AppRouter />
+          </AuthProvider>
+        </ThemeProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
+  );
+}
 ```
 
 
@@ -3492,70 +3849,24 @@ Run bundle visualizers in CI/CD. Identify:
 ### Q211: What is the Complete Taxonomy of Re-Render Elimination Strategies in React 19?
 **Answer:**
 
-```
-+──────────────────────────────────────────────────────────────────────────────────────────────────────────+
-|                                    Re-Render Elimination Strategies                                      |
-+──────────────────────────┬───────────────────────────────────────────┬───────────────────────────────────+
-| Technique                | Mechanism                                 | Impact                            |
-+──────────────────────────┼───────────────────────────────────────────┼───────────────────────────────────+
-| **1. React Compiler**    | Automatic SSA static memoization of       | Eliminates manual useMemo,        |
-| **(Built-in React 19)**  | reactive scopes into cached bytecode slots| useCallback & React.memo          |
-+──────────────────────────┼───────────────────────────────────────────┼───────────────────────────────────+
-| **2. State Colocation**  | Move state down to the lowest leaf        | Prevents top-level parents and    |
-|                          | component that actually needs it          | peer sibling subtrees from rendering|
-+──────────────────────────┼───────────────────────────────────────────┼───────────────────────────────────+
-| **3. Element Lifting**   | Pass un-memoized heavy subtrees via the   | React reuses identical JSX element|
-| **(Children as Props)**  | `children` prop                           | references without re-running diff|
-+──────────────────────────┼───────────────────────────────────────────┼───────────────────────────────────+
-| **4. Selective Stores**  | Zustand / useSyncExternalStore with       | Component re-renders ONLY when the|
-|                          | granular selector functions               | selected slice value changes      |
-+──────────────────────────┼───────────────────────────────────────────┼───────────────────────────────────+
-| **5. Uncontrolled State**| `useRef` + native `FormData` for forms    | 0 re-renders during user typing   |
-+──────────────────────────┼───────────────────────────────────────────┼───────────────────────────────────+
-| **6. React.cache()**     | Server-side per-request function caching  | Deduplicates identical DB queries |
-| **(Built-in React 19)**  | and data transforms within a render pass  | across separate server components |
-+──────────────────────────┼───────────────────────────────────────────┼───────────────────────────────────+
-| **7. Offscreen API**     | `<Activity mode="hidden">` keeps inactive | Preserves DOM & state in memory   |
-| **(Built-in React 19)**  | views in memory at IdleLane priority      | with 0 re-mounting overhead       |
-+──────────────────────────┼───────────────────────────────────────────┼───────────────────────────────────+
-| **8. Transient Updates** | Direct DOM mutation via `useRef` for      | Bypasses React reconciliation on   |
-|                          | 60fps drag-and-drop / scroll animations   | high-frequency frame events       |
-+──────────────────────────┴───────────────────────────────────────────┴───────────────────────────────────+
+```javascript
+// React Compiler inlines fine-grained memoization slots:
+function Card({ user, onItemClick }) {
+  const formattedName = formatUser(user); // Auto-memoized!
+  return <div onClick={() => onItemClick(user.id)}>{formattedName}</div>;
+}
 ```
 
 ---
 
 ### Q212: How does State Colocation eliminate massive re-render trees in complex enterprise forms and dashboards?
 **Answer:**
-**Anti-Pattern (Lifting State too High)**:
-Placing a modal toggle or input string state in the Root Dashboard component causes the **entire dashboard (100+ components, tables, charts) to re-render on every keystroke**:
 
 ```javascript
-// ❌ ANTI-PATTERN: HeavyDashboard re-renders on EVERY keystroke!
-function HeavyDashboard() {
-  const [filterText, setFilterText] = useState('');
-  return (
-    <div>
-      <input value={filterText} onChange={e => setFilterText(e.target.value)} />
-      <HeavyChartsWidget />  {/* Re-renders needlessly! */}
-      <ComplexDataGrid />    {/* Re-renders needlessly! */}
-      <FilteredTable filter={filterText} />
-    </div>
-  );
-}
-
-// ✅ STATE COLOCATION: Isolate input into its own leaf component!
-function FilterInputWrapper({ onSearch }) {
-  const [filterText, setFilterText] = useState('');
-  return (
-    <input 
-      value={filterText} 
-      onChange={e => {
-        setFilterText(e.target.value);
-        onSearch(e.target.value);
-      }} 
-    />
-  );
+// State Colocation isolates state to leaf component:
+function SearchInput({ onSearch }) {
+  const [query, setQuery] = useState('');
+  return <input value={query} onChange={e => { setQuery(e.target.value); onSearch(e.target.value); }} />;
 }
 ```
 
@@ -3563,41 +3874,20 @@ function FilterInputWrapper({ onSearch }) {
 
 ### Q213: How does React 19 `React.cache()` eliminate duplicate database and API calls across Server Components?
 **Answer:**
-In React Server Component (RSC) trees, multiple deeply nested components often need the same current user or product data.
-`React.cache()` memoizes the result of a function for the **duration of the single incoming server HTTP request**.
 
 ```javascript
 import { cache } from 'react';
 import db from '@/lib/db';
 
-// Deduplicated across the entire server render pass
-export const getCachedProduct = cache(async (productId) => {
-  console.log(`[DB Query] Fetching product: ${productId}`);
-  return await db.product.findUnique({ where: { id: productId } });
+export const getCachedProduct = cache(async (id) => {
+  return await db.product.findUnique({ where: { id } });
 });
-
-// Component A (Hero Banner)
-export async function ProductHero({ productId }) {
-  const product = await getCachedProduct(productId); // Fired first time -> Executes DB query
-  return <h1>{product.title}</h1>;
-}
-
-// Component B (Sidebar Specs - nested 5 levels deep)
-export async function ProductSidebar({ productId }) {
-  const product = await getCachedProduct(productId); // Fired second time -> Returned instantly from cache!
-  return <div>Price: ${product.price}</div>;
-}
 ```
 
 ---
 
 ### Q214: How do you avoid "Loading Spinner Thrashing" using React 19 `useTransition` and `useDeferredValue`?
 **Answer:**
-Traditional boolean `isLoading` state unmounts the current view and displays a jarring blank spinner on every filter click, destroying user experience.
-
-**React 19 Concurrent Transition Solution**:
-- Keeps the **current UI interactive and visible** while the next view is prepared in the background at lower priority.
-- Shows a subtle, non-disruptive loading indicator via `isPending` without clearing current content.
 
 ```javascript
 import { useState, useTransition } from 'react';
@@ -3606,25 +3896,15 @@ export function ProductCatalog() {
   const [category, setCategory] = useState('all');
   const [isPending, startTransition] = useTransition();
 
-  function handleCategoryChange(newCategory) {
-    startTransition(async () => {
-      // Background render: existing catalog stays on screen!
-      setCategory(newCategory);
+  const handleSelect = (cat) => {
+    startTransition(() => {
+      setCategory(cat);
     });
-  }
+  };
 
   return (
-    <div>
-      <div className="button-group">
-        <button onClick={() => handleCategoryChange('laptops')}>Laptops</button>
-        <button onClick={() => handleCategoryChange('phones')}>Phones</button>
-        {isPending && <span className="subtle-spinner">Refreshing...</span>}
-      </div>
-
-      {/* Content remains visible with dimmed opacity instead of flashing a blank spinner */}
-      <div style={{ opacity: isPending ? 0.6 : 1, transition: 'opacity 0.2s' }}>
-        <ProductGrid category={category} />
-      </div>
+    <div style={{ opacity: isPending ? 0.6 : 1 }}>
+      <ProductGrid category={category} />
     </div>
   );
 }
@@ -3634,47 +3914,20 @@ export function ProductCatalog() {
 
 ### Q215: How do you optimize Images with Cloudinary in React for Maximum Core Web Vitals (LCP/CLS) Performance?
 **Answer:**
-Raw images uploaded by users are often 5MB–10MB JPEGs/PNGs. Serving raw images destroys **Largest Contentful Paint (LCP)** and exhausts mobile bandwidth.
-
-**Cloudinary Dynamic Optimization Pipeline:**
-1. **`f_auto` (Automatic Next-Gen Format)**: Delivers **AVIF** to Chrome/Firefox, **WebP** to Safari, and fallback JPEG.
-2. **`q_auto` (Intelligent Quality Compression)**: Compresses bytes based on human visual perception without visible artifacts.
-3. **`dpr_auto` & Responsive `srcset`**: Delivers exact resolution based on device pixel ratio (Retina 2x/3x vs. 1x).
-4. **`w_auto` & Crop modes**: Resizes dynamically on Cloudinary CDN edge.
 
 ```javascript
-export function buildCloudinaryUrl(publicId, { width, height, quality = 'auto', format = 'auto' } = {}) {
-  const transformations = [
-    `f_${format}`,
-    `q_${quality}`,
-    width ? `w_${width}` : '',
-    height ? `h_${height}` : '',
-    'c_fill', // Smart Crop
-    'g_auto'  // AI Content-Aware Gravity (keeps faces in center)
-  ].filter(Boolean).join(',');
-
-  return `https://res.cloudinary.com/my-enterprise-cloud/image/upload/${transformations}/${publicId}`;
-}
-
-export function OptimizedCloudinaryImage({ publicId, alt, width, height, isHero = false }) {
-  const src = buildCloudinaryUrl(publicId, { width, height });
-  const srcSet = [
-    `${buildCloudinaryUrl(publicId, { width: 400 })} 400w`,
-    `${buildCloudinaryUrl(publicId, { width: 800 })} 800w`,
-    `${buildCloudinaryUrl(publicId, { width: 1200 })} 1200w`
-  ].join(', ');
+export function OptimizedImage({ publicId, alt, width, height, isHero = false }) {
+  const url = `https://res.cloudinary.com/my-cloud/image/upload/f_auto,q_auto,w_${width},h_${height},c_fill/${publicId}`;
 
   return (
     <img
-      src={src}
-      srcSet={srcSet}
-      sizes="(max-width: 600px) 100vw, 800px"
+      src={url}
       alt={alt}
       width={width}
       height={height}
       loading={isHero ? 'eager' : 'lazy'}
-      fetchPriority={isHero ? 'high' : 'auto'} // 🚀 Elevate LCP priority for hero image
-      style={{ aspectRatio: `${width} / ${height}`, objectFit: 'cover' }} // 🛡️ Zero Cumulative Layout Shift (CLS)
+      fetchPriority={isHero ? 'high' : 'auto'}
+      style={{ aspectRatio: `${width}/${height}`, objectFit: 'cover' }}
     />
   );
 }
@@ -3684,54 +3937,19 @@ export function OptimizedCloudinaryImage({ publicId, alt, width, height, isHero 
 
 ### Q216: How do you implement Blur-Up Low-Quality Image Placeholders (LQIP) with Cloudinary and React?
 **Answer:**
-Before the main image loads, a tiny **16px wide blurred base64 placeholder (size: <500 bytes)** is displayed to give users instant visual feedback without layout shift.
 
 ```javascript
 import { useState } from 'react';
 
-export function ProgressiveBlurImage({ publicId, alt, width, height }) {
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  // 1. Ultra-lightweight blurred placeholder URL (w_20, e_blur:1000)
-  const lqipUrl = `https://res.cloudinary.com/my-cloud/image/upload/w_20,c_fill,e_blur:1000,f_auto,q_10/${publicId}`;
-  
-  // 2. Full resolution optimized image
-  const fullUrl = `https://res.cloudinary.com/my-cloud/image/upload/w_${width},h_${height},c_fill,f_auto,q_auto/${publicId}`;
+export function ProgressiveImage({ publicId, alt, width, height }) {
+  const [loaded, setLoaded] = useState(false);
+  const lqip = `https://res.cloudinary.com/my-cloud/image/upload/w_20,c_fill,e_blur:1000,f_auto,q_10/${publicId}`;
+  const full = `https://res.cloudinary.com/my-cloud/image/upload/w_${width},h_${height},c_fill,f_auto,q_auto/${publicId}`;
 
   return (
-    <div style={{ position: 'relative', width, height, overflow: 'hidden' }}>
-      {/* Blurred Low-Quality Background Placeholder */}
-      <img
-        src={lqipUrl}
-        alt=""
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          inset: 0,
-          width: '100%',
-          height: '100%',
-          filter: 'blur(20px)',
-          transform: 'scale(1.1)',
-          opacity: isLoaded ? 0 : 1,
-          transition: 'opacity 0.5s ease-out'
-        }}
-      />
-
-      {/* Full Resolution Main Image */}
-      <img
-        src={fullUrl}
-        alt={alt}
-        loading="lazy"
-        onLoad={() => setIsLoaded(true)}
-        style={{
-          position: 'relative',
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          opacity: isLoaded ? 1 : 0,
-          transition: 'opacity 0.5s ease-in'
-        }}
-      />
+    <div style={{ position: 'relative', width, height }}>
+      <img src={lqip} alt="" style={{ position: 'absolute', inset: 0, filter: 'blur(20px)', opacity: loaded ? 0 : 1 }} />
+      <img src={full} alt={alt} onLoad={() => setLoaded(true)} style={{ position: 'relative', opacity: loaded ? 1 : 0 }} />
     </div>
   );
 }
@@ -3741,46 +3959,25 @@ export function ProgressiveBlurImage({ publicId, alt, width, height }) {
 
 ### Q217: How do you optimize High-Scale Video Streaming in React using Cloudinary Adaptive HLS/DASH Streaming?
 **Answer:**
-Loading raw `.mp4` video files causes buffering on slow mobile connections.
-**Adaptive Bitrate Streaming (HLS `.m3u8`)** breaks videos into 2-second chunks and dynamically adjusts video resolution (1080p $\rightarrow$ 720p $\rightarrow$ 480p) in real time based on user bandwidth.
 
 ```javascript
 import { useEffect, useRef } from 'react';
 import Hls from 'hls.js';
 
-export function CloudinaryHlsPlayer({ videoPublicId }) {
+export function HlsVideoPlayer({ publicId }) {
   const videoRef = useRef(null);
-
-  // Cloudinary generates adaptive HLS manifest dynamically
-  const hlsManifestUrl = `https://res.cloudinary.com/my-cloud/video/upload/sp_auto/f_m3u8/${videoPublicId}.m3u8`;
+  const hlsUrl = `https://res.cloudinary.com/my-cloud/video/upload/sp_auto/f_m3u8/${publicId}.m3u8`;
 
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    if (video.canPlayType('application/vnd.apple.mpegurl')) {
-      // Native HLS support (Safari / iOS)
-      video.src = hlsManifestUrl;
-    } else if (Hls.isSupported()) {
-      // HLS.js for Chrome / Firefox / Android
-      const hls = new Hls({ enableWorker: true });
-      hls.loadSource(hlsManifestUrl);
-      hls.attachMedia(video);
-
+    if (Hls.isSupported()) {
+      const hls = new Hls();
+      hls.loadSource(hlsUrl);
+      hls.attachMedia(videoRef.current);
       return () => hls.destroy();
     }
-  }, [hlsManifestUrl]);
+  }, [hlsUrl]);
 
-  return (
-    <video
-      ref={videoRef}
-      controls
-      playsInline
-      preload="metadata"
-      poster={`https://res.cloudinary.com/my-cloud/video/upload/f_auto,q_auto,so_0/${videoPublicId}.jpg`}
-      style={{ width: '100%', aspectRatio: '16/9' }}
-    />
-  );
+  return <video ref={videoRef} controls playsInline style={{ width: '100%', aspectRatio: '16/9' }} />;
 }
 ```
 
@@ -3788,30 +3985,18 @@ export function CloudinaryHlsPlayer({ videoPublicId }) {
 
 ### Q218: How do you use React 19 Native Resource Hints (`preload`, `preinit`, `preconnect`) to supercharge LCP Hero Images and Fonts?
 **Answer:**
-React 19 exposes native resource preloading directly in `react-dom`.
-When placed inside a component, React hoists the resource hints into the earliest HTML streaming chunk:
 
 ```javascript
 import { preload, preconnect } from 'react-dom';
 
-export function HeroBanner({ bannerPublicId }) {
-  // 1. Warm connection to CDN
+export function HeroBanner({ publicId }) {
   preconnect('https://res.cloudinary.com');
+  preload(`https://res.cloudinary.com/my-cloud/image/upload/f_auto,q_auto,w_1200/${publicId}`, {
+    as: 'image',
+    fetchPriority: 'high'
+  });
 
-  // 2. Preload LCP hero image with high fetch priority
-  preload(
-    `https://res.cloudinary.com/my-cloud/image/upload/w_1200,f_auto,q_auto/${bannerPublicId}`,
-    { as: 'image', fetchPriority: 'high' }
-  );
-
-  return (
-    <div className="hero">
-      <img 
-        src={`https://res.cloudinary.com/my-cloud/image/upload/w_1200,f_auto,q_auto/${bannerPublicId}`} 
-        alt="Featured Product" 
-      />
-    </div>
-  );
+  return <img src={`https://res.cloudinary.com/my-cloud/image/upload/f_auto,q_auto,w_1200/${publicId}`} alt="Hero" />;
 }
 ```
 
@@ -3819,35 +4004,24 @@ export function HeroBanner({ bannerPublicId }) {
 
 ### Q219: How do you build an IntersectionObserver Video Autoplay/Pause Component to Save CPU and Memory?
 **Answer:**
-Playing 10 off-screen videos simultaneously in a feed consumes 100% CPU and decoders.
-**Solution**: Autoplay videos only when $\ge 50\%$ visible in viewport, and pause immediately when scrolled away.
 
 ```javascript
 import { useEffect, useRef } from 'react';
 
-export function LazyAutoplayVideo({ src, poster }) {
+export function LazyVideo({ src }) {
   const videoRef = useRef(null);
 
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) videoRef.current?.play().catch(() => {});
+      else videoRef.current?.pause();
+    }, { threshold: 0.5 });
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          video.play().catch(() => {/* Handle browser autoplay policy */});
-        } else {
-          video.pause();
-        }
-      },
-      { threshold: 0.5 } // 50% visibility threshold
-    );
-
-    observer.observe(video);
+    if (videoRef.current) observer.observe(videoRef.current);
     return () => observer.disconnect();
   }, []);
 
-  return <video ref={videoRef} src={src} poster={poster} muted loop playsInline />;
+  return <video ref={videoRef} src={src} muted loop playsInline />;
 }
 ```
 
@@ -3855,23 +4029,21 @@ export function LazyAutoplayVideo({ src, poster }) {
 
 ### Q220: How do Uncontrolled Form Inputs with `useRef` eliminate 100% of keystroke re-renders?
 **Answer:**
-- **Controlled Input (`useState`)**: Re-renders component on *every single letter typed* (100 keystrokes = 100 re-renders).
-- **Uncontrolled Input (`useRef` / `FormData`)**: Value lives in browser DOM. **0 re-renders** during user typing.
 
 ```javascript
 import { useRef } from 'react';
 
-export function UltraFastSearchForm({ onSearch }) {
+export function FastUncontrolledInput({ onSearch }) {
   const inputRef = useRef(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSearch(inputRef.current.value); // Read value on submit without typing re-renders!
+    onSearch(inputRef.current.value); // 0 re-renders during typing!
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <input ref={inputRef} defaultValue="" placeholder="Search..." />
+      <input ref={inputRef} defaultValue="" />
       <button type="submit">Search</button>
     </form>
   );
@@ -3882,67 +4054,35 @@ export function UltraFastSearchForm({ onSearch }) {
 
 ### Q221: What is Context Splitting and why is it superior to passing a single monolithic context object?
 **Answer:**
-If state and dispatcher are bundled together:
-`const [state, setState] = useState(...)`
-`<AppContext.Provider value={{ state, setState }}>`
-Any component calling `useContext(AppContext)` will re-render even if it *only* calls `setState`!
 
-**Context Splitting Pattern**:
 ```javascript
 export const StateContext = createContext(null);
 export const DispatchContext = createContext(null);
 
-export function AppProvider({ children }) {
-  const [state, dispatch] = useReducer(reducer, initialState);
-
+export function Provider({ children }) {
+  const [state, dispatch] = useReducer(reducer, initial);
   return (
     <DispatchContext value={dispatch}>
-      <StateContext value={state}>
-        {children}
-      </StateContext>
+      <StateContext value={state}>{children}</StateContext>
     </DispatchContext>
   );
 }
-
-// Read-only component: Re-renders when state changes
-export function useAppState() { return useContext(StateContext); }
-
-// Action-only component: NEVER re-renders on state changes (dispatch reference is 100% stable)!
-export function useAppDispatch() { return useContext(DispatchContext); }
 ```
 
 ---
 
 ### Q222: How does the React 19 `<Activity mode="hidden">` API eliminate Tab Switching Re-mounts?
 **Answer:**
-In tabbed interfaces (Dashboard $\leftrightarrow$ Settings $\leftrightarrow$ Billing), unmounting tabs discards user form input, scroll position, and state, requiring full re-mounting when the tab is clicked again.
-
-`<Activity mode="hidden">` keeps the inactive tab mounted in memory:
-- Hides DOM nodes (`display: none`).
-- Pauses internal timers and low-priority tasks.
-- Restores instantly with zero latency when switched back!
 
 ```javascript
 import { Activity, useState } from 'react';
 
 export function TabContainer() {
-  const [activeTab, setActiveTab] = useState('feed');
-
+  const [tab, setTab] = useState('a');
   return (
     <div>
-      <nav>
-        <button onClick={() => setActiveTab('feed')}>Feed</button>
-        <button onClick={() => setActiveTab('editor')}>Draft Editor</button>
-      </nav>
-
-      {/* Keeps HeavyFeed mounted in memory without re-render lag */}
-      <Activity mode={activeTab === 'feed' ? 'visible' : 'hidden'}>
-        <HeavyFeed />
-      </Activity>
-
-      <Activity mode={activeTab === 'editor' ? 'visible' : 'hidden'}>
-        <DraftEditor />
-      </Activity>
+      <Activity mode={tab === 'a' ? 'visible' : 'hidden'}><HeavyTabA /></Activity>
+      <Activity mode={tab === 'b' ? 'visible' : 'hidden'}><HeavyTabB /></Activity>
     </div>
   );
 }
@@ -3952,21 +4092,14 @@ export function TabContainer() {
 
 ### Q223: What is the "Event Callback Ref" pattern (`useEvent`) and how does it guarantee permanent function identity?
 **Answer:**
-Allows reading mutable state inside an event callback without listing state variables in dependency arrays:
 
 ```javascript
 import { useRef, useLayoutEffect, useCallback } from 'react';
 
 export function useEvent(handler) {
   const handlerRef = useRef(handler);
-
-  useLayoutEffect(() => {
-    handlerRef.current = handler;
-  });
-
-  return useCallback((...args) => {
-    return handlerRef.current(...args);
-  }, []); // Empty deps: Function reference NEVER changes!
+  useLayoutEffect(() => { handlerRef.current = handler; });
+  return useCallback((...args) => handlerRef.current(...args), []);
 }
 ```
 
@@ -3974,43 +4107,41 @@ export function useEvent(handler) {
 
 ### Q224: How do you prevent Cumulative Layout Shift (CLS) when loading Dynamic React Banners?
 **Answer:**
-1. Always define explicit `aspect-ratio` or `min-height` on container wrappers.
-2. Use CSS `contain-intrinsic-size` with `content-visibility: auto`.
-3. Reserve space for dynamic ads/banners using CSS Grid slot placeholders before network calls finish.
+
+```css
+/* Reserve static slot dimensions before async banner loads: */
+.dynamic-ad-slot {
+  min-height: 250px;
+  aspect-ratio: 16 / 9;
+  contain-intrinsic-size: 0 250px;
+}
+```
 
 ---
 
 ### Q225: What is the Performance Cost of Prop Drilling vs. Context vs. Signals (Zustand)?
 **Answer:**
-- **Prop Drilling**: 0 runtime memory overhead; high developer maintenance cost.
-- **React Context**: High re-render cost across deep trees on object mutations unless split/memoized.
-- **Signals / Zustand**: Direct $O(1)$ component-level subscribers via `useSyncExternalStore` (Bypasses intermediate component reconciliation entirely).
+
+```javascript
+// Zustand fine-grained subscription bypasses intermediate component tree:
+const userAvatar = useUserStore(s => s.user.avatarUrl); // Re-renders ONLY on avatar change!
+```
 
 ---
 
 ### Q226: How do you configure Cloudinary Client-Side Uploads directly from React without passing through backend servers?
 **Answer:**
-Direct uploads from browser to Cloudinary bypass backend Node.js servers, saving server CPU, RAM, and bandwidth.
 
 ```javascript
-export async function uploadDirectToCloudinary(file) {
-  const formData = new FormData();
-  formData.append('file', file);
-  formData.append('upload_preset', 'unsigned_user_avatars'); // Configured in Cloudinary Dashboard
-  formData.append('cloud_name', 'my-enterprise-cloud');
-
-  const res = await fetch('https://api.cloudinary.com/v1_1/my-enterprise-cloud/image/upload', {
+export async function uploadToCloudinary(file) {
+  const fd = new FormData();
+  fd.append('file', file);
+  fd.append('upload_preset', 'unsigned_preset');
+  const res = await fetch('https://api.cloudinary.com/v1_1/my-cloud/image/upload', {
     method: 'POST',
-    body: formData
+    body: fd
   });
-
-  const data = await res.json();
-  return {
-    publicId: data.public_id,
-    secureUrl: data.secure_url,
-    width: data.width,
-    height: data.height
-  };
+  return await res.json();
 }
 ```
 
@@ -4018,16 +4149,25 @@ export async function uploadDirectToCloudinary(file) {
 
 ### Q227: What is Skeleton Dimension Locking and why is it required in Suspense fallbacks?
 **Answer:**
-If `<Suspense fallback={<Skeleton />}>` renders a 50px placeholder, but the loaded component is 400px tall:
-- When the data loads, the entire page below jumps by 350px, causing a severe **Google Core Web Vitals CLS penalty (Score > 0.25)**.
-- **Dimension Locking**: Skeletons must mimic the exact bounding box, grid columns, and card heights of the final loaded UI.
+
+```javascript
+// Skeleton locked to exact 300px card height:
+<Suspense fallback={<div style={{ height: '300px', width: '100%' }} className="skeleton" />}>
+  <AsyncCard />
+</Suspense>
+```
 
 ---
 
 ### Q228: How do you eliminate re-renders in Window Resize and Scroll Event Handlers?
 **Answer:**
-- Never store `window.scrollY` in React state (`useState`) during scroll!
-- **Solution**: Read `window.scrollY` inside `requestAnimationFrame` or pass the value directly to CSS custom properties via `ref.current.style.setProperty('--scroll-y', `${window.scrollY}px`)`.
+
+```javascript
+// Direct CSS variable mutation without React state re-renders:
+window.addEventListener('scroll', () => {
+  document.documentElement.style.setProperty('--scroll-top', `${window.scrollY}px`);
+}, { passive: true });
+```
 
 ---
 
@@ -4037,29 +4177,16 @@ If `<Suspense fallback={<Skeleton />}>` renders a 50px placeholder, but the load
 ```javascript
 import { useOptimistic, useActionState } from 'react';
 
-export function CloudinaryImageCard({ image, onLikeAction }) {
-  const [optimisticLikes, setOptimisticLikes] = useOptimistic(
-    image.likeCount,
-    (currentCount, change) => currentCount + change
-  );
+export function ImageLikeButton({ initialLikes, imageId, likeAction }) {
+  const [likes, setOptimisticLikes] = useOptimistic(initialLikes, (curr, delta) => curr + delta);
 
   async function handleLike() {
-    setOptimisticLikes(1); // Increment immediately in UI!
-    await onLikeAction(image.id); // Reverts automatically if network action fails
+    setOptimisticLikes(1);
+    await likeAction(imageId);
   }
 
-  const [, formAction, isPending] = useActionState(handleLike, null);
-
-  return (
-    <div className="card">
-      <img src={`https://res.cloudinary.com/my-cloud/image/upload/w_400,f_auto,q_auto/${image.publicId}`} alt="" />
-      <form action={formAction}>
-        <button type="submit" disabled={isPending}>
-          ❤️ {optimisticLikes} {isPending && '...'}
-        </button>
-      </form>
-    </div>
-  );
+  const [, formAction] = useActionState(handleLike, null);
+  return <form action={formAction}><button type="submit">❤️ {likes}</button></form>;
 }
 ```
 
@@ -4068,21 +4195,881 @@ export function CloudinaryImageCard({ image, onLikeAction }) {
 ### Q230: What is the Enterprise Checklist for Zero-Waste React 19 Production Performance?
 **Answer:**
 
+```javascript
+// Performance Audit Check in CI/CD:
+// 1. React Compiler enabled
+// 2. Cloudinary f_auto, q_auto, responsive srcset
+// 3. fetchPriority="high" on Hero image
+// 4. @tanstack/react-virtual on large tables
 ```
-+─────────────────────────────────────────────────────────────────────────────+
-|               Enterprise React 19 Production Performance Checklist          |
-+─────────────────────────────────────────────────────────────────────────────+
-| [✓] React Compiler enabled (Auto-memoizes reactive scopes).                 |
-| [✓] Cloudinary / CDN with f_auto, q_auto, and responsive srcset.            |
-| [✓] fetchPriority="high" and preload() for above-the-fold Hero LCP.         |
-| [✓] State Colocation applied (Leaf-level state isolation).                  |
-| [✓] Element Lifting (children prop) for non-memoized wrapper components.    |
-| [✓] useTransition for low-priority updates (Zero loading spinner flash).    |
-| [✓] Uncontrolled forms (useRef/FormData) for high-frequency typing.         |
-| [✓] Selective Zustand / Jotai stores instead of monolithic global contexts. |
-| [✓] List virtualization (@tanstack/react-virtual) for lists >50 items.      |
-| [✓] React.cache() for per-request server query deduplication.               |
-| [✓] Dimension-locked Suspense skeletons to guarantee CLS = 0.00.            |
-| [✓] Web Workers for sorting/filtering datasets >10,000 items.               |
-+─────────────────────────────────────────────────────────────────────────────+
+
+
+---
+
+# Part 11: External API Fetching, Re-Fetch Elimination & Pagination Architectures (Q231 - Q250)
+
+---
+
+### Q231: How do you build a Custom `useFetch` Hook with In-Memory Deduplication to Avoid Duplicate In-Flight Re-Fetches?
+**Answer:**
+When 5 sibling components mount simultaneously requesting `/api/user/profile`, naive `useEffect` fetchers fire 5 duplicate HTTP requests.
+**In-Memory Promise Deduplication** caches active Promises so that all callers share a single network request:
+
+```typescript
+import { useState, useEffect } from 'react';
+
+// Global in-memory Promise & data cache
+const inFlightRequests = new Map<string, Promise<any>>();
+const memoryCache = new Map<string, { data: any; timestamp: number }>();
+
+export function useFetchDeduplicated<T>(url: string, ttlMs: number = 60000) {
+  const [data, setData] = useState<T | null>(() => {
+    const cached = memoryCache.get(url);
+    if (cached && Date.now() - cached.timestamp < ttlMs) {
+      return cached.data;
+    }
+    return null;
+  });
+  const [loading, setLoading] = useState<boolean>(!data);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    // 1. Check fresh cache
+    const cached = memoryCache.get(url);
+    if (cached && Date.now() - cached.timestamp < ttlMs) {
+      setData(cached.data);
+      setLoading(false);
+      return;
+    }
+
+    // 2. Reuse in-flight Promise or create a new one
+    let requestPromise = inFlightRequests.get(url);
+    if (!requestPromise) {
+      requestPromise = fetch(url)
+        .then((res) => {
+          if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
+          return res.json();
+        })
+        .then((result) => {
+          memoryCache.set(url, { data: result, timestamp: Date.now() });
+          return result;
+        })
+        .finally(() => {
+          inFlightRequests.delete(url); // Clean up active in-flight map
+        });
+      
+      inFlightRequests.set(url, requestPromise);
+    }
+
+    setLoading(true);
+    requestPromise
+      .then((result) => {
+        if (isMounted) {
+          setData(result);
+          setError(null);
+        }
+      })
+      .catch((err) => {
+        if (isMounted) setError(err);
+      })
+      .finally(() => {
+        if (isMounted) setLoading(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [url, ttlMs]);
+
+  return { data, loading, error };
+}
+```
+
+---
+
+### Q232: How do you implement Standard Offset-Based Pagination with URL Query Sync in React 19?
+**Answer:**
+Offset pagination (`?page=2&limit=20`) synchronizes page state with URL search parameters so page links are shareable, bookmarkable, and preserve browser history:
+
+```javascript
+import { useSearchParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+
+async function fetchProducts({ page = 1, limit = 10 }) {
+  const res = await fetch(`/api/products?page=${page}&limit=${limit}`);
+  if (!res.ok) throw new Error('Failed to fetch');
+  return res.json(); // returns { items: [...], totalPages: 10, totalCount: 100 }
+}
+
+export function OffsetPaginationTable() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentPage = parseInt(searchParams.get('page') || '1', 10);
+  const pageSize = 10;
+
+  const { data, isPending, isPlaceholderData } = useQuery({
+    queryKey: ['products', currentPage],
+    queryFn: () => fetchProducts({ page: currentPage, limit: pageSize }),
+    placeholderData: (previousData) => previousData, // Keeps previous page visible while fetching next page!
+    staleTime: 1000 * 60 * 5 // 5 minutes fresh data
+  });
+
+  const goToPage = (page) => {
+    setSearchParams({ page: String(page) });
+  };
+
+  return (
+    <div>
+      {isPending ? (
+        <p>Loading table...</p>
+      ) : (
+        <table>
+          <thead>
+            <tr><th>ID</th><th>Name</th><th>Price</th></tr>
+          </thead>
+          <tbody style={{ opacity: isPlaceholderData ? 0.6 : 1 }}>
+            {data?.items.map((item) => (
+              <tr key={item.id}>
+                <td>{item.id}</td><td>{item.name}</td><td>${item.price}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+
+      {/* Pagination Controls */}
+      <div className="pagination-controls">
+        <button 
+          onClick={() => goToPage(currentPage - 1)} 
+          disabled={currentPage === 1 || isPlaceholderData}
+        >
+          Previous
+        </button>
+        <span>Page {currentPage} of {data?.totalPages || 1}</span>
+        <button 
+          onClick={() => goToPage(currentPage + 1)} 
+          disabled={currentPage >= (data?.totalPages || 1) || isPlaceholderData}
+        >
+          Next
+        </button>
+      </div>
+    </div>
+  );
+}
+```
+
+---
+
+### Q233: How do you implement High-Performance Cursor-Based (Keyset) Pagination for Real-Time Streaming Feeds?
+**Answer:**
+Offset pagination (`OFFSET 50000`) degrades SQL performance ($O(N)$ index scan) and skips/duplicates items if new rows are inserted.
+**Cursor-based Pagination** uses an immutable pointer (e.g. `last_seen_id` or timestamp) to query `WHERE id < cursor LIMIT 20` in $O(1)$ time:
+
+```javascript
+import { useState } from 'react';
+
+export function CursorFeedList() {
+  const [posts, setPosts] = useState([]);
+  const [nextCursor, setNextCursor] = useState(null);
+  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(false);
+
+  async function loadMorePosts() {
+    if (loading || !hasMore) return;
+    setLoading(true);
+
+    try {
+      const url = nextCursor 
+        ? `/api/feed?cursor=${encodeURIComponent(nextCursor)}&limit=15` 
+        : `/api/feed?limit=15`;
+      
+      const res = await fetch(url);
+      const data = await res.json(); // { items: [...], nextCursor: "eyJpZCI6MTA0NX0=", hasMore: true }
+
+      setPosts((prev) => [...prev, ...data.items]);
+      setNextCursor(data.nextCursor);
+      setHasMore(data.hasMore);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="feed-container">
+      {posts.map((post) => (
+        <article key={post.id} className="post-card">
+          <h3>{post.title}</h3>
+          <p>{post.body}</p>
+        </article>
+      ))}
+
+      {hasMore && (
+        <button onClick={loadMorePosts} disabled={loading}>
+          {loading ? 'Loading more posts...' : 'Load More'}
+        </button>
+      )}
+    </div>
+  );
+}
+```
+
+---
+
+### Q234: How do you implement Infinite Scrolling with `IntersectionObserver` and TanStack Query `useInfiniteQuery`?
+**Answer:**
+
+```javascript
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { useEffect, useRef } from 'react';
+
+async function fetchInfiniteUsers({ pageParam = null }) {
+  const url = pageParam 
+    ? `/api/users?cursor=${pageParam}&limit=20` 
+    : `/api/users?limit=20`;
+  const res = await fetch(url);
+  return res.json(); // { users: [...], nextCursor: 1045 }
+}
+
+export function InfiniteUserScroll() {
+  const loadMoreRef = useRef(null);
+
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    status
+  } = useInfiniteQuery({
+    queryKey: ['infiniteUsers'],
+    queryFn: fetchInfiniteUsers,
+    initialPageParam: null,
+    getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
+    staleTime: 1000 * 60 * 10 // 10 minutes cache
+  });
+
+  // Automatically trigger fetchNextPage when sentinel element is visible
+  useEffect(() => {
+    const sentinel = loadMoreRef.current;
+    if (!sentinel) return;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
+        fetchNextPage();
+      }
+    }, { threshold: 0.1 });
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  if (status === 'pending') return <p>Loading initial users...</p>;
+
+  return (
+    <div className="infinite-scroll-list">
+      {data?.pages.map((page) =>
+        page.users.map((user) => (
+          <div key={user.id} className="user-row">
+            <span>{user.name}</span> - <span>{user.email}</span>
+          </div>
+        ))
+      )}
+
+      {/* Sentinel element observed by IntersectionObserver */}
+      <div ref={loadMoreRef} style={{ height: 40, textAlign: 'center' }}>
+        {isFetchingNextPage ? 'Loading next 20 users...' : hasNextPage ? 'Scroll down for more' : 'All users loaded'}
+      </div>
+    </div>
+  );
+}
+```
+
+---
+
+### Q235: How do you implement Prefetching on Hover for 0ms Instant Page Transitions?
+**Answer:**
+When a user moves their mouse over a pagination link or table row, prefetching downloads the target page data in the background **before** they click:
+
+```javascript
+import { useQueryClient } from '@tanstack/react-query';
+
+export function PaginationButton({ pageNumber, children }) {
+  const queryClient = useQueryClient();
+
+  // Prefetch data into cache on mouse hover or keyboard focus
+  const handlePrefetch = () => {
+    queryClient.prefetchQuery({
+      queryKey: ['products', pageNumber],
+      queryFn: () => fetch(`/api/products?page=${pageNumber}`).then(r => r.json()),
+      staleTime: 1000 * 60 * 2 // Keeps prefetched data fresh for 2 minutes
+    });
+  };
+
+  return (
+    <button
+      onMouseEnter={handlePrefetch}
+      onFocus={handlePrefetch}
+      onClick={() => goToPage(pageNumber)}
+    >
+      {children}
+    </button>
+  );
+}
+```
+
+---
+
+### Q236: How do you configure Window Focus and Network Reconnect Refetch rules in TanStack Query to Avoid Unwanted Re-Fetches?
+**Answer:**
+By default, TanStack Query refetches all active queries whenever the browser window regains focus (`refetchOnWindowFocus: true`) or network reconnects. In dashboards with 50 live charts, this triggers a storm of network requests.
+
+**Fine-Grained Re-Fetch Prevention Config:**
+```javascript
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      // 🛡️ Prevent unwanted refetches:
+      staleTime: 1000 * 60 * 5,       // Data considered fresh for 5 minutes (No background refetch on mount)
+      gcTime: 1000 * 60 * 30,          // Keep unused cache in memory for 30 minutes
+      refetchOnWindowFocus: false,     // Disable automatic refetch when user switches browser tabs
+      refetchOnReconnect: 'always',    // Refetch only when network drops and reconnects
+      refetchOnMount: false,           // Do not refetch on component remount if data is not stale
+      retry: 2,                        // Retry failed network requests twice before throwing error
+      retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 30000) // Exponential backoff with cap
+    }
+  }
+});
+```
+
+---
+
+### Q237: How do you implement Bi-Directional Infinite Scrolling (Chat History / Timeline with upward & downward scroll)?
+**Answer:**
+In chat applications (Slack/Discord), initial loading lands in the middle or bottom of history. Scrolling **up** fetches older historical messages, while scrolling **down** fetches newer messages:
+
+```javascript
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { useRef, useLayoutEffect } from 'react';
+
+async function fetchChatMessages({ pageParam = 0, direction }) {
+  const res = await fetch(`/api/chat?cursor=${pageParam}&direction=${direction}`);
+  return res.json();
+}
+
+export function BiDirectionalChat({ initialMessageId }) {
+  const containerRef = useRef(null);
+  const previousScrollHeightRef = useRef(0);
+
+  const {
+    data,
+    fetchPreviousPage,
+    fetchNextPage,
+    hasPreviousPage,
+    hasNextPage,
+    isFetchingPreviousPage
+  } = useInfiniteQuery({
+    queryKey: ['chat', initialMessageId],
+    queryFn: ({ pageParam }) => fetchChatMessages({ pageParam, direction: 'older' }),
+    initialPageParam: initialMessageId,
+    getPreviousPageParam: (firstPage) => firstPage.olderCursor ?? undefined,
+    getNextPageParam: (lastPage) => lastPage.newerCursor ?? undefined
+  });
+
+  // Preserve scroll position when older messages are prepended to top of chat
+  useLayoutEffect(() => {
+    if (containerRef.current && isFetchingPreviousPage) {
+      const diff = containerRef.current.scrollHeight - previousScrollHeightRef.current;
+      containerRef.current.scrollTop += diff;
+    }
+    if (containerRef.current) {
+      previousScrollHeightRef.current = containerRef.current.scrollHeight;
+    }
+  }, [data, isFetchingPreviousPage]);
+
+  return (
+    <div ref={containerRef} style={{ height: '600px', overflowY: 'auto' }}>
+      {hasPreviousPage && (
+        <button onClick={() => fetchPreviousPage()}>Load Older Messages</button>
+      )}
+
+      {data?.pages.map((page) =>
+        page.messages.map((msg) => (
+          <div key={msg.id} className="chat-bubble">
+            <strong>{msg.sender}:</strong> {msg.text}
+          </div>
+        ))
+      )}
+
+      {hasNextPage && (
+        <button onClick={() => fetchNextPage()}>Load Newer Messages</button>
+      )}
+    </div>
+  );
+}
+```
+
+---
+
+### Q238: How do you build an Auto-Polling Real-Time Hook with Adaptive Backoff when User is Idle?
+**Answer:**
+Polling every 2 seconds when the user is inactive or has minimized the tab wastes server bandwidth.
+**Adaptive Polling**: Polls at 2s when active, slows down to 30s when window loses focus or user is idle:
+
+```javascript
+import { useEffect, useState, useRef } from 'react';
+
+export function useAdaptivePolling(fetchFn, { activeInterval = 2000, idleInterval = 30000 }) {
+  const [data, setData] = useState(null);
+  const [isIdle, setIsIdle] = useState(false);
+  const savedFetch = useRef(fetchFn);
+
+  useEffect(() => { savedFetch.current = fetchFn; });
+
+  // Detect user activity and tab focus
+  useEffect(() => {
+    let idleTimer;
+    const resetIdle = () => {
+      setIsIdle(false);
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => setIsIdle(true), 60000); // Idle after 60s of no mouse/keyboard events
+    };
+
+    const handleVisibility = () => setIsIdle(document.hidden);
+
+    window.addEventListener('mousemove', resetIdle);
+    window.addEventListener('keydown', resetIdle);
+    document.addEventListener('visibilitychange', handleVisibility);
+
+    return () => {
+      window.removeEventListener('mousemove', resetIdle);
+      window.removeEventListener('keydown', resetIdle);
+      document.removeEventListener('visibilitychange', handleVisibility);
+      clearTimeout(idleTimer);
+    };
+  }, []);
+
+  useEffect(() => {
+    let isCancelled = false;
+    const currentInterval = isIdle ? idleInterval : activeInterval;
+
+    const poll = async () => {
+      try {
+        const result = await savedFetch.current();
+        if (!isCancelled) setData(result);
+      } catch (err) {
+        console.error('Polling error:', err);
+      }
+    };
+
+    poll(); // Initial run
+    const intervalId = setInterval(poll, currentInterval);
+
+    return () => {
+      isCancelled = true;
+      clearInterval(intervalId);
+    };
+  }, [isIdle, activeInterval, idleInterval]);
+
+  return data;
+}
+```
+
+---
+
+### Q239: How do you combine Virtualization and Infinite Fetching with `@tanstack/react-virtual`?
+**Answer:**
+
+```javascript
+import { useVirtualizer } from '@tanstack/react-virtual';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { useRef, useEffect } from 'react';
+
+export function VirtualInfiniteTable() {
+  const parentRef = useRef(null);
+
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
+    queryKey: ['virtualRows'],
+    queryFn: ({ pageParam = 0 }) => fetch(`/api/rows?cursor=${pageParam}`).then(r => r.json()),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => lastPage.nextCursor
+  });
+
+  const allRows = data ? data.pages.flatMap(d => d.rows) : [];
+
+  const rowVirtualizer = useVirtualizer({
+    count: hasNextPage ? allRows.length + 1 : allRows.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => 50,
+    overscan: 5
+  });
+
+  useEffect(() => {
+    const [lastItem] = [...rowVirtualizer.getVirtualItems()].reverse();
+    if (!lastItem) return;
+
+    if (lastItem.index >= allRows.length - 1 && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [hasNextPage, fetchNextPage, allRows.length, isFetchingNextPage, rowVirtualizer.getVirtualItems()]);
+
+  return (
+    <div ref={parentRef} style={{ height: '500px', overflow: 'auto' }}>
+      <div style={{ height: `${rowVirtualizer.getTotalSize()}px`, width: '100%', position: 'relative' }}>
+        {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+          const isLoaderRow = virtualRow.index > allRows.length - 1;
+          const row = allRows[virtualRow.index];
+
+          return (
+            <div
+              key={virtualRow.index}
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: `${virtualRow.size}px`,
+                transform: `translateY(${virtualRow.start}px)`
+              }}
+            >
+              {isLoaderRow ? 'Loading more rows...' : `Row ${row.id}: ${row.title}`}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+```
+
+---
+
+### Q240: What is the SWR (Stale-While-Revalidate) Cache Hydration and Mutate API in Vercel's `swr` library?
+**Answer:**
+SWR returns cached data first (stale), then fetches fresh data in the background (revalidate), and finally updates state with zero UI lag:
+
+```javascript
+import useSWR, { mutate } from 'swr';
+
+const fetcher = (url) => fetch(url).then((res) => res.json());
+
+export function UserDashboard({ userId }) {
+  const { data: user, error, isLoading } = useSWR(`/api/user/${userId}`, fetcher, {
+    revalidateOnFocus: false,
+    dedupingInterval: 60000 // Deduplicate requests within 1 minute
+  });
+
+  // Imperative Optimistic Mutation across any component
+  const handleUpdateName = async (newName) => {
+    // 1. Update UI optimistically
+    mutate(`/api/user/${userId}`, { ...user, name: newName }, false);
+
+    // 2. Perform actual API call
+    await fetch(`/api/user/${userId}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ name: newName })
+    });
+
+    // 3. Trigger background revalidation to guarantee sync
+    mutate(`/api/user/${userId}`);
+  };
+
+  if (isLoading) return <p>Loading...</p>;
+  return (
+    <div>
+      <h2>{user.name}</h2>
+      <button onClick={() => handleUpdateName('New Name')}>Update Name</button>
+    </div>
+  );
+}
+```
+
+---
+
+### Q241: How do you build a `useNetwork` hook with Offline Mutation Queueing in React?
+**Answer:**
+Intercepts network requests when offline, stores failed mutation requests in IndexedDB, and automatically flushes them in sequence when the device regains connectivity:
+
+```javascript
+import { useState, useEffect } from 'react';
+import { get, set } from 'idb-keyval';
+
+export function useOfflineQueue() {
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+  useEffect(() => {
+    const handleOnline = async () => {
+      setIsOnline(true);
+      // Flush offline queue when reconnected:
+      const queue = (await get('offline_mutations')) || [];
+      for (const item of queue) {
+        await fetch(item.url, { method: item.method, body: JSON.stringify(item.body) });
+      }
+      await set('offline_mutations', []);
+    };
+
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
+  const queueMutation = async (mutation) => {
+    const queue = (await get('offline_mutations')) || [];
+    queue.push(mutation);
+    await set('offline_mutations', queue);
+  };
+
+  return { isOnline, queueMutation };
+}
+```
+
+---
+
+### Q242: How do you handle Dependent (Sequential) API queries in TanStack Query without waterfall bugs (`enabled: !!data`)?
+**Answer:**
+Ensures that Query B executes **only after** Query A has successfully resolved:
+
+```javascript
+import { useQuery } from '@tanstack/react-query';
+
+export function UserOrganizationView({ email }) {
+  // Query 1: Fetch user by email
+  const { data: user } = useQuery({
+    queryKey: ['user', email],
+    queryFn: () => fetch(`/api/user?email=${email}`).then(r => r.json())
+  });
+
+  const userId = user?.id;
+
+  // Query 2: Dependent query - waits until userId is defined!
+  const { data: organizations, isPending } = useQuery({
+    queryKey: ['orgs', userId],
+    queryFn: () => fetch(`/api/users/${userId}/orgs`).then(r => r.json()),
+    enabled: !!userId // 🛡️ Prevents execution until userId is truthy!
+  });
+
+  if (isPending) return <p>Loading organizations...</p>;
+  return <ul>{organizations?.map(o => <li key={o.id}>{o.name}</li>)}</ul>;
+}
+```
+
+---
+
+### Q243: How do you handle Dynamic Parallel API Queries with `useQueries` in TanStack Query?
+**Answer:**
+When querying an array of dynamic IDs where `useQuery` cannot be called inside a loop:
+
+```javascript
+import { useQueries } from '@tanstack/react-query';
+
+export function MultiUserCards({ userIds }) {
+  // Executes dynamic parallel queries with unified caching:
+  const userQueries = useQueries({
+    queries: userIds.map((id) => ({
+      queryKey: ['user', id],
+      queryFn: () => fetch(`/api/users/${id}`).then(r => r.json()),
+      staleTime: 1000 * 60 * 5
+    }))
+  });
+
+  const isLoading = userQueries.some((q) => q.isPending);
+
+  if (isLoading) return <p>Loading users...</p>;
+  return (
+    <div>
+      {userQueries.map(({ data: user }) => (
+        <div key={user.id}>{user.name}</div>
+      ))}
+    </div>
+  );
+}
+```
+
+---
+
+### Q244: How do you prevent Double-Fetch on Component Mount in React 18/19 StrictMode?
+**Answer:**
+In development, `StrictMode` mounts, unmounts, and re-mounts components to test cleanups.
+Using TanStack Query or `useRef` guard prevents duplicate network calls:
+
+```javascript
+import { useEffect, useRef } from 'react';
+
+export function StrictModeSafeFetch() {
+  const isFetched = useRef(false);
+
+  useEffect(() => {
+    // 🛡️ Prevent duplicate fetch in StrictMode:
+    if (isFetched.current) return;
+    isFetched.current = true;
+
+    fetchData();
+  }, []);
+}
+```
+
+---
+
+### Q245: How do you build a Client-Side API Rate Limiter / Request Throttler in React?
+**Answer:**
+
+```javascript
+class ClientRateLimiter {
+  constructor(maxRequests, perWindowMs) {
+    this.maxRequests = maxRequests;
+    this.perWindowMs = perWindowMs;
+    this.queue = [];
+  }
+
+  async acquire() {
+    const now = Date.now();
+    this.queue = this.queue.filter(t => t > now - this.perWindowMs);
+    if (this.queue.length >= this.maxRequests) {
+      const waitTime = this.perWindowMs - (now - this.queue[0]);
+      await new Promise(resolve => setTimeout(resolve, waitTime));
+      return this.acquire();
+    }
+    this.queue.push(Date.now());
+  }
+}
+
+const limiter = new ClientRateLimiter(5, 1000); // 5 requests per second
+
+export async function rateLimitedFetch(url, options) {
+  await limiter.acquire();
+  return fetch(url, options);
+}
+```
+
+---
+
+### Q246: How do you handle Pagination State Synchronization with Browser Back/Forward buttons?
+**Answer:**
+
+```javascript
+import { useSearchParams } from 'react-router-dom';
+
+export function PaginationSync() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = parseInt(searchParams.get('page') || '1', 10);
+
+  // Updates browser history stack:
+  const changePage = (newPage) => {
+    setSearchParams({ page: String(newPage) }); // Pushes state to history!
+  };
+
+  return (
+    <div>
+      <button onClick={() => changePage(page - 1)} disabled={page <= 1}>Prev</button>
+      <span>Current Page: {page}</span>
+      <button onClick={() => changePage(page + 1)}>Next</button>
+    </div>
+  );
+}
+```
+
+---
+
+### Q247: How do you implement Infinite Virtualized Grid Pagination (2D matrix) with `@tanstack/react-virtual`?
+**Answer:**
+
+```javascript
+import { useVirtualizer } from '@tanstack/react-virtual';
+import { useRef } from 'react';
+
+export function VirtualGrid({ items, columnCount = 4 }) {
+  const parentRef = useRef(null);
+  const rowCount = Math.ceil(items.length / columnCount);
+
+  const rowVirtualizer = useVirtualizer({
+    count: rowCount,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => 180,
+    overscan: 3
+  });
+
+  return (
+    <div ref={parentRef} style={{ height: '600px', overflow: 'auto' }}>
+      <div style={{ height: `${rowVirtualizer.getTotalSize()}px`, position: 'relative' }}>
+        {rowVirtualizer.getVirtualItems().map(virtualRow => {
+          const startIndex = virtualRow.index * columnCount;
+          const rowItems = items.slice(startIndex, startIndex + columnCount);
+
+          return (
+            <div key={virtualRow.index} style={{ position: 'absolute', top: 0, transform: `translateY(${virtualRow.start}px)`, display: 'grid', gridTemplateColumns: `repeat(${columnCount}, 1fr)`, width: '100%' }}>
+              {rowItems.map(item => (
+                <div key={item.id} className="grid-card">{item.title}</div>
+              ))}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+```
+
+---
+
+### Q248: How do you cache API responses in LocalStorage / IndexedDB with TanStack Query Persist Client?
+**Answer:**
+
+```javascript
+import { QueryClient } from '@tanstack/react-query';
+import { persistQueryClient } from '@tanstack/react-query-persist-client';
+import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
+
+export const queryClient = new QueryClient({
+  defaultOptions: { queries: { gcTime: 1000 * 60 * 60 * 24 } } // 24 hours
+});
+
+const localStoragePersister = createSyncStoragePersister({
+  storage: typeof window !== 'undefined' ? window.localStorage : undefined
+});
+
+persistQueryClient({
+  queryClient,
+  persister: localStoragePersister,
+  maxAge: 1000 * 60 * 60 * 24 // 24-hour persistent offline cache!
+});
+```
+
+---
+
+### Q249: What is the difference between Keyset Pagination and Offset Pagination in SQL queries from React?
+**Answer:**
+
+```javascript
+// 1. Offset Pagination (Slow on large tables, index scanning overhead):
+// SQL: SELECT * FROM items ORDER BY id LIMIT 20 OFFSET 100000;
+
+// 2. Keyset / Cursor Pagination (Fast O(1) index lookup):
+// SQL: SELECT * FROM items WHERE id > 100000 ORDER BY id LIMIT 20;
+async function fetchKeysetPage(lastSeenId, limit = 20) {
+  const url = lastSeenId ? `/api/items?after=${lastSeenId}&limit=${limit}` : `/api/items?limit=${limit}`;
+  return fetch(url).then(r => r.json());
+}
+```
+
+---
+
+### Q250: What is the Enterprise Checklist for Resilient, Zero-Miss External API Fetching and Pagination in React 19?
+**Answer:**
+
+```javascript
+// Enterprise API Fetching & Pagination Architecture Checklist:
+// [✓] Promise Deduplication active for concurrent identical calls.
+// [✓] AbortController wired to useEffect / query cleanup.
+// [✓] staleTime configured (min 5 min) to prevent refetch on tab switch.
+// [✓] Cursor-based pagination used for real-time and large datasets.
+// [✓] Prefetching on Hover configured for 0ms page transitions.
+// [✓] URL query parameters synchronized with pagination state.
+// [✓] Bi-directional scrolling state preserves scroll position via useLayoutEffect.
+// [✓] Persistent offline caching with IndexedDB / LocalStorage persisters.
 ```

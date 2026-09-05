@@ -433,31 +433,84 @@ function AutoResizeTextarea() {
 ### Q15: What is the new `hydration` error reporting improvement in React 19?
 **Answer:**
 Hydration mismatch errors (e.g. server rendered `<div>Server</div>`, client rendered `<div>Client</div>`) in older React displayed cryptic `Minified React error #418`.
-React 19 prints a **side-by-side colorized visual diff** directly in the browser console showing the exact mismatched DOM nodes and call site.
+React 19 prints a **side-by-side colorized visual diff** directly in the browser console showing the exact mismatched DOM nodes:
+
+```javascript
+// React 19 Hydration Mismatch Diff Log in Console:
+// Uncaught Error: Hydration failed because the initial UI does not match what was rendered on the server.
+//   <App>
+//     <div>
+// -     "Server Rendered Text"
+// +     "Client Rendered Text"
+//     </div>
+//   </App>
+```
 
 ---
 
 ### Q16: What is the difference between Server Actions and traditional REST/tRPC API routes?
 **Answer:**
 - **REST/tRPC**: Explicit endpoints requiring URL routing, serialization boilerplate, and separate client fetch code.
-- **Server Actions**: Remote Procedure Calls (RPC) generated transparently by the React bundler. You import and invoke a server function directly; React handles serialization, HTTP POST framing, CSRF token verification, and optimistic state synchronization automatically.
+- **Server Actions**: Remote Procedure Calls (RPC) generated transparently by the React bundler:
+
+```javascript
+// Server Action ('use server'):
+'use server';
+export async function updateEmail(userId, newEmail) {
+  await db.user.update({ where: { id: userId }, data: { email: newEmail } });
+  return { success: true };
+}
+
+// Client Component: Import and invoke directly like a local async function!
+'use client';
+import { updateEmail } from './actions';
+
+export function EmailForm({ userId }) {
+  return <button onClick={() => updateEmail(userId, 'alice@domain.com')}>Update</button>;
+}
+```
 
 ---
 
 ### Q17: How does React 19 handle Custom Elements / Web Components seamlessly?
 **Answer:**
-In React 18 and earlier, passing complex props or listening to custom events on Web Components required manual `ref` and `addEventListener` setup.
 In React 19, React checks if a prop exists on the Custom Element instance as a property:
-- Primitive attributes (`string`, `number`) are set via `setAttribute()`.
-- Complex data (`objects`, `arrays`, `functions`) are set directly as properties on the DOM instance.
+
+```javascript
+// React 19 Native Custom Element Integration:
+export function WebComponentWrapper() {
+  // Complex objects & custom events pass directly without manual ref.addEventListener:
+  return (
+    <my-custom-chart
+      chartData={[{ x: 1, y: 10 }, { x: 2, y: 20 }]} // Passed directly as property!
+      onchartclick={(e) => console.log('Custom event triggered:', e.detail)}
+    />
+  );
+}
+```
 
 ---
 
 ### Q18: What is Partial Prerendering (PPR) in the context of React 19 and Next.js?
 **Answer:**
 PPR combines Static Site Generation (SSG) and Dynamic Streaming Server-Side Rendering into a single HTTP response:
-1. The **Static Shell** (Navbar, Sidebar, Skeleton cards) is served instantly from edge CDN cache.
-2. The **Dynamic Holes** (Personalized user feed, live pricing) stream in over the same open HTTP stream via React `<Suspense>` without multiple roundtrips.
+
+```javascript
+// next.config.js - Partial Prerendering (PPR):
+export const experimental = { ppr: true };
+
+// Page Component:
+export default function Page() {
+  return (
+    <div>
+      <StaticNavbar /> {/* Instant static shell from Edge CDN */}
+      <Suspense fallback={<FeedSkeleton />}>
+        <DynamicPersonalizedFeed /> {/* Streams in dynamically over same HTTP stream */}
+      </Suspense>
+    </div>
+  );
+}
+```
 
 ---
 
@@ -488,12 +541,18 @@ function ChartContainer({ chartPromise }) {
 
 ### Q20: What are the memory and execution performance trade-offs of Server Components vs. Client Components?
 **Answer:**
-- **Server Components**:
-  - Memory cost is on the server (V8 Node/Edge runtime).
-  - 0 KB client bundle size, eliminating parsing, JIT compilation, and hydration overhead in the user's browser.
-- **Client Components**:
-  - Memory cost is on the client device (DOM nodes, V8 JS heap).
-  - Required for interactivity (`onClick`, `onChange`), browser APIs (`localStorage`, `window`), and client state (`useState`).
+- **Server Components**: Executed on server, 0 KB client JS.
+- **Client Components**: Downloaded, parsed, hydrated in browser RAM.
+
+```javascript
+// Server Component: 0KB JavaScript sent to client (Heavy markdown parser runs on server!)
+import { marked } from 'marked'; // 50KB library NEVER sent to browser!
+
+export async function ServerMarkdownViewer({ markdownText }) {
+  const html = marked.parse(markdownText);
+  return <div dangerouslySetInnerHTML={{ __html: html }} />;
+}
+```
 
 ---
 
@@ -523,21 +582,52 @@ export async function uploadAvatarAction(formData) {
 
 ### Q22: What happens when an error is thrown inside a Server Component vs. a Client Component?
 **Answer:**
-- **Client Component Error**: Caught by the nearest `<ErrorBoundary>` in the browser. Full component stack is available in DevTools.
-- **Server Component Error**: Sanitized by React in production to prevent leaking database credentials or server stack traces to the browser (`"An error occurred in the Server Components render"`). Caught by the client-side `<ErrorBoundary>` surrounding the Suspense boundary.
+Server errors are sanitized in production to avoid leaking database passwords:
+
+```javascript
+// Error Boundary surrounding Server Component Suspense boundary:
+<ErrorBoundary fallback={<p>Unable to load recommendations. Please try again.</p>}>
+  <Suspense fallback={<Skeleton />}>
+    <AsyncServerRecommendations /> {/* Sanitized server crash caught safely! */}
+  </Suspense>
+</ErrorBoundary>
+```
 
 ---
 
 ### Q23: How does React 19 deduplicate Promises passed into the `use()` Hook?
 **Answer:**
-If the same Promise instance is passed to multiple components in the same render tree, React 19 tracks the Promise reference and resolves all components simultaneously when the Promise settles, avoiding duplicate network queries.
+Passing the same Promise reference unwraps simultaneously across sibling components:
+
+```javascript
+// Shared Promise instance:
+const userPromise = fetchUser(userId);
+
+function SiblingA() {
+  const user = use(userPromise); // Unwraps shared promise
+  return <h1>{user.name}</h1>;
+}
+
+function SiblingB() {
+  const user = use(userPromise); // Reuses exact same settled value without duplicate network query!
+  return <p>{user.email}</p>;
+}
+```
 
 ---
 
 ### Q24: What is the difference between React 19 Actions and useEffect-based data mutation?
 **Answer:**
-- **`useEffect` mutation (Anti-pattern)**: Causes double-rendering, flash of stale content, manual race condition handling, and requires manual `isMounted` checks.
-- **React 19 Action (`useActionState` / `startTransition`)**: Integrates directly with React’s concurrent scheduler, manages pending UI transitions natively, and enables rollback on error.
+Actions integrate natively with Transitions and rollbacks:
+
+```javascript
+// React 19 Action: Clean pending state and error boundary integration
+const [state, formAction, isPending] = useActionState(async (prev, formData) => {
+  return await mutateData(formData);
+}, initial);
+
+return <form action={formAction}><button disabled={isPending}>Save</button></form>;
+```
 
 ---
 

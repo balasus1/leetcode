@@ -6,45 +6,33 @@
 **Answer:**
 The **Fiber Reconciler** is React’s core reconciliation engine.
 
-```
-Legacy Stack Reconciler (React <16):
-- Recursive synchronous call stack traversal.
-- Cannot be paused, aborted, or prioritized.
-- Heavy re-renders block the browser main thread (>16ms), causing dropped frames (jank).
-
-Fiber Architecture (React 16 -> 19):
-- Virtual stack frame implemented as a JavaScript object (Fiber Node).
-- Uses a Singly Linked List tree structure (child, sibling, return pointers).
-- Work can be paused, split into chunks, aborted, prioritized, and resumed!
-```
-
-**Structure of a Fiber Node:**
 ```javascript
+// Structure of an individual React Fiber Node:
 const fiberNode = {
-  tag: WorkTag,            // FunctionComponent, ClassComponent, HostRoot, etc.
+  tag: 0,                  // FunctionComponent = 0, HostRoot = 3, HostComponent = 5
   key: null,
   elementType: App,
   type: App,
-  stateNode: null,         // Real DOM node or Class instance
+  stateNode: null,         // Real DOM instance or Class instance
   
   // Singly Linked List Tree Pointers
-  child: FiberNode,        // First child
-  sibling: FiberNode,      // Next sibling
-  return: FiberNode,       // Parent fiber (where work returns)
+  child: null,             // Pointer to first child Fiber
+  sibling: null,           // Pointer to next sibling Fiber
+  return: null,            // Pointer to parent Fiber (where work returns)
   
-  // Work and State
+  // State and Work
   memoizedProps: {},
   pendingProps: {},
-  memoizedState: {},       // Hook linked list
+  memoizedState: null,     // Linked list of hook states
   updateQueue: null,
   
-  // Concurrency & Priority
-  lanes: Lane,             // Bitmask priority lanes
-  childLanes: Lane,
+  // Concurrency & Bitmask Priority
+  lanes: 0b0000000000000000000000000000001, // 31-bit Lane bitmask
+  childLanes: 0,
   
   // Double Buffering
-  alternate: FiberNode,    // Pointer to mirror fiber in workInProgress / current tree
-  flags: Flags,            // Side effects (Placement, Update, Deletion)
+  alternate: null,         // Mirror pointer in workInProgress / current tree
+  flags: 0b0000000000000000000000000000100  // Side effects: Placement, Update, Deletion
 };
 ```
 
@@ -52,114 +40,181 @@ const fiberNode = {
 
 ### Q27: How does Double Buffering work in React Fiber (`current` vs `workInProgress` tree)?
 **Answer:**
-Similar to graphics rendering (OpenGL/DirectX), React uses a **Double Buffering** strategy to prevent half-rendered, flickering UI states from appearing on the screen.
+React uses a **Double Buffering** strategy:
 
+```javascript
+// Double Buffering Pointer Swap in React Root Commit:
+function commitRoot(root) {
+  const finishedWork = root.current.alternate; // workInProgress tree
+  
+  // 1. Flush DOM mutations atomically to screen
+  commitMutationEffects(finishedWork);
+  
+  // 2. Atomic Pointer Swap (Instant transition to new screen state with 0 visual tearing)
+  root.current = finishedWork;
+}
 ```
-[Screen Display] <── Linked to ── [current Tree] (Committed, visible DOM)
-                                        │
-                                 alternate pointer
-                                        │
-[Background Render] ───────────> [workInProgress Tree] (Draft / Being computed)
-```
-
-1. **`current` Tree**: Represents the fibers currently mounted and visible on the screen.
-2. **`workInProgress` Tree**: Constructed in memory during the asynchronous render phase.
-3. When the `workInProgress` tree finishes and is committed to the real DOM, React simply swaps a single pointer (`root.current = workInProgress`), turning the draft tree into the visible tree in a single atomic operation!
 
 ---
 
 ### Q28: What are the two main phases of React rendering: The Render (Reconciliation) Phase vs. The Commit Phase?
 **Answer:**
 
-| Phase | Characteristics | Schedulable? | Side Effects Allowed? |
-|---|---|---|---|
-| **1. Render Phase**<br>(Reconciliation) | Computes JSX diffs, runs hooks, constructs `workInProgress` fiber tree, flags mutations (`Placement`, `Update`). | **Asynchronous & Interruptible** (Can pause or yield to high-priority user input). | **Pure computation only** (NO DOM mutations or network triggers). |
-| **2. Commit Phase** | Flushes DOM mutations, runs `useLayoutEffect`, paints DOM, runs `useEffect` asynchronously. | **Synchronous & Non-interruptible** (Executes in a single atomic tick to prevent visual tearing). | **Yes** (Mutates real DOM, binds event listeners). |
+```javascript
+// Phase 1: Render Phase (Asynchronous, pure computation, can be paused/aborted)
+function performUnitOfWork(fiber) {
+  const nextChild = beginWork(fiber); // Computes diffs, runs hooks, flags mutations
+  if (!nextChild) {
+    completeUnitOfWork(fiber);        // Bubbles up effects
+  }
+  return nextChild;
+}
+
+// Phase 2: Commit Phase (Synchronous, mutates real DOM, cannot be interrupted)
+function commitPhase(finishedWork) {
+  flushPassiveEffects();              // Cleans up previous useEffects
+  commitPlacementAndUpdate(finishedWork); // Real DOM appendChild / update
+  flushLayoutEffects(finishedWork);   // Runs useLayoutEffect synchronously
+}
+```
 
 ---
 
 ### Q29: What is the Lane Model in React and how does Bitmask Priority scheduling work?
 **Answer:**
-Prior to React 17, React used numeric priorities (Expiration Times). React modern Fiber uses a **31-bit Bitmask Lane Model** to represent task priorities and concurrent lanes.
 
 ```javascript
-// Internal Lane Constants (31-bit integer bitmasks)
-const TotalLanes = 31;
-const SyncLane               = 0b0000000000000000000000000000001; // Blocking User Input (Click, Type)
-const InputContinuousLane    = 0b0000000000000000000000000000010; // Drag, Scroll, MouseMove
-const DefaultLane            = 0b0000000000000000000000000010000; // Normal useState update
-const TransitionLanes        = 0b0000000000000011111111000000000; // startTransition updates
-const IdleLane               = 0b0100000000000000000000000000000; // Offscreen / Low priority
-```
+// 31-bit Priority Lanes in React Internals:
+const SyncLane            = 0b0000000000000000000000000000001; // User typing, click (Highest)
+const InputContinuousLane = 0b0000000000000000000000000000010; // Scroll, drag
+const DefaultLane         = 0b0000000000000000000000000010000; // Normal setState
+const TransitionLanes     = 0b0000000000000011111111000000000; // startTransition
+const IdleLane            = 0b0100000000000000000000000000000; // Low-priority background
 
-**Bitwise Efficiency:**
-- Combining lanes: `lanes = laneA | laneB`
-- Checking intersection: `(lanes & SyncLane) !== 0`
-- Selecting highest priority lane: `lanes & -lanes` (isolate lowest set bit in $O(1)$ assembly instructions).
+// Bitwise operations:
+const isHighPriority = (pendingLanes & (SyncLane | InputContinuousLane)) !== 0;
+const highestPriorityLane = pendingLanes & -pendingLanes; // O(1) isolation of lowest set bit
+```
 
 ---
 
 ### Q30: How does Time Slicing and Cooperative Scheduling work with `MessageChannel` and `requestHostCallback`?
 **Answer:**
-React avoids `window.requestIdleCallback` because of poor browser support and low 20fps refresh caps.
-Instead, React’s Scheduler uses **`MessageChannel`** (a micro-macrotask primitive with ~0ms delay):
 
-1. React sets a target frame budget of **5ms per work unit**.
-2. Inside `workLoopConcurrent()`, React checks `shouldYieldToHost()` after processing each fiber node:
-   ```javascript
-   function shouldYieldToHost() {
-     return performance.now() >= deadline; // 5ms budget exceeded!
-   }
-   ```
-3. If 5ms is exceeded and high-priority browser input is pending, React yields control back to the browser to paint and process mouse events, then posts a message on `MessageChannel` to resume work in the next frame.
+```javascript
+// Cooperative Work Loop in React Scheduler:
+let deadline = 0;
+const frameYieldMs = 5; // 5ms frame slice budget
+
+function shouldYieldToHost() {
+  return performance.now() >= deadline;
+}
+
+const channel = new MessageChannel();
+channel.port1.onmessage = function performWorkUntilDeadline() {
+  deadline = performance.now() + frameYieldMs;
+  
+  let hasMoreWork = true;
+  while (hasMoreWork && !shouldYieldToHost()) {
+    hasMoreWork = workLoopConcurrentStep();
+  }
+
+  // If work remains but 5ms budget expired -> Yield to browser paint, then schedule next tick:
+  if (hasMoreWork) {
+    channel.port2.postMessage(null);
+  }
+};
+```
 
 ---
 
 ### Q31: What is the Diffing Algorithm in React and what are the 3 foundational heuristic assumptions?
 **Answer:**
-A general tree comparison algorithm has $O(n^3)$ time complexity (1,000 nodes = 1 billion comparisons). React reduces this to **$O(n)$** using 3 heuristics:
 
-1. **Two elements of different types produce different trees**: If `<div>` changes to `<span>`, React destroys the entire subtree and builds a new one from scratch.
-2. **Component Identity via Keys**: Keys must be stable, unique, and predictable between renders to match child elements across list re-orderings.
-3. **Breadth-First Level-by-Level Diffing**: React only compares nodes at the same tree depth; it does not attempt to match nodes moved across different tree branches.
+```javascript
+// React Diffing Heuristics:
+// 1. Different element types destroy and rebuild entire subtree:
+// <div><Counter /></div> -> <span><Counter /></span> (Counter unmounts and remounts from scratch)
+
+// 2. Element identity preserved via stable keys across renders:
+// Old: [<li key="a">A</li>, <li key="b">B</li>]
+// New: [<li key="b">B</li>, <li key="a">A</li>] -> Reused without DOM destruction
+
+// 3. Level-by-level comparison:
+function reconcileChildren(current, workInProgress, nextChildren) {
+  if (current === null) {
+    workInProgress.child = mountChildFibers(workInProgress, null, nextChildren);
+  } else {
+    workInProgress.child = reconcileChildFibers(workInProgress, current.child, nextChildren);
+  }
+}
+```
 
 ---
 
 ### Q32: Why is using array index as a `key` dangerous in dynamic lists?
 **Answer:**
-Using index as a key confuses the reconciler when items are inserted, prepended, or deleted:
 
 ```javascript
-// Initial:
-[0: 'Item A', 1: 'Item B']
+// 🚨 BUGGY BEHAVIOR with Index Keys:
+// Initial state: [{ text: 'Task 1' }, { text: 'Task 2' }]
+// When prepending 'Task 0':
+// Index 0 receives 'Task 0', Index 1 receives 'Task 1', Index 2 receives 'Task 2'
+// Any local uncontrolled <input> or focus state on Index 0 stays stuck on the wrong item!
 
-// Prepend 'Item New':
-[0: 'Item New', 1: 'Item A', 2: 'Item B']
+// ✅ SECURE with Stable IDs:
+{items.map((item) => (
+  <TodoItem key={item.uniqueId} item={item} />
+))}
 ```
-React compares index `0` (`Item A` vs `Item New`). Because both share key `0`, React retains the old component instance and local DOM input states, causing **unintended state bleeding, incorrect input focus, and animation glitches**.
 
 ---
 
 ### Q33: How does React Reconciliation handle single-element vs. multi-child array diffing (`reconcileChildrenArray`)?
 **Answer:**
-When reconciling an array of children, React uses a **two-pass algorithm** to avoid nested loops:
 
-1. **Pass 1 (Fast-Path Sequential Match)**: Iterates through old and new child arrays in lockstep while keys match. Stops on the first mismatch.
-2. **Pass 2 (Map-Based Lookup for Reordering/Insertions)**:
-   - Remaining old fibers are placed into a `Map<key | index, FiberNode>`.
-   - React iterates through the remaining new elements, querying the Map in $O(1)$ time to reuse existing fibers and marking `Placement` flags for moved nodes.
-   - Any unused fibers remaining in the Map are marked with the `Deletion` flag.
+```javascript
+// Two-Pass Multi-Child Reconciliation in React Fiber:
+function reconcileChildrenArray(returnFiber, currentFirstChild, newChildren) {
+  let oldFiber = currentFirstChild;
+  let newIdx = 0;
+  
+  // Pass 1: Sequential lockstep match
+  for (; oldFiber !== null && newIdx < newChildren.length; newIdx++) {
+    if (oldFiber.key !== newChildren[newIdx].key) break;
+    oldFiber = oldFiber.sibling;
+  }
+
+  // Pass 2: Map-based lookup for inserted/reordered nodes
+  const existingChildrenMap = new Map();
+  while (oldFiber !== null) {
+    existingChildrenMap.set(oldFiber.key || oldFiber.index, oldFiber);
+    oldFiber = oldFiber.sibling;
+  }
+
+  // Re-use matching fibers in O(1) from Map:
+  for (; newIdx < newChildren.length; newIdx++) {
+    const matchedFiber = existingChildrenMap.get(newChildren[newIdx].key);
+    // Reuse matchedFiber and mark Placement flags for repositioned nodes
+  }
+}
+```
 
 ---
 
 ### Q34: What are Fiber WorkTags and what is the difference between `HostComponent`, `HostRoot`, and `FunctionComponent`?
 **Answer:**
-`fiber.tag` identifies the type of work unit:
-- **`HostRoot` (3)**: The root node of the React component tree mounted via `createRoot`.
-- **`HostComponent` (5)**: Native DOM elements (`<div>`, `<span>`, `<button>`).
-- **`FunctionComponent` (0)**: Functional React components.
-- **`SuspenseComponent` (13)**: Suspense boundary nodes.
-- **`OffscreenComponent` (22)**: Nodes hidden or pre-rendered offscreen.
+
+```javascript
+// React Internal WorkTag Constants:
+export const FunctionComponent = 0;
+export const ClassComponent = 1;
+export const HostRoot = 3;          // Mounted via ReactDOM.createRoot(container)
+export const HostComponent = 5;     // Native HTML nodes ('div', 'span')
+export const HostText = 6;          // Raw text strings
+export const SuspenseComponent = 13;// <Suspense> boundaries
+export const OffscreenComponent = 22; // <Activity mode="hidden">
+```
 
 ---
 
@@ -167,17 +222,17 @@ When reconciling an array of children, React uses a **two-pass algorithm** to av
 **Answer:**
 
 ```javascript
-// Synchronous Work Loop (Blocking, cannot be paused)
+// Synchronous Work Loop (Blocking execution)
 function workLoopSync() {
   while (workInProgress !== null) {
     performUnitOfWork(workInProgress);
   }
 }
 
-// Concurrent Work Loop (Time-sliced, cooperative multitasking)
+// Concurrent Work Loop (Time-sliced execution)
 function workLoopConcurrent() {
-  while (workInProgress !== null && !shouldYield()) {
-    performUnitOfWork(workInProgress); // Process 1 fiber node
+  while (workInProgress !== null && !shouldYieldToHost()) {
+    performUnitOfWork(workInProgress);
   }
 }
 ```
@@ -186,73 +241,91 @@ function workLoopConcurrent() {
 
 ### Q36: How does `beginWork` and `completeWork` traverse the Fiber tree in a Depth-First Search (DFS)?
 **Answer:**
-React traverses the Fiber tree using a two-phase DFS without recursion:
 
+```javascript
+// React Fiber DFS Traversal Engine:
+function performUnitOfWork(unitOfWork) {
+  const current = unitOfWork.alternate;
+  
+  // 1. Step Down (Evaluate component and return first child):
+  let next = beginWork(current, unitOfWork, renderLanes);
+  unitOfWork.memoizedProps = unitOfWork.pendingProps;
+
+  if (next === null) {
+    // 2. Leaf reached -> Step Right (siblings) or Step Up (parent return):
+    completeUnitOfWork(unitOfWork);
+  } else {
+    workInProgress = next;
+  }
+}
 ```
-                  Root
-                 /    \
-            Navbar     Sidebar
-            /    \
-        Logo     Links
-
-1. beginWork: Root -> Navbar -> Logo (Drills down via .child pointers)
-2. completeWork: Logo finishes, moves to sibling -> Links
-3. completeWork: Links finishes, bubbles up to Navbar via .return pointer
-4. beginWork: Navbar finishes, moves to sibling -> Sidebar
-```
-
-- **`beginWork(current, workInProgress, renderLanes)`**: Evaluates props, executes hook functions, runs reconciliation diff, and returns the next `.child` fiber.
-- **`completeWork(current, workInProgress, renderLanes)`**: Bubbles up from leaves, constructs real DOM instances, attaches event listeners, and aggregates subtree update flags.
 
 ---
 
 ### Q37: What is Selective Hydration and how does React prioritize user interactions on un-hydrated components?
 **Answer:**
-In traditional SSR, the entire HTML page is non-interactive until all JavaScript bundles download and hydrate.
-**Selective Hydration (React 18/19 with `<Suspense>`)**:
-1. Components wrapped in `<Suspense>` hydrate independently as their JS chunks load.
-2. If a user clicks on an **un-hydrated button**, React captures the click event, **immediately pauses ongoing background hydration, prioritizes and hydrates the clicked component synchronously**, and then replays the user's click event seamlessly!
+
+```javascript
+// Selective Hydration in React 18/19:
+// User clicks un-hydrated <CommentSection /> while <Navbar /> is hydrating:
+function dispatchDiscreteEvent(domEvent) {
+  const targetFiber = getFiberFromDOMNode(domEvent.target);
+  
+  if (isFiberUnmergedAndUnhydrated(targetFiber)) {
+    // 1. Intercept and hold click event in memory
+    // 2. Elevate targetFiber priority to SyncLane
+    // 3. Hydrate targetFiber immediately!
+    // 4. Replay click event on newly hydrated component!
+  }
+}
+```
 
 ---
 
 ### Q38: What are React Fiber Flags (formerly `effectTag`) and how are they committed to the DOM?
 **Answer:**
-During the render phase, React assigns bitmask flags to fibers describing the DOM operation needed:
-- `Placement (0b00000000000010)`: Insert new DOM node (`appendChild` / `insertBefore`).
-- `Update (0b00000000000100)`: Update attributes, styles, or text content.
-- `Deletion (0b00000000001000)`: Remove DOM node (`removeChild`).
 
-In the **Commit Phase**, React traverses only the fibers with flags and executes the minimal set of real DOM mutations.
+```javascript
+// Fiber Mutation Flags Bitmasks:
+export const NoFlags         = 0b00000000000000000000;
+export const Placement       = 0b00000000000000000010; // appendChild / insertBefore
+export const Update          = 0b00000000000000000100; // commitUpdate (props/text)
+export const Deletion        = 0b00000000000000001000; // removeChild
+export const Passive         = 0b00000000000010000000; // useEffect callback
+export const Layout          = 0b00000000000001000000; // useLayoutEffect callback
+```
 
 ---
 
 ### Q39: What is Tearing in Concurrent React and how does `useSyncExternalStore` prevent it?
 **Answer:**
-**Tearing** occurs in concurrent rendering when a non-React external store (e.g. Redux, Zustand, RxJS) updates *in the middle of an asynchronous render phase*. Component A renders with version 1 of the store, React yields, the store mutates to version 2, and Component B renders with version 2—causing visual inconsistencies on the same screen!
-
-**`useSyncExternalStore` Solution**:
-Forces synchronous consistency for external stores, guaranteeing zero tearing.
 
 ```javascript
 import { useSyncExternalStore } from 'react';
 
-function subscribe(callback) {
-  window.addEventListener('online', callback);
-  window.addEventListener('offline', callback);
-  return () => {
-    window.removeEventListener('online', callback);
-    window.removeEventListener('offline', callback);
+// Custom external store subscriber preventing concurrent tearing
+function createTearFreeStore(initialState) {
+  let state = initialState;
+  const listeners = new Set();
+
+  return {
+    getState: () => state,
+    setState: (next) => {
+      state = next;
+      listeners.forEach(l => l());
+    },
+    subscribe: (listener) => {
+      listeners.add(listener);
+      return () => listeners.delete(listener);
+    }
   };
 }
 
-function getSnapshot() {
-  return navigator.onLine;
-}
+const store = createTearFreeStore({ theme: 'dark' });
 
-export function NetworkStatusIndicator() {
-  // Tear-free synchronization with browser online status
-  const isOnline = useSyncExternalStore(subscribe, getSnapshot);
-  return <div>Status: {isOnline ? '🟢 Online' : '🔴 Offline'}</div>;
+export function ThemeWatcher() {
+  const state = useSyncExternalStore(store.subscribe, store.getState);
+  return <div>Current Theme: {state.theme}</div>;
 }
 ```
 
@@ -261,39 +334,28 @@ export function NetworkStatusIndicator() {
 ### Q40: How does `useDeferredValue` differ from `useTransition` and standard Debouncing?
 **Answer:**
 
-```
-+─────────────────────────────────────────────────────────────────────────────+
-| Feature           | Debounce (setTimeout) | useTransition | useDeferredValue|
-+───────────────────┼───────────────────────┼───────────────┼─────────────────+
-| **Mechanism**     | Artificial fixed delay| Low-priority  | Low-priority    |
-|                   | (e.g. 300ms lag)      | State Update  | Derived Value   |
-+───────────────────┼───────────────────────┼───────────────┼─────────────────+
-| **CPU Awareness** | No (Fires blindly)    | Yes (Adapts to| Yes (Adapts to  |
-|                   |                       | device speed) | device speed)   |
-+───────────────────┼───────────────────────┼───────────────┼─────────────────+
-| **Access to State**| Direct setter        | Wraps setter  | Wraps value     |
-|                   |                       | (setCount)    | (query)         |
-+───────────────────┼───────────────────────┼───────────────┼─────────────────+
-| **Pending State** | Manual flag           | `isPending`   | `value !==      |
-|                   |                       | boolean       | deferredValue`  |
-+───────────────────┴───────────────────────┴───────────────┴─────────────────+
-```
-
 ```javascript
-import { useState, useDeferredValue } from 'react';
+import { useState, useDeferredValue, useTransition } from 'react';
 
-export function SearchFilter({ largeDataset }) {
+export function SearchDashboard({ fullData }) {
   const [query, setQuery] = useState('');
-  const deferredQuery = useDeferredValue(query); // Adapts rendering to frame budget
+  
+  // 1. useDeferredValue: Defers derived value rendering without blocking typing
+  const deferredQuery = useDeferredValue(query);
 
-  const isStale = query !== deferredQuery;
+  // 2. useTransition: Wraps state setter directly
+  const [isPending, startTransition] = useTransition();
+
+  const handleSelectTab = (tab) => {
+    startTransition(() => {
+      setActiveTab(tab);
+    });
+  };
 
   return (
     <div>
       <input value={query} onChange={e => setQuery(e.target.value)} />
-      <div style={{ opacity: isStale ? 0.5 : 1 }}>
-        <HeavyList query={deferredQuery} items={largeDataset} />
-      </div>
+      <HeavyList query={deferredQuery} items={fullData} />
     </div>
   );
 }
@@ -303,57 +365,88 @@ export function SearchFilter({ largeDataset }) {
 
 ### Q41: How does React manage the Hook Linked List inside `fiber.memoizedState`?
 **Answer:**
-Hooks inside a component are stored as a **singly linked list** on `fiber.memoizedState`:
 
+```javascript
+// Hook Linked List Representation on Fiber Node:
+const hook = {
+  memoizedState: 0,         // Current state value
+  baseState: 0,
+  baseQueue: null,
+  queue: {
+    pending: null,          // Circular linked list of pending update actions
+    dispatch: null,
+    lastRenderedReducer: null,
+    lastRenderedState: null
+  },
+  next: null                // Pointer to next hook in component!
+};
 ```
-fiber.memoizedState ──> [Hook 1: useState]
-                               │ .next
-                               ▼
-                        [Hook 2: useEffect]
-                               │ .next
-                               ▼
-                        [Hook 3: useRef]
-```
-Each hook node has `{ memoizedState, baseState, queue, next }`.
-This is why **Hooks must never be called inside conditions or loops**: altering the call order breaks the fixed index pointers in the linked list!
 
 ---
 
 ### Q42: What is the Offscreen API / `<Activity>` component in React 19?
 **Answer:**
-`<Activity mode="hidden">` (formerly `<Offscreen>`) allows keeping a component mounted in memory while removing its DOM nodes from the visual screen.
-- Preserves local state, scroll position, and active focus.
-- Lowers priority of child fibers to `IdleLane`.
-- Perfect for instant multi-tab switching and virtualized view caching without re-mounting overhead.
+
+```javascript
+import { Activity, useState } from 'react';
+
+export function TabSwitcher() {
+  const [tab, setTab] = useState('home');
+
+  return (
+    <div>
+      <button onClick={() => setTab('home')}>Home</button>
+      <button onClick={() => setTab('profile')}>Profile</button>
+
+      {/* Keeps components mounted in RAM; DOM hidden and throttled to IdleLane */}
+      <Activity mode={tab === 'home' ? 'visible' : 'hidden'}>
+        <HeavyHomeFeed />
+      </Activity>
+
+      <Activity mode={tab === 'profile' ? 'visible' : 'hidden'}>
+        <UserProfileForm />
+      </Activity>
+    </div>
+  );
+}
+```
 
 ---
 
 ### Q43: How does React handle Synthetic Events and Event Delegation in React 18 & 19?
 **Answer:**
-- In React 16 and earlier, React attached global event listeners to `document`.
-- In React 17, 18, and 19, React attaches event listeners to the **Root DOM Container (`#root`)** where `createRoot()` was mounted.
-- **SyntheticEvent**: A cross-browser wrapper conforming to W3C standards with event pooling eliminated in modern React.
+
+```javascript
+// React 18 & 19 Event Delegation Root Attachment:
+function listenToAllSupportedEvents(rootContainerElement) {
+  const allNativeEvents = ['click', 'keydown', 'input', 'scroll', 'pointerdown'];
+  allNativeEvents.forEach(eventType => {
+    // Attached strictly to root DOM container node (#root), NOT document!
+    rootContainerElement.addEventListener(eventType, dispatchSyntheticEvent);
+  });
+}
+```
 
 ---
 
 ### Q44: What is the difference between `flushSync()` and automatic batching?
 **Answer:**
-- **Automatic Batching (Default in React 18/19)**: Multiple state updates across promises, `setTimeout`, or native event handlers are grouped into a single re-render.
-- **`flushSync(callback)`**: Forces React to synchronously re-render and flush DOM updates immediately (useful for measuring DOM elements immediately after state update).
 
 ```javascript
 import { useState } from 'react';
 import { flushSync } from 'react-dom';
 
-function ScrollToBottom() {
+export function AutoScrollChat() {
   const [messages, setMessages] = useState([]);
 
-  function handleSend(newMsg) {
+  function sendMessage(text) {
+    // Force immediate synchronous DOM render before executing next line:
     flushSync(() => {
-      setMessages(prev => [...prev, newMsg]); // Forces immediate synchronous DOM render!
+      setMessages(prev => [...prev, text]);
     });
-    // DOM is guaranteed to be updated here:
-    chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    
+    // Guaranteed that DOM contains new message element here:
+    chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
   }
 }
 ```
@@ -362,40 +455,145 @@ function ScrollToBottom() {
 
 ### Q45: How does React Error Boundary catch errors and why can't it catch errors in async callbacks or SSR?
 **Answer:**
-- Error Boundaries catch errors thrown during **Render Phase, Lifecycle methods (`componentDidMount`), and Constructors**.
-- **Cannot catch**:
-  1. Errors in async callbacks (`setTimeout`, `onClick`) $\rightarrow$ Use `try/catch` or `useActionState`.
-  2. Server-Side Rendering (SSR) $\rightarrow$ Handled at server request level.
-  3. Errors thrown inside the Error Boundary component itself.
+
+```javascript
+import React from 'react';
+
+export class GlobalErrorBoundary extends React.Component {
+  state = { hasError: false, error: null };
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error('[Error Boundary Caught]', error, errorInfo.componentStack);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="error-fallback">
+          <h2>Application Crash Prevented</h2>
+          <p>{this.state.error?.message}</p>
+          <button onClick={() => this.setState({ hasError: false })}>Try Again</button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+```
 
 ---
 
 ### Q46: What is the difference between `useLayoutEffect` and `useEffect` execution timing?
 **Answer:**
-- **`useLayoutEffect`**: Runs **synchronously after DOM mutations but BEFORE the browser paints**. Used strictly for measuring DOM layouts (e.g. tooltips, popover positioning) to prevent visual flickering.
-- **`useEffect`**: Runs **asynchronously AFTER the browser paints**. Used for network requests, telemetry, and subscriptions.
+
+```javascript
+import { useState, useLayoutEffect, useEffect, useRef } from 'react';
+
+export function TooltipPositioner({ targetRect }) {
+  const tooltipRef = useRef(null);
+  const [coords, setCoords] = useState({ top: 0, left: 0 });
+
+  // Synchronous BEFORE Paint: Prevents tooltip from visibly jumping on screen!
+  useLayoutEffect(() => {
+    const height = tooltipRef.current.offsetHeight;
+    setCoords({
+      top: targetRect.top - height - 10,
+      left: targetRect.left
+    });
+  }, [targetRect]);
+
+  // Asynchronous AFTER Paint: Telemetry / Subscriptions
+  useEffect(() => {
+    analytics.track('tooltip_viewed');
+  }, []);
+
+  return <div ref={tooltipRef} style={{ position: 'fixed', top: coords.top, left: coords.left }}>Tooltip</div>;
+}
+```
 
 ---
 
 ### Q47: How does React deduplicate multiple setState calls inside the same tick?
 **Answer:**
-State updates are appended to the fiber's `updateQueue` circular linked list. During the render phase, React processes all pending updates in sequence, calculating the final `memoizedState` in a single pass.
+
+```javascript
+// Internal Update Queue processing in React Fiber:
+function processUpdateQueue(workInProgress, props, queue, renderLanes) {
+  let update = queue.firstBaseUpdate;
+  let newState = queue.baseState;
+
+  while (update !== null) {
+    // Process queued actions in sequence into final state value:
+    if (typeof update.action === 'function') {
+      newState = update.action(newState);
+    } else {
+      newState = update.action;
+    }
+    update = update.next;
+  }
+  workInProgress.memoizedState = newState; // Single state committed!
+}
+```
 
 ---
 
 ### Q48: What is the role of `React.Children` and why is it discouraged in modern React 19?
 **Answer:**
-`React.Children` (`map`, `forEach`, `toArray`) was used to manipulate child elements dynamically.
-**Discouraged in React 19** because it relies on inspecting opaque React elements, breaks server components, and is easily replaced by explicit render props or compound component Context.
+
+```javascript
+// ❌ Discouraged Legacy Pattern:
+function OldTabs({ children }) {
+  return React.Children.map(children, child => {
+    return React.cloneElement(child, { active: true }); // Opaque, fragile prop cloning!
+  });
+}
+
+// ✅ Modern React 19 Pattern (Compound Components with Context):
+const TabContext = createContext({ active: false });
+function ModernTabs({ children }) {
+  return <TabContext value={{ active: true }}>{children}</TabContext>;
+}
+```
 
 ---
 
 ### Q49: How does React 19 detect and warn about Infinite Re-render Loops?
 **Answer:**
-React caps consecutive synchronous re-renders at **50 iterations**. If a component triggers state updates during render without a terminating condition, React aborts and throws `Maximum update depth exceeded`.
+
+```javascript
+// React Re-render Guard in Fiber Work Loop:
+let nestedUpdateCount = 0;
+const NESTED_UPDATE_LIMIT = 50;
+
+function ensureRootIsScheduled(root) {
+  nestedUpdateCount++;
+  if (nestedUpdateCount > NESTED_UPDATE_LIMIT) {
+    nestedUpdateCount = 0;
+    throw new Error('Maximum update depth exceeded. This can happen when a component repeatedly calls setState inside render.');
+  }
+}
+```
 
 ---
 
 ### Q50: How does Concurrent Mode prioritize User Input over Data Fetching?
 **Answer:**
-User input (keyboard typing, clicks) is assigned to `SyncLane` (highest priority). When a keypress occurs while a low-priority `TransitionLane` (e.g. graph rendering) is computing, React **aborts the background work in progress, renders the keypress immediately in under 5ms, and restarts the graph render**.
+
+```javascript
+// Fiber Scheduler Priority Preemption:
+function requestUpdateLane(fiber) {
+  // If event triggered by user keyboard/click -> Assign SyncLane
+  if ((executionContext & DiscreteEventContext) !== 0) {
+    return SyncLane;
+  }
+  // If transition update -> Assign TransitionLane
+  if (currentTransition !== null) {
+    return TransitionLanes;
+  }
+  return DefaultLane;
+}
+```
