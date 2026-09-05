@@ -72,6 +72,21 @@ Libuv is a multi-platform support library focusing on asynchronous I/O. It was o
 
 ---
 
+#### Code Example:
+```javascript
+// Libuv architecture in Node.js: Event loop + Thread pool
+import fs from 'node:fs';
+import crypto from 'node:crypto';
+
+// Non-blocking OS kernel async I/O (epoll/kqueue)
+import http from 'node:http';
+http.get('http://example.com', (res) => console.log('Kernel async I/O completed'));
+
+// Blocking OS operation dispatched to Libuv Thread Pool
+fs.readFile('large.log', () => console.log('Libuv threadpool file I/O finished'));
+crypto.pbkdf2('pass', 'salt', 100000, 64, 'sha512', () => console.log('Libuv crypto task done'));
+```
+
 ### Q4: Which operations run on the Libuv Thread Pool vs. the OS Kernel (epoll/kqueue)?
 **Answer:**
 
@@ -86,6 +101,22 @@ Libuv is a multi-platform support library focusing on asynchronous I/O. It was o
 | **Compression** | `zlib.deflate`, `zlib.gzip`, `zlib.brotliCompress` | **Libuv Thread Pool** | Synchronous zlib compression jobs dispatched to pool |
 
 ---
+
+#### Code Example:
+```javascript
+// Thread Pool vs Kernel epoll/kqueue demonstration:
+import http from 'node:http';
+import fs from 'node:fs';
+import dns from 'node:dns';
+
+// 1. OS Kernel Non-blocking (0 threads from pool):
+const server = http.createServer((req, res) => res.end('epoll/kqueue'));
+
+// 2. Libuv Threadpool (UV_THREADPOOL_SIZE, default 4):
+process.env.UV_THREADPOOL_SIZE = '8'; // Must be set before first call
+fs.readFile('data.json', (err, data) => {}); // Threadpool
+dns.lookup('example.com', (err, address) => {}); // Threadpool (getaddrinfo(3))
+```
 
 ### Q5: How do you configure and tune the Libuv Thread Pool (`UV_THREADPOOL_SIZE`), and what are the gotchas?
 **Answer:**
@@ -149,6 +180,23 @@ Node.js executes **user JavaScript in a single thread** (the Main Thread / Event
 4. **No Thread-Switching Overhead**: Handles 100,000+ idle/concurrent sockets with minimal memory overhead compared to thread-per-request models (Apache, Tomcat) which allocate 1-2MB stack per thread.
 
 ---
+
+#### Code Example:
+```javascript
+// Thousands of concurrent connections handled on a single JS main thread
+import http from 'node:http';
+
+const server = http.createServer((req, res) => {
+  // Main JS thread spends < 0.1ms here registering callbacks
+  setTimeout(() => {
+    // Timer callback executed on main thread when ready
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ status: 'success', thread: 'Single JS Event Loop' }));
+  }, 100);
+});
+
+server.listen(3000, () => console.log('Server accepting 10k+ concurrent sockets'));
+```
 
 ### Q8: What are Hidden Classes (Shapes) and Inline Caching in V8?
 **Answer:**
@@ -264,6 +312,20 @@ timer.unref();
 
 ---
 
+#### Code Example:
+```javascript
+// Internal Node.js C++ Bindings access (node:internal)
+// In C++ (node_file.cc): env->SetMethod(target, "read", Read);
+// In JS:
+const { internalBinding } = require('internal/test/binding');
+try {
+  const fsBinding = internalBinding('fs');
+  console.log('Internal C++ binding methods:', Object.keys(fsBinding).slice(0, 5));
+} catch {
+  console.log('internalBinding is restricted to Node.js core internals');
+}
+```
+
 ### Q13: How does V8 handle Numbers (SMI vs. HeapNumber) and why does it matter for performance?
 **Answer:**
 JavaScript defines all numbers as 64-bit IEEE 754 floating-point values. However, allocating 64-bit heap objects for loop counters or IDs would destroy performance.
@@ -321,6 +383,19 @@ readStream.on('data', (chunk) => {
 
 ---
 
+#### Code Example:
+```javascript
+// llhttp is the ultra-fast C/TypeScript HTTP 1.1 parser replacing legacy http_parser
+import http from 'node:http';
+
+const server = http.createServer((req, res) => {
+  // llhttp parses HTTP headers & chunked transfer encoding at native C speed
+  console.log('Parsed headers via llhttp:', req.headers);
+  res.end('HTTP parsing handled by llhttp engine');
+});
+server.listen(8080);
+```
+
 ### Q16: How does Node.js implement the global scope (`globalThis`, `global`) vs. the Browser `window`?
 **Answer:**
 - In the browser, the top-level scope is `window`, which is also the global execution context where `var` declarations attach.
@@ -330,6 +405,20 @@ readStream.on('data', (chunk) => {
   - Core globals: `process`, `Buffer`, `console`, `setTimeout`, `setImmediate`, `queueMicrotask`, `fetch`, `AbortController`, `crypto`.
 
 ---
+
+#### Code Example:
+```javascript
+// Comparing Node.js global scope vs Module scope
+console.log(global === globalThis); // true (ECMAScript universal global)
+
+// CommonJS wrapper injects local variables that are NOT on global:
+// (function (exports, require, module, __filename, __dirname) { ... });
+var localScoped = 42;
+console.log(global.localScoped); // undefined (local to module file)
+
+global.sharedConfig = { region: 'us-east-1' };
+console.log(globalThis.sharedConfig.region); // 'us-east-1' (Pollutes global scope)
+```
 
 ### Q17: What are Node.js conditional exports in `package.json`?
 **Answer:**

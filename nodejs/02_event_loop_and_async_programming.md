@@ -384,6 +384,26 @@ Callback hell occurs when deeply nested asynchronous callbacks create unreadable
 
 ---
 
+#### Code Example:
+```javascript
+// 1. Legacy Callback Hell (Pyramid of Doom):
+fs.readFile('user.json', (err, user) => {
+  db.query('SELECT * FROM orders WHERE user_id = ?', [user.id], (err, orders) => {
+    payment.charge(orders[0], (err, receipt) => {
+      mailer.send(receipt, (err) => console.log('Finished'));
+    });
+  });
+});
+
+// 2. Modern Clean Solution (async/await + Promise.all):
+async function processUser(file) {
+  const user = JSON.parse(await fs.promises.readFile(file, 'utf8'));
+  const orders = await db.query('SELECT * FROM orders WHERE user_id = ?', [user.id]);
+  const receipt = await payment.charge(orders[0]);
+  await mailer.send(receipt);
+}
+```
+
 ### Q41: How do Async Iterators (`for await...of`) work in Node.js streams and generators?
 **Answer:**
 Async iterators implement the `[Symbol.asyncIterator]` protocol, yielding Promises that resolve to `{ value, done }`.
@@ -421,6 +441,21 @@ async function processLargeLog(filePath) {
 
 ---
 
+#### Code Example:
+```javascript
+// In modern V8 (Node 14+), async/await has zero-cost async stack traces
+async function computeFast() {
+  // V8 optimizes microtick resumption directly in bytecode
+  const val = await Promise.resolve(100);
+  return val * 2;
+}
+
+// In raw Promise chains, multiple closures and allocation objects are created:
+function computeRaw() {
+  return Promise.resolve(100).then(val => val * 2);
+}
+```
+
 ### Q43: What happens when an error is thrown inside a `setTimeout` callback?
 **Answer:**
 Because the `setTimeout` callback executes in a separate tick of the Event Loop (Timers phase), a `try / catch` block surrounding the `setTimeout` call **cannot catch** errors thrown inside the callback.
@@ -454,6 +489,20 @@ try {
 - `process.nextTick(fn)`: Node.js proprietary API. Enqueues a callback onto the **NextTick Queue**, which executes **before** the standard microtask queue.
 
 ---
+
+#### Code Example:
+```javascript
+// Order of Microtask Execution:
+console.log('1: Sync');
+
+queueMicrotask(() => console.log('4: queueMicrotask'));
+Promise.resolve().then(() => console.log('5: Promise.then'));
+process.nextTick(() => console.log('2: process.nextTick A'));
+process.nextTick(() => console.log('3: process.nextTick B'));
+
+console.log('Sync End');
+// Output: 1: Sync -> Sync End -> 2: nextTick A -> 3: nextTick B -> 4: queueMicrotask -> 5: Promise.then
+```
 
 ### Q45: What is the "Zalgo" problem and why must asynchronous APIs always be consistently asynchronous?
 **Answer:**
@@ -495,6 +544,20 @@ function getSafeUserData(userId, callback) {
 - **Timer Coalescing**: Libuv groups timers with identical expiry times into a single binary min-heap / timer wheel to minimize timer registration syscalls.
 
 ---
+
+#### Code Example:
+```javascript
+// Timers in Libuv are bucketed in a Minimum Binary Heap / Timer Wheel
+const start = Date.now();
+setTimeout(() => {
+  const drift = Date.now() - start - 1000;
+  console.log(`Fired after 1000ms with ${drift}ms OS timer drift`);
+}, 1000);
+
+// Unref prevents timer from keeping the event loop alive:
+const keepAliveTimer = setInterval(() => {}, 60000);
+keepAliveTimer.unref(); // Node process will exit if no other work remains
+```
 
 ### Q47: How do you implement a robust Circuit Breaker pattern in Node.js?
 **Answer:**

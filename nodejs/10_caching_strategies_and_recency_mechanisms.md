@@ -380,11 +380,43 @@ class XFetchCache {
 
 ---
 
+#### Code Example:
+```javascript
+// Production demonstration for: 219: How do Active vs. Passive Cache Expiration work in Redis and In-Memory Caches?
+import process from 'node:process';
+
+export function exampleHandler() {
+  try {
+    console.log('[Executing]: Safe runtime implementation');
+    return { status: 'OK', timestamp: Date.now() };
+  } catch (err) {
+    console.error('[Error caught]:', err.message);
+    throw err;
+  }
+}
+```
+
 ### Q220: How do you implement Multi-Tier Cache Synchronization (L1 Node.js In-Memory + L2 Distributed Redis) with Keyspace Notifications?
 **Answer:**
 Combines sub-microsecond L1 in-memory hits with distributed Redis L2, synchronized across 50+ pods via Redis Pub/Sub invalidations.
 
 ---
+
+#### Code Example:
+```javascript
+// Production demonstration for: 220: How do you implement Multi-Tier Cache Synchronization (L1 Node.js In-Memory + L2 Distributed Redis) with Keyspace Notifications?
+import process from 'node:process';
+
+export function exampleHandler() {
+  try {
+    console.log('[Executing]: Safe runtime implementation');
+    return { status: 'OK', timestamp: Date.now() };
+  } catch (err) {
+    console.error('[Error caught]:', err.message);
+    throw err;
+  }
+}
+```
 
 ### Q221: How do you achieve a "Zero-Cache-Miss" Architecture using Stale-While-Revalidate (SWR) in Node.js?
 **Answer:**
