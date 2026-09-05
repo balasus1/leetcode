@@ -8,17 +8,31 @@
 
 To maximize retention without cognitive fatigue, divide your daily 6 hours into **four focused 90-minute blocks**:
 
-```
-┌───────────────────────────┬─────────────────────────────────────────────────────────────┐
-│ 09:00 - 10:30 (90 mins)   │ Block 1: DSA & LeetCode Muscle Memory (2-3 Target Patterns) │
-├───────────────────────────┼─────────────────────────────────────────────────────────────┤
-│ 10:45 - 12:15 (90 mins)   │ Block 2: System Design & Distributed Architecture Deep Dive  │
-├───────────────────────────┼─────────────────────────────────────────────────────────────┤
-│ 14:00 - 15:30 (90 mins)   │ Block 3: Node.js, JavaScript, Java & Kafka Core Internals    │
-├───────────────────────────┼─────────────────────────────────────────────────────────────┤
-│ 15:45 - 17:15 (90 mins)   │ Block 4: React 19, Frontend Architecture & Live Articulation│
-└───────────────────────────┴─────────────────────────────────────────────────────────────┘
-```
+| Time Slot | Duration | Focus Area | Goal |
+|:---|:---:|:---|:---|
+| **09:00 – 10:30** | **90 mins** | **Block 1: DSA & LeetCode Muscle Memory** | 2–3 problems under a 15-minute timer. Speak logic aloud before typing. |
+| **10:45 – 12:15** | **90 mins** | **Block 2: System Design & Distributed Architecture** | Complete 1 end-to-end design (Capacity math → APIs → DB → Caching → Resiliency). |
+| **14:00 – 15:30** | **90 mins** | **Block 3: Node.js, JS, Java & Kafka Internals** | Deep-dive runtime mechanics (Event Loop, Streams, Pools, Partitions, Memory Leaks). |
+| **15:45 – 17:15** | **90 mins** | **Block 4: React 19, Frontend & Live Mock Drill** | Build components from scratch, explain Fiber/State/Hooks, record mock articulation. |
+
+---
+
+## 📊 Master 10-Day Curriculum At A Glance
+
+| Day | Block 1: DSA (90m) | Block 2: System Design (90m) | Block 3: Backend & Core (90m) | Block 4: React / UI (90m) |
+|:---|:---|:---|:---|:---|
+| **Day 1**<br>*(Sept 6)* | **Two Pointers & Sliding Window**<br>• Longest Substring<br>• 3Sum, Container With Most Water<br>• Minimum Window Substring | **URL Shortener (TinyURL)**<br>• DAU → QPS & Capacity Math<br>• Base62 Encoding & Key Gen<br>• Redis Cache-Aside & DB Schema | **Node.js & V8 Runtime**<br>• JIT (Ignition/TurboFan)<br>• 6 Libuv Loop Phases<br>• `nextTick` vs `Promise.then` | **React Fiber & Custom Hooks**<br>• Virtual DOM vs Fiber Nodes<br>• Reconciliation vs Commit<br>• `useFetchWithCache` Hook |
+| **Day 2**<br>*(Sept 7)* | **Linked Lists & O(1) Cache**<br>• Reverse Linked List<br>• $O(1)$ LRU Cache Map + DLL<br>• Merge K Sorted Lists | **Distributed Caching**<br>• Write-Through / Write-Behind<br>• XFetch Probabilistic TTL<br>• Bloom Filters for Penetration | **Streams & High-Perf I/O**<br>• Readable/Writable/Transform<br>• `stream.pipeline()` & Backpressure<br>• 1GB Stream Parser (<50MB RAM) | **State Architecture**<br>• `useReducer` vs `Zustand`<br>• Render Optimization & Memo<br>• Multi-Column Filter Data Grid |
+| **Day 3**<br>*(Sept 8)* | **Trees & BFS/DFS**<br>• Lowest Common Ancestor<br>• Validate BST<br>• Binary Tree Max Path Sum | **E-Commerce Flash Sale**<br>• Optimistic Locking & Decr<br>• Distributed Sagas & 2PC<br>• Master-Replica Lag Mitigation | **DB Tuning & Java Basics**<br>• B-Tree Index Scans vs Seq<br>• Pool Sizing: $(2 \times \text{cores}) + \text{spindles}$<br>• Java Virtual Threads / Spring | **Advanced Forms & Search**<br>• Controlled vs Uncontrolled<br>• `useTransition` Non-blocking<br>• Debounced Typeahead Search |
+| **Day 4**<br>*(Sept 9)* | **Graphs & Topological Sort**<br>• Course Schedule I & II<br>• Number of Islands<br>• Word Ladder BFS | **Notification Service**<br>• Kafka Topics & Partitions<br>• Consumer Groups & Offsets<br>• Rate Limiting & DLQ Queues | **Event-Driven & Outbox**<br>• Kafka Backpressure & Semantics<br>• Transactional Outbox Pattern<br>• BullMQ Queue Consumer | **React 19 Modern Features**<br>• `useActionState`, `useOptimistic`<br>• `use(Promise)` Resource API<br>• Optimistic Upvote Button |
+| **Day 5**<br>*(Sept 10)* | **Heaps & Priority Queues**<br>• Top K Frequent Elements<br>• Find Median from Stream<br>• Task Scheduler | **Real-Time Chat (WhatsApp)**<br>• WebSockets vs SSE vs Polling<br>• Redis Pub/Sub Cluster Adapter<br>• Message Ack & Last-Seen State | **100 to 10k RPS Scaling**<br>• Multi-Core `node:cluster`<br>• `DataLoader` N+1 Elimination<br>• SingleFlight Deduplication | **Virtualization & Lists**<br>• `react-window` DOM Recycling<br>• 100,000 Rows @ 60 FPS<br>• Infinite Scroll + Skeletons |
+| **Day 6**<br>*(Sept 11)* | **Dynamic Programming**<br>• Coin Change 1 & 2<br>• Longest Increasing Subseq<br>• Word Break, House Robber | **Distributed API Gateway**<br>• Token & Leaky Bucket<br>• Redis Sliding Log Lua Script<br>• JWT vs OAuth 2.0 / OIDC | **Node.js Security Suite**<br>• Prototype Pollution Defense<br>• `crypto.timingSafeEqual`<br>• AES-256-GCM & ReDoS Mitigation | **Error Resilience**<br>• Error Boundaries & Reset<br>• Suspense Fallbacks<br>• RTL Component Testing |
+| **Day 7**<br>*(Sept 12)* | **Intervals & Matrix**<br>• Merge Intervals, Insert<br>• Non-overlapping Intervals<br>• Rotate Image / Spiral Matrix | **Video Platform (Netflix)**<br>• S3 Chunked Presigned Uploads<br>• HLS/DASH Video Transcoding<br>• Global CDN Edge Caching | **Memory Leaks & V8 GC**<br>• 3-Snapshot Chrome Profiling<br>• Retained vs Shallow Size<br>• Unbounded Cache Leak Fixes | **Micro-Frontends**<br>• Webpack Module Federation<br>• Monorepo (Turborepo) Setup<br>• Cross-App State Sync |
+| **Day 8**<br>*(Sept 13)* | **Trie & Backtracking**<br>• Implement Trie (Prefix Tree)<br>• Word Search I & II<br>• Subsets & Permutations | **Ride-Hailing (Uber/Lyft)**<br>• Geohashing & Uber H3 Hex<br>• Real-time Driver Matching<br>• Spatial Indexing (PostGIS) | **Microservices & OTel**<br>• OpenTelemetry Distributed Trace<br>• `traceparent` Context Passing<br>• Circuit Breakers & gRPC | **Fullstack Live Polish**<br>• Real-time WebSocket Showcase<br>• Live Dashboard Integration<br>• Reconnection Strategies |
+| **Day 9**<br>*(Sept 14)* | **Timed DSA Mock Exam**<br>• 2 Unseen LeetCode Mediums<br>• Strict 40-Min Timer<br>• Aloud Step-by-Step Walkthrough | **Timed SysDesign Mock**<br>• Payment Platform (Stripe)<br>• Double-Entry Ledger System<br>• 45-Min Live Architecture Draw | **Speed Q&A Backend Drill**<br>• Rapid 50 Question Review<br>• 1-Min Crisp Answers for Core<br>• Master Question Bank Drill | **Timed UI Build Drill**<br>• Build Rich Component in 20m<br>• Zero-Bug Clean Implementation<br>• State & CSS Live Demo |
+| **Day 10**<br>*(Sept 15)* | **Mental Readiness**<br>• Communication Cadence<br>• Asking Clarifying Questions<br>• High-Value Framing | **SysDesign Formulas**<br>• Quick QPS & RAM Math<br>• CAP & Database Partitioning<br>• Architecture Cheat Sheet | **Production Checklist**<br>• Demo App Verification<br>• Zero Build/Lint Errors<br>• GitHub Portfolio Ready | **Behavioral (STAR)**<br>• Production Outage Story<br>• Architecture Migration Story<br>• Leadership & Mentoring Story |
+
+---
 
 ---
 
