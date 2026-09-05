@@ -2,7 +2,7 @@
 
 ---
 
-### Q211: What are the Core Caching Strategies (Cache-Aside, Read-Through, Write-Through, Write-Behind, Write-Around, Refresh-Ahead) and when should each be used?
+### Q221: What are the Core Caching Strategies (Cache-Aside, Read-Through, Write-Through, Write-Behind, Write-Around, Refresh-Ahead) and when should each be used?
 **Answer:**
 
 ```
@@ -34,7 +34,7 @@
 
 ---
 
-### Q212: How do you implement the Write-Through and Write-Behind (Write-Back) Caching Patterns in Node.js?
+### Q222: How do you implement the Write-Through and Write-Behind (Write-Back) Caching Patterns in Node.js?
 **Answer:**
 
 #### 1. Write-Through Pattern (Synchronous DB write via Cache Layer):
@@ -124,7 +124,7 @@ class WriteBehindCache {
 
 ---
 
-### Q213: What are the different Cache Eviction & Recency Algorithms (LRU, LFU, FIFO, 2Q, ARC, W-TinyLFU) and how do they differ?
+### Q223: What are the different Cache Eviction & Recency Algorithms (LRU, LFU, FIFO, 2Q, ARC, W-TinyLFU) and how do they differ?
 **Answer:**
 
 ```
@@ -154,7 +154,7 @@ class WriteBehindCache {
 
 ---
 
-### Q214: How do you build an $O(1)$ Least Recently Used (LRU) Cache from scratch using a Doubly Linked List + Hash Map?
+### Q224: How do you build an $O(1)$ Least Recently Used (LRU) Cache from scratch using a Doubly Linked List + Hash Map?
 **Answer:**
 
 ```javascript
@@ -235,7 +235,7 @@ class DoublyLinkedListLRUCache {
 
 ---
 
-### Q215: How do you implement an $O(1)$ Least Frequently Used (LFU) Cache in Node.js?
+### Q225: How do you implement an $O(1)$ Least Frequently Used (LFU) Cache in Node.js?
 **Answer:**
 
 ```javascript
@@ -295,7 +295,7 @@ class LFUCache {
 
 ---
 
-### Q216: What is the difference between Absolute TTL vs. Sliding (Inactivity) TTL and how do you implement them?
+### Q226: What is the difference between Absolute TTL vs. Sliding (Inactivity) TTL and how do you implement them?
 **Answer:**
 - **Absolute TTL**: Fixed expiration timestamp regardless of reads (OTPs, stock quotes).
 - **Sliding (Inactivity) TTL**: Resets TTL on each read (`GETEX`), expiring only after $N$ seconds of complete inactivity (sessions, shopping carts).
@@ -320,7 +320,7 @@ class SlidingTTLCache {
 
 ---
 
-### Q217: What is TTL Jitter and why is it essential to prevent Mass Cache Expiration Cascades?
+### Q227: What is TTL Jitter and why is it essential to prevent Mass Cache Expiration Cascades?
 **Answer:**
 Prevents 100,000 keys loaded during a cron job from expiring simultaneously:
 
@@ -337,7 +337,7 @@ await redis.set(`catalog:${categoryId}`, JSON.stringify(data), 'EX', ttl);
 
 ---
 
-### Q218: What is Probabilistic Early Expiration (The XFetch Algorithm) and how does it prevent Cache Stampedes?
+### Q228: What is Probabilistic Early Expiration (The XFetch Algorithm) and how does it prevent Cache Stampedes?
 **Answer:**
 Recomputes and refreshes cached items in the background *before* expiration based on computation delta $\delta$:
 
@@ -373,7 +373,7 @@ class XFetchCache {
 
 ---
 
-### Q219: How do Active vs. Passive Cache Expiration work in Redis and In-Memory Caches?
+### Q229: How do Active vs. Passive Cache Expiration work in Redis and In-Memory Caches?
 **Answer:**
 - **Passive (Lazy)**: Expiration evaluated only when a client attempts a `GET`.
 - **Active (Background Scrubbing)**: Periodic random sampling (e.g. 10 times/sec in Redis) to proactively evict expired keys and free RAM.
@@ -396,7 +396,7 @@ export function exampleHandler() {
 }
 ```
 
-### Q220: How do you implement Multi-Tier Cache Synchronization (L1 Node.js In-Memory + L2 Distributed Redis) with Keyspace Notifications?
+### Q230: How do you implement Multi-Tier Cache Synchronization (L1 Node.js In-Memory + L2 Distributed Redis) with Keyspace Notifications?
 **Answer:**
 Combines sub-microsecond L1 in-memory hits with distributed Redis L2, synchronized across 50+ pods via Redis Pub/Sub invalidations.
 
@@ -418,7 +418,7 @@ export function exampleHandler() {
 }
 ```
 
-### Q221: How do you achieve a "Zero-Cache-Miss" Architecture using Stale-While-Revalidate (SWR) in Node.js?
+### Q231: How do you achieve a "Zero-Cache-Miss" Architecture using Stale-While-Revalidate (SWR) in Node.js?
 **Answer:**
 In high-scale systems, waiting for a database read on a cache miss causes latency spikes ($>100\text{ms}$).
 **Stale-While-Revalidate (SWR)** guarantees **zero cache misses and $<1\text{ms}$ response times**:
@@ -471,7 +471,7 @@ class SWRCache {
 
 ---
 
-### Q222: How does Change Data Capture (CDC via Debezium & Kafka) achieve Zero-Miss Push-Populated Caching?
+### Q232: How does Change Data Capture (CDC via Debezium & Kafka) achieve Zero-Miss Push-Populated Caching?
 **Answer:**
 Instead of traditional pull-based "Cache-Aside" (which suffers from initial cache misses on newly inserted or updated rows), **CDC Push-Populated Caching** streams database transaction logs directly into the cache.
 
@@ -491,7 +491,7 @@ Instead of traditional pull-based "Cache-Aside" (which suffers from initial cach
 
 ---
 
-### Q223: How do you implement Cache Pre-Warming on Deployment and Blue-Green Rollouts?
+### Q233: How do you implement Cache Pre-Warming on Deployment and Blue-Green Rollouts?
 **Answer:**
 When deploying a new service version or launching a new Redis cluster, a "Cold Cache" causes a flood of database queries (Cold Start Spike), taking down the DB.
 
@@ -517,7 +517,7 @@ async function warmHotCache(db, redis) {
 
 ---
 
-### Q224: How do you combine Read-Through, SingleFlight, and Fallback Stale Cache for Zero-Downtime High Availability?
+### Q234: How do you combine Read-Through, SingleFlight, and Fallback Stale Cache for Zero-Downtime High Availability?
 **Answer:**
 If the primary database crashes, a resilient system serves stale cached data indefinitely rather than throwing 500 Internal Server Errors to users.
 
@@ -568,7 +568,7 @@ class ResilientZeroMissCache {
 
 ---
 
-### Q225: What are Bloom Filters and Cuckoo Filters and how do they eliminate Cache Penetration on Non-Existent Keys?
+### Q235: What are Bloom Filters and Cuckoo Filters and how do they eliminate Cache Penetration on Non-Existent Keys?
 **Answer:**
 - **Cache Penetration**: An attacker requests millions of non-existent IDs (`/user/random_uuid_9999`). Since they are not in the cache, every single request hits the database, exhausting connection pools.
 - **Bloom Filter Solution**: A space-efficient probabilistic data structure that tests whether an element is a member of a set.

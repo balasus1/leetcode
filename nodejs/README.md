@@ -1,6 +1,6 @@
-# 🚀 Comprehensive Node.js Production Master Knowledge Bank (225 Questions)
+# 🚀 Comprehensive Node.js Production Master Knowledge Bank (235 Questions)
 
-This directory contains an exhaustive, production-tested collection of **225 Node.js interview and architectural questions** with elaborate answers, architecture diagrams, production trade-offs, and practical code snippets.
+This directory contains an exhaustive, production-tested collection of **235 Node.js interview and architectural questions** with elaborate answers, architecture diagrams, production trade-offs, and practical code snippets.
 
 ---
 
@@ -16,9 +16,9 @@ This directory contains an exhaustive, production-tested collection of **225 Nod
 | **Part 6** | **High-Scale Networking, HTTP/2, HTTP/3 & WebSockets** | Q126 – Q145 | [06_networking_web_and_realtime.md](./06_networking_web_and_realtime.md) |
 | **Part 7** | **Databases, Caching, Storage & Messaging** | Q146 – Q165 | [07_databases_caching_and_messaging.md](./07_databases_caching_and_messaging.md) |
 | **Part 8** | **Security, Cryptography, Auth & Hardening** | Q166 – Q185 | [08_security_auth_and_cryptography.md](./08_security_auth_and_cryptography.md) |
-| **Part 9** | **Production Scale, Observability & Modern Node (v18–v22+)** | Q186 – Q210 | [09_production_scale_observability_and_modern_features.md](./09_production_scale_observability_and_modern_features.md) |
-| **Part 10** | **Advanced Caching, Zero-Miss Topologies & Recency Policies** | Q211 – Q225 | [10_caching_strategies_and_recency_mechanisms.md](./10_caching_strategies_and_recency_mechanisms.md) |
-| 🌟 **Master** | **Single Combined Master Guide (All 225 Questions)** | **Q1 – Q225** | [ALL_200_NODEJS_QUESTIONS_MASTER.md](./ALL_200_NODEJS_QUESTIONS_MASTER.md) |
+| **Part 9** | **Production Scale, Observability, Modern Node (v18–v22+) & 100-to-10,000 RPS Scaling Playbook** | Q186 – Q220 | [09_production_scale_observability_and_modern_features.md](./09_production_scale_observability_and_modern_features.md) |
+| **Part 10** | **Advanced Caching, Zero-Miss Topologies & Recency Policies** | Q221 – Q235 | [10_caching_strategies_and_recency_mechanisms.md](./10_caching_strategies_and_recency_mechanisms.md) |
+| 🌟 **Master** | **Single Combined Master Guide (All 235 Questions)** | **Q1 – Q235** | [ALL_200_NODEJS_QUESTIONS_MASTER.md](./ALL_200_NODEJS_QUESTIONS_MASTER.md) |
 
 ---
 
@@ -28,6 +28,12 @@ This directory contains an exhaustive, production-tested collection of **225 Nod
 - **Event Loop Mechanics**: 6 Libuv loop phases (Timers, Pending, Idle/Prepare, Poll, Check, Close), NextTick & Microtask queues, Event Loop lag monitoring.
 - **Streams & Memory**: Readable/Writable/Duplex/Transform streams, Backpressure handling, `stream.pipeline()`, WHATWG Web Streams, StringDecoder multi-byte UTF-8, Buffers and TypedArrays.
 - **Concurrency & Scaling**: Worker Threads vs. Child Processes vs. Cluster module, `SharedArrayBuffer` & `Atomics`, Zero-Downtime rolling reloads, `os.availableParallelism()`.
+- **100 to 10,000+ RPS Performance Scaling Playbook**:
+  - **100 to 500 RPS**: Gzip & Brotli compression optimization (`threshold: 1024`), filtering out pre-compressed media.
+  - **500 to 2,000 RPS**: Multi-core cluster saturation with zero-downtime rolling restart, Database Connection Pool sizing formula (`core_count * 2 + spindles`), fail-fast connection timeouts.
+  - **2,000 to 5,000 RPS**: Eliminating N+1 queries using Facebook's `DataLoader` microtask batching + memoization, 3-Snapshot Chrome DevTools memory leak diffing & RSS monitoring.
+  - **5,000 to 10,000+ RPS**: Cache Stampede / Thundering Herd mitigation via SingleFlight promise coalescing and Probabilistic Early Expiration (XFetch), `fast-json-stringify` JIT schema compilation, OS file descriptor limits (`ulimit -n 65536`, `somaxconn`), and persistent HTTP Keep-Alive pooling with `undici`.
+  - **Stress Testing**: Automated load testing pipelines using `autocannon` (`-c 200 -d 15 -p 10`) and Clinic.js (`clinic doctor`, `clinic flame`, `clinic bubbleprof`).
 - **Memory & Garbage Collection**: Generational GC (Scavenger Cheney algorithm vs. Major Mark-Sweep-Compact), Heap snapshots, Chrome DevTools profiling, weak references (`WeakMap`/`WeakRef`), LRU cache implementations.
 - **High-Throughput Networking**: `keepAlive: true` socket pooling, HTTP/2 multiplexing, HTTP/3 QUIC, WebSocket connection scaling, Undici client, TCP Nagle's algorithm (`setNoDelay`), SSE.
 - **Storage, Caching & Data Systems**: Postgres connection pooling sizing, Transaction isolation levels, SingleFlight cache stampede protection, Redis distributed locking (Redlock), DataLoader N+1 mitigation, BullMQ queues, Kafka streams, Outbox pattern.
