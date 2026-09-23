@@ -60,6 +60,11 @@ public class MasterTestRunner {
             System.out.println("\n>> Running Module 10: Graphs...");
             interview_prep_mastery._10_graphs.GraphChallenges.main(new String[0]);
 
+            // Module 11: Concurrency & Distributed Systems
+            System.out.println("\n>> Running Module 11: Concurrency & Distributed Systems...");
+            interview_prep_mastery._11_concurrency_and_distributed.ConcurrencyPrimitivesAndPatterns.main(new String[0]);
+            interview_prep_mastery._11_concurrency_and_distributed.DistributedSystemsCore.main(new String[0]);
+
             System.out.println("\n================================================================================");
             System.out.println("  CONGRATULATIONS: 100% OF ALL MODULES & TEST SUITES PASSED SUCCESSFULLY!       ");
             System.out.println("================================================================================");
