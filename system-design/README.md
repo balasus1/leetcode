@@ -19,7 +19,8 @@ A comprehensive, production-grade knowledge base designed to clear Staff / Princ
 | **[Part 07](file:///Volumes/Workspace/dev/github/personal/balasus1/leetcode/system-design/07_messaging_streaming_and_event_driven_architectures.md)** | Messaging & Event Streams | RabbitMQ vs Kafka, zero-copy `sendfile`, consumer groups, Exactly-Once Processing, Event Sourcing, CQRS. |
 | **[Part 08](file:///Volumes/Workspace/dev/github/personal/balasus1/leetcode/system-design/08_cloud_native_kubernetes_and_storage_infrastructure.md)** | Cloud-Native K8s & Object Storage | K8s control plane, Envoy sidecars, S3 Erasure Coding, Presigned URLs, Google Spanner TrueTime, BigQuery. |
 | **[Part 09](file:///Volumes/Workspace/dev/github/personal/balasus1/leetcode/system-design/09_graph_systems_algorithms_and_search_engines.md)** | Graph Systems & Search Engines | Index-Free Adjacency, BFS/DFS 2nd-degree friends, Dijkstra, PageRank, Elasticsearch Inverted Index, BM25. |
-| **[Part 10](file:///Volumes/Workspace/dev/github/personal/balasus1/leetcode/system-design/10_top_faang_system_design_case_studies.md)** | Top FAANG Case Studies | WhatsApp Real-Time Chat, Twitter Hybrid Newsfeed, Uber H3 Hexagonal Dispatch, YouTube Transcoding. |
+| **[Part 10](file:///Volumes/Workspace/bala/interview-prep/leetcode/system-design/10_top_faang_system_design_case_studies.md)** | Top FAANG Case Studies | WhatsApp Real-Time Chat, Twitter Hybrid Newsfeed, Uber H3 Hexagonal Dispatch, YouTube Transcoding. |
+| **[Part 11](file:///Volumes/Workspace/bala/interview-prep/leetcode/system-design/11_system_design_estimations_and_infra_sizing_playbook.md)** | Estimations & Infra Sizing Playbook | Little's Law, Worker Thread Pools, Redis Sizing, Kafka Partitions, 10 Case Studies (URL Shortener, Rate Limiter, KV Store, Chat, Newsfeed, Crawler, Payments, Task Scheduler, Booking). |
 
 ---
 
