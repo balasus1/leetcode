@@ -65,6 +65,12 @@ public class MasterTestRunner {
             interview_prep_mastery._11_concurrency_and_distributed.ConcurrencyPrimitivesAndPatterns.main(new String[0]);
             interview_prep_mastery._11_concurrency_and_distributed.DistributedSystemsCore.main(new String[0]);
 
+            // Module 12: JVM Internals, Spring @Transactional & Design Patterns
+            System.out.println("\n>> Running Module 12: JVM Internals, Spring @Transactional & Design Patterns...");
+            interview_prep_mastery._12_jvm_spring_patterns.JvmInternalsDemos.main(new String[0]);
+            interview_prep_mastery._12_jvm_spring_patterns.SpringTransactionalSimulator.main(new String[0]);
+            interview_prep_mastery._12_jvm_spring_patterns.DesignPatternsMasterDemos.main(new String[0]);
+
             System.out.println("\n================================================================================");
             System.out.println("  CONGRATULATIONS: 100% OF ALL MODULES & TEST SUITES PASSED SUCCESSFULLY!       ");
             System.out.println("================================================================================");
