@@ -1,6 +1,6 @@
 # 🎯 Senior Java Backend & Distributed Systems Interview Mastery Hub
 
-This repository contains battle-tested, high-impact answers, 60-second verbal scripts, JVM bytecode mechanics, system architecture blueprints, concurrency traps, and runnable production code snippets tailored for Senior/Lead/Architect Java Backend Developer interviews (Human & AI avatar technical rounds).
+This repository contains battle-tested, high-impact answers, 60-second verbal scripts, JVM bytecode mechanics, system architecture blueprints, concurrency traps, and runnable production code snippets tailored for Senior/Lead/Architect Java Backend & Full-Stack Developer interviews (Human & AI avatar technical rounds).
 
 ---
 
@@ -159,7 +159,7 @@ This repository contains battle-tested, high-impact answers, 60-second verbal sc
 ---
 
 ### 🔹 [13. Senior Architect: Concurrency, High Load & Distributed Failures](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/13_architect_concurrency_and_distributed_failures/README.md)
-- Concurrency Decision Matrix: `synchronized` vs `ReentrantLock` vs `ConcurrentHashMap` vs Atomics
+- Concurrency Decision Matrix: `synchronized` vs `ReentrantLock` vs `ConcurrentHashMap` vs Atomics/`LongAdder`
 - Production JVM Incident: High CPU & Long GC Pauses RCA
 - Asynchronous Orchestration: 5 Downstream Services with a 2-Second SLA
 - `HashMap` vs `ConcurrentHashMap`: Internal Failure Mechanics under Concurrency
@@ -177,9 +177,26 @@ This repository contains battle-tested, high-impact answers, 60-second verbal sc
 - Check-Then-Act TOCTOU Races & `computeIfAbsent()` Atomicity
 - Why Double-Checked Locking REQUIRES `volatile` (Instruction Reordering)
 - Safe Publication & Partially Initialized Object Escape
-- `ThreadLocal` Leaks in Tomcat Thread Pools
+- `ThreadLocal` Pollution in Tomcat Thread Pools & Cross-User Data Leaks
 - Designing a Read-Heavy Shared Cache (`StampedLock` Optimistic Reads)
 - 🔥 **Production Incident RCA**: Users Receiving Another User's Data
+
+---
+
+### 🔹 [15. Angular Architecture, Component Lifecycle & Directives (Full-Stack)](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/15_angular_frontend_for_fullstack_java/README.md)
+- Angular Component Lifecycle Execution Order (`ngOnChanges` $\to$ `ngOnInit` $\to$ `ngAfterViewInit` $\to$ `ngOnDestroy`)
+- Anatomy of an Angular Component (`@Component`, TypeScript Class, HTML Template, Scoped SCSS)
+- Directives: Structural (`*ngIf`, `*ngFor`) vs Attribute (`ngClass`, `ngStyle`) vs Custom Directives
+- Memory leak prevention in `ngOnDestroy` via RxJS unsubscriptions
+
+---
+
+### 🔹 [16. Spring Bean Scopes, Java Return Mechanics & Custom File Handling](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/16_spring_bean_scopes_java_returns_and_custom_file_handling/README.md)
+- All 6 Spring Bean Scopes (`singleton`, `prototype`, `request`, `session`, `application`, `websocket`)
+- The **Prototype-in-Singleton Injection Trap** & Resolution via `@Lookup` / `ObjectProvider`
+- Java 8 Stream: Calculating Frequency of All Elements in a List
+- Mechanics of `return` in Java & The `finally` Block Override Trap
+- Custom File Handling: High-Throughput Memory-Efficient Streaming (`StreamingResponseBody`) vs Static Files
 
 ---
 
