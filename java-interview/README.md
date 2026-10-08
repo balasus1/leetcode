@@ -192,6 +192,16 @@ This repository contains battle-tested, high-impact answers, 60-second verbal sc
 
 ---
 
+### 🔹 [16. Senior Live Problem Solving & Must-Know Algorithmic Patterns](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/16_senior_live_coding_and_algorithmic_patterns/README.md)
+- 💻 **LRU Cache Implementation**: $O(1)$ Doubly Linked List + HashMap (Custom node & synchronization)
+- 💻 **Sliding Window Pattern**: Longest Substring Without Repeating Characters ($O(N)$ index map)
+- 💻 **Intervals Pattern**: Merge Overlapping Intervals ($O(N \log N)$ sorting & in-place merge)
+- 💻 **QuickSelect / Top-K Pattern**: $K$-th Largest Element in $O(N)$ Average Time
+- 💻 **Graph / Cycle Detection**: Microservice Circular Dependency Detection (Topological Sort / Kahn's Algorithm)
+- 💻 **Dynamic Programming**: Coin Change (Minimum Coins in $O(\text{amount} \times N)$)
+
+---
+
 ## 🏛️ Chronological Interview Rounds
 - 📁 [Round 1 Archive](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/round-1/README.md)
 - 📁 [Round 2 Archive](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/round-2/README.md)
