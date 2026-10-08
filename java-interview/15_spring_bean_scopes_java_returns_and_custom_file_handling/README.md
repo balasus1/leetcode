@@ -1,4 +1,4 @@
-# 16. Spring Bean Scopes, Java Return Mechanics & Custom File Handling
+# 15. Spring Bean Scopes, Java Return Mechanics & Custom File Handling
 
 Deep-dive answers, 60-second verbal scripts, memory management, and code examples for Senior Backend Engineers.
 

@@ -183,15 +183,7 @@ This repository contains battle-tested, high-impact answers, 60-second verbal sc
 
 ---
 
-### 🔹 [15. Angular Architecture, Component Lifecycle & Directives (Full-Stack)](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/15_angular_frontend_for_fullstack_java/README.md)
-- Angular Component Lifecycle Execution Order (`ngOnChanges` $\to$ `ngOnInit` $\to$ `ngAfterViewInit` $\to$ `ngOnDestroy`)
-- Anatomy of an Angular Component (`@Component`, TypeScript Class, HTML Template, Scoped SCSS)
-- Directives: Structural (`*ngIf`, `*ngFor`) vs Attribute (`ngClass`, `ngStyle`) vs Custom Directives
-- Memory leak prevention in `ngOnDestroy` via RxJS unsubscriptions
-
----
-
-### 🔹 [16. Spring Bean Scopes, Java Return Mechanics & Custom File Handling](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/16_spring_bean_scopes_java_returns_and_custom_file_handling/README.md)
+### 🔹 [15. Spring Bean Scopes, Java Return Mechanics & Custom File Handling](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/15_spring_bean_scopes_java_returns_and_custom_file_handling/README.md)
 - All 6 Spring Bean Scopes (`singleton`, `prototype`, `request`, `session`, `application`, `websocket`)
 - The **Prototype-in-Singleton Injection Trap** & Resolution via `@Lookup` / `ObjectProvider`
 - Java 8 Stream: Calculating Frequency of All Elements in a List
