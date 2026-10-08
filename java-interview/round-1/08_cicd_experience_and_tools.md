@@ -1,7 +1,7 @@
 # 08. Explain Your CI/CD Experience and Tools Used
 
 ## 🎙️ 60-Second Verbal Script (For Interviewer & AI)
-> "In my recent projects, I designed and maintained enterprise CI/CD pipelines following modern **GitOps and Trunk-Based Development** practices using **GitHub Actions, Jenkins, SonarQube, Trivy, Docker, and ArgoCD for Kubernetes**.
+> "In my recent projects, I designed and maintained enterprise CI/CD pipelines following modern **GitOps and Trunk-Based Development** practices using **GitHub Actions Workflows, SonarQube, Trivy, Docker, and ArgoCD for Kubernetes**.
 >
 > On the **Continuous Integration (CI)** side, every pull request triggers automated Gradle builds, executes Unit and Integration tests with Testcontainers, performs static code analysis via **SonarQube** enforcing strict Quality Gates (80%+ code coverage, zero security vulnerabilities), and scans container dependencies using **Trivy / Snyk**.
 >

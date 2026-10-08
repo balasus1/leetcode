@@ -97,7 +97,7 @@ This repository contains battle-tested, high-impact answers, 60-second verbal sc
 ### 🔹 [07. Cloud (AWS), Kubernetes, DevOps & Unit Testing (Mockito)](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/07_cloud_devops_k8s_and_testing/README.md)
 - Amazon S3 Object Size Limits (5TB max, 5GB single PUT, Multipart Upload)
 - Incident Response: What to Do When a Production Deployment Pipeline Fails Midway
-- Where to Check CI/CD Pipeline Logs (GitHub Actions, Jenkins, GitLab)
+- Where to Check CI/CD Pipeline Logs (GitHub Actions Workflows)
 - Kubernetes Pod Log Diagnostics (`kubectl logs`, `describe`, `get events`)
 - Centralized Production Logging (ELK/EFK Stack, Grafana Loki, AWS CloudWatch)
 - Mockito `@Mock` vs `@Spy` (Partial Mocking with Runnable Code)

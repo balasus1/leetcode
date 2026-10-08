@@ -38,10 +38,10 @@ Production troubleshooting, CI/CD triage, Kubernetes log commands, enterprise ob
 
 ### 3. Where to Check CI/CD Pipeline Logs
 #### 🎙️ 60-Second Verbal Script
-> "Depending on the enterprise CI/CD platform:
-> - **GitHub Actions**: Navigate to the repository's **'Actions' tab**, select the failing workflow run, and expand the failing step (e.g., `Run tests` or `Container Security Scan`).
-> - **Jenkins**: Open the build run and click **'Console Output'** or view Blue Ocean stage execution logs.
-> - **GitLab CI**: Open **CI/CD -> Pipelines -> Jobs**, click the failed job to view full terminal stdout/stderr."
+> "In our GitHub Actions CI/CD workflows:
+> - Navigate to the repository's **'Actions' tab** on GitHub.
+> - Select the specific failing workflow run triggered by the commit or pull request.
+> - Click on the failing job (e.g. `build-and-test` or `container-scan`), expand the failed step (e.g., `Run tests & JaCoCo`, `SonarQube Quality Gate`, or `Trivy Security Scan`), and inspect the live terminal output, stack traces, and exit codes."
 
 ---
 
