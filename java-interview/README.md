@@ -1,12 +1,12 @@
-# 🎯 Senior Java Backend & Microservices Interview Mastery Hub
+# 🎯 Senior Java Backend & Distributed Systems Interview Mastery Hub
 
-This repository contains battle-tested, high-impact answers, 60-second verbal scripts, JVM bytecode mechanics, system architecture blueprints, and runnable production code snippets tailored for Senior/Lead Java Backend Developer interviews (Human & AI avatar technical rounds).
+This repository contains battle-tested, high-impact answers, 60-second verbal scripts, JVM bytecode mechanics, system architecture blueprints, concurrency traps, and runnable production code snippets tailored for Senior/Lead/Architect Java Backend Developer interviews (Human & AI avatar technical rounds).
 
 ---
 
 ## 🧭 The 4-Pillar Structure for Every Interview Question
 1. **🎙️ 60-Second Verbal Script**: Exact conversational pitch designed to be spoken smoothly in ~60 seconds to an interviewer or AI avatar.
-2. **🧠 Key Technical Bullets & Memory Architecture**: Concise mental checklists and comparison tables.
+2. **🧠 Key Technical Bullets & Memory Architecture**: Concise mental checklists, JMM happens-before rules, and comparison tables.
 3. **💻 Production-Grade Working Code & Visual Diagrams**: Copy-paste runnable code and architecture flows.
 4. **⚡ Drill-Down Traps & Follow-Up Mastery**: Clear answers to edge-case questions, memory leaks, and concurrency bugs.
 
@@ -155,6 +155,31 @@ This repository contains battle-tested, high-impact answers, 60-second verbal sc
 - Docker Volumes vs Bind Mounts vs tmpfs
 - SQL Query: 2nd Highest Salary in a Department (`DENSE_RANK()`)
 - Complex SQL Query with WHERE, GROUP BY, HAVING, ORDER BY & Database Execution Order
+
+---
+
+### 🔹 [13. Senior Architect: Concurrency, High Load & Distributed Failures](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/13_architect_concurrency_and_distributed_failures/README.md)
+- Concurrency Decision Matrix: `synchronized` vs `ReentrantLock` vs `ConcurrentHashMap` vs Atomics
+- Production JVM Incident: High CPU & Long GC Pauses RCA
+- Asynchronous Orchestration: 5 Downstream Services with a 2-Second SLA
+- `HashMap` vs `ConcurrentHashMap`: Internal Failure Mechanics under Concurrency
+- Mitigating Retry Storms & Cascading Failures (Exponential Backoff with Full Jitter, Circuit Breakers)
+
+---
+
+### 🔹 [14. Thread Safety, Memory Traps & Concurrency Deep-Dive](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/14_senior_thread_safety_and_memory_traps/README.md)
+- Determining Thread Safety in a Java Class
+- Immutable Classes with Mutable Internal Fields (Defensive Copying)
+- The Synchronized Method Fallacy & Compound Operation Races
+- Reference Escape: Returning Internal Mutable Collections
+- Why `Collections.unmodifiableList()` is NOT Inherently Thread-Safe
+- Iterating Over Synchronized Collections & `ConcurrentModificationException`
+- Check-Then-Act TOCTOU Races & `computeIfAbsent()` Atomicity
+- Why Double-Checked Locking REQUIRES `volatile` (Instruction Reordering)
+- Safe Publication & Partially Initialized Object Escape
+- `ThreadLocal` Leaks in Tomcat Thread Pools
+- Designing a Read-Heavy Shared Cache (`StampedLock` Optimistic Reads)
+- 🔥 **Production Incident RCA**: Users Receiving Another User's Data
 
 ---
 
