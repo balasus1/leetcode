@@ -1,6 +1,6 @@
-# 🎯 Java & Spring Boot Full-Stack Senior Interview Mastery Hub
+# 🎯 Senior Java Backend & Microservices Interview Mastery Hub
 
-This repository contains battle-tested, high-impact answers, 60-second verbal scripts, JVM bytecode mechanics, and runnable production code snippets tailored for Senior/Lead Java Backend Developer interviews (Human & AI avatar technical rounds).
+This repository contains battle-tested, high-impact answers, 60-second verbal scripts, JVM bytecode mechanics, system architecture blueprints, and runnable production code snippets tailored for Senior/Lead Java Backend Developer interviews (Human & AI avatar technical rounds).
 
 ---
 
@@ -14,20 +14,20 @@ This repository contains battle-tested, high-impact answers, 60-second verbal sc
 
 ## 📚 Master Knowledge Modules Index
 
-### 1. 🔹 [Java Core, Stream API & Modern Java 8 / 17 / 21](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/01_java_core_and_streams/README.md)
+### 🔹 [01. Java Core, Stream API & Modern Java 8 / 17 / 21](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/01_java_core_and_streams/README.md)
 - GC Evolution (Java 8 vs 17 vs 21 Generational ZGC)
 - Stream API Internals, Lazy Evaluation & `ReferencePipeline`
 - Stream Reusability & `IllegalStateException`
 - Concurrency & Parallel Streams with Non-Thread-Safe Collections
 - Types of Thread Pools (`Executors` vs bounded `ThreadPoolExecutor`)
-- Operator Overloading & Compiler Overriding Rules (Parameters vs Names)
+- Operator Overloading & Compiler Overriding Rules
 - Try-with-Resources, `AutoCloseable` & Suppressed Exceptions
 - Serialization through Inheritance & `==` vs `.equals()` Contract
 - 💻 **Live Coding**: Find Frequency of Duplicate Numbers with Stream API
 
 ---
 
-### 2. 🔹 [JVM Internals, Memory Management & Production Troubleshooting](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/02_jvm_internals_and_troubleshooting/README.md)
+### 🔹 [02. JVM Internals, Memory Management & Production Troubleshooting](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/02_jvm_internals_and_troubleshooting/README.md)
 - Heap vs Stack Memory & Java Memory Model (JMM)
 - ClassLoader Lifecycle (Loading, Linking [Verification/Prep/Resolution], Initialization)
 - Garbage Collection Deep-Dive: G1 GC vs ZGC vs Serial GC
@@ -41,7 +41,7 @@ This repository contains battle-tested, high-impact answers, 60-second verbal sc
 
 ---
 
-### 3. 🔹 [Spring Boot Core, Cache, Async & @Transactional](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/03_spring_boot_and_transactional/README.md)
+### 🔹 [03. Spring Boot Core, Cache, Async & @Transactional](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/03_spring_boot_and_transactional/README.md)
 - Where and How to Use `@Async` with custom ThreadPools
 - Spring Cache Architecture (`@Cacheable`, `@CachePut`, `@CacheEvict`, Redis TTLs)
 - `@Autowired` vs `@Qualifier` & Multiple Bean Resolution (`@Primary`)
@@ -57,7 +57,7 @@ This repository contains battle-tested, high-impact answers, 60-second verbal sc
 
 ---
 
-### 4. 🔹 [GoF Design Patterns & Enterprise Microservices Architecture](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/04_design_patterns/README.md)
+### 🔹 [04. GoF Design Patterns & Enterprise Microservices Architecture](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/04_design_patterns/README.md)
 - Factory Method vs Abstract Factory Pattern
 - Builder Pattern for Immutable Thread-Safe Objects
 - Thread-Safe Singletons (Bill Pugh vs Double-Checked Locking with `volatile` vs Enum)
@@ -70,7 +70,7 @@ This repository contains battle-tested, high-impact answers, 60-second verbal sc
 
 ---
 
-### 5. 🔹 [Microservices Architecture, Kafka & Distributed Systems](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/05_microservices_kafka_distributed_systems/README.md)
+### 🔹 [05. Microservices Architecture, Kafka & Distributed Systems](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/05_microservices_kafka_distributed_systems/README.md)
 - Synchronous (REST/gRPC) vs Asynchronous (Kafka/SQS) Communication
 - 💻 Code Implementation: Async Communication with Spring Kafka
 - **Distributed Tracing**: Trace ID & Span ID Propagation (OpenTelemetry, W3C `traceparent`)
@@ -83,7 +83,7 @@ This repository contains battle-tested, high-impact answers, 60-second verbal sc
 
 ---
 
-### 6. 🔹 [PostgreSQL, Concurrency, SQL Joins & Query Execution Plans](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/06_databases_postgresql_and_sql/README.md)
+### 🔹 [06. PostgreSQL, Concurrency, SQL Joins & Query Execution Plans](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/06_databases_postgresql_and_sql/README.md)
 - How PostgreSQL Handles Concurrency: **MVCC Internals (`xmin`/`xmax`, Vacuuming)**
 - PostgreSQL Transaction Isolation Levels (Read Committed, Repeatable Read, SSI)
 - Primary Key vs Unique Key & **The NULL Trap**
@@ -94,7 +94,7 @@ This repository contains battle-tested, high-impact answers, 60-second verbal sc
 
 ---
 
-### 7. 🔹 [Cloud (AWS), Kubernetes, DevOps & Unit Testing (Mockito)](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/07_cloud_devops_k8s_and_testing/README.md)
+### 🔹 [07. Cloud (AWS), Kubernetes, DevOps & Unit Testing (Mockito)](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/07_cloud_devops_k8s_and_testing/README.md)
 - Amazon S3 Object Size Limits (5TB max, 5GB single PUT, Multipart Upload)
 - Incident Response: What to Do When a Production Deployment Pipeline Fails Midway
 - Where to Check CI/CD Pipeline Logs (GitHub Actions, Jenkins, GitLab)
@@ -104,10 +104,61 @@ This repository contains battle-tested, high-impact answers, 60-second verbal sc
 
 ---
 
-## 🏛️ Chronological Interview Rounds
+### 🔹 [08. Modern Java 17/21, Concurrency, Virtual Threads & Immutability](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/08_senior_backend_core_and_modern_java/README.md)
+- Sealed Classes & Exhaustive Compiler Pattern Matching
+- Virtual Threads (Java 21 Project Loom) & Carrier Thread Unmounting
+- `Optional.map()` vs `Optional.flatMap()`
+- Garbage Collection: Serial vs Parallel vs G1 vs ZGC
+- `var` Local Variable Type Inference Best Practices
+- `CopyOnWriteArrayList` vs `ArrayList`
+- `CompletableFuture` for Non-Blocking Asynchronous Pipelines
+- Pattern Matching for `switch` & Guarded Patterns (`when`)
+- Text Blocks (`"""`) for JSON/XML/SQL
+- Enforcing Object Immutability & Defensive Copying
 
-| Round | Directory | Highlights |
-|---|---|---|
-| **Round 1** | [round-1/](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/round-1/README.md) | PriorityQueue, SOLID, Strategy Pattern, `@SpringBootApplication`, PUT vs PATCH, REST, Stream Max Salary, CI/CD, AWS, Kubernetes, Kafka Schema Registry, Records/Sealed |
-| **Round 2** | [round-2/](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/round-2/README.md) | Static Method Hiding, Spring Boot Startup Lifecycle, `final`/`finally`/`finalize`, GC Internals, Minimum Meeting Rooms Greedy |
-| **Client Round** | [round-3-client/](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/round-3-client/README.md) | Class Loaders, Thread Creation Paradigms, Polymorphism, `JpaRepository` vs `CrudRepository`, `@RestController` vs `@Controller`, `@ControllerAdvice` vs `@RestControllerAdvice` |
+---
+
+### 🔹 [09. Spring Boot Architecture, Security (JWT/RBAC) & Cloud Integrations](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/09_senior_spring_boot_and_security/README.md)
+- 4-Tier Clean Layered Architecture (Controller $\to$ Service $\to$ Repository)
+- Complete Spring Security 6 / JWT Authentication & Refresh Token Flow
+- Authorization with RBAC & `@PreAuthorize`
+- Multi-Environment Configuration (`application.yml` Profiles)
+- `@Configuration` vs `@Bean` & `proxyBeanMethods` CGLIB mechanics
+- Embedded Server Management (Tomcat/Jetty auto-detection)
+- `@ControllerAdvice` vs `@ExceptionHandler`
+- Integrating Spring Boot with AWS Services (S3 Pre-signed URLs, RDS Aurora)
+
+---
+
+### 🔹 [10. Microservices Resilience, Rate Limiting & RCA Playbook](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/10_senior_microservices_and_resilience/README.md)
+- Rate Limiting: Token Bucket vs Leaky Bucket vs Sliding Window Counter with Redis
+- Circuit Breaker Pattern (Resilience4j CLOSED $\to$ OPEN $\to$ HALF_OPEN)
+- API Gateway (North-South) vs Service Mesh (East-West Istio/Envoy)
+- Handling Eventual Consistency (Saga Pattern, Transactional Outbox, Idempotent Consumers)
+- Senior Engineer Playbook: Step-by-step Troubleshooting of Slow APIs in Production
+
+---
+
+### 🔹 [11. Senior Coding Tasks & Algorithmic Solutions](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/11_senior_algorithms_and_coding_tasks/README.md)
+- 💻 **Palindrome Number without String Conversion** ($O(\log N)$ time, $O(1)$ space)
+- 💻 **Sort a Stack using Another Stack** ($O(N^2)$ time, $O(N)$ space)
+- 💻 **Maximum Sum Subarray (Kadane's Algorithm)** ($O(N)$ linear time)
+- 💻 **Remove Duplicate Integers using Two Pointers** ($O(1)$ auxiliary in-place)
+- 💻 **Count All Palindromic Substrings** (Expand Around Center, $O(N^2)$ time, $O(1)$ space)
+- 💻 **Complete 3-Tier REST API**: Controller, Service, Repository with Path/Query Params, Pagination & Sorting
+
+---
+
+### 🔹 [12. Kubernetes, Docker, DevOps & Advanced SQL Deep-Dive](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/12_devops_k8s_docker_and_sql_deepdive/README.md)
+- Kubernetes StatefulSets vs Deployments
+- Kubernetes Zero-Downtime Rolling Updates (`maxSurge`, `maxUnavailable`, readiness probes)
+- Docker Volumes vs Bind Mounts vs tmpfs
+- SQL Query: 2nd Highest Salary in a Department (`DENSE_RANK()`)
+- Complex SQL Query with WHERE, GROUP BY, HAVING, ORDER BY & Database Execution Order
+
+---
+
+## 🏛️ Chronological Interview Rounds
+- 📁 [Round 1 Archive](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/round-1/README.md)
+- 📁 [Round 2 Archive](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/round-2/README.md)
+- 📁 [Client Round Archive](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/round-3-client/README.md)
