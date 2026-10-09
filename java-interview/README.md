@@ -213,6 +213,33 @@ This repository contains battle-tested, high-impact answers, 60-second verbal sc
 
 ---
 
+### 🔹 [17. 30 Scenario-Based Senior Java Backend Interview Deep-Dives](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/17_thirty_scenario_based_interview_deep_dives/README.md)
+- ⚡ **Java & Concurrency**: HashMap concurrency pitfalls, duplicate payment race conditions, thread pool spikes, 30s downstream REST call optimization, record consistency.
+- 🍃 **Spring Boot & JPA**: Slow startup diagnosis (`/actuator/startup`), circular dependencies, `LazyInitializationException` & OSIV, `@Transactional` rollback anomalies, `OutOfMemoryError` troubleshooting.
+- 🌐 **Microservices**: Cascading failure mitigation (Resilience4j), 2-phase idempotency tables, slow service isolation (Bulkheads), W3C distributed tracing, REST vs gRPC vs Kafka.
+- 📬 **Apache Kafka**: Consumer message deduplication, partition traffic skew/salting, Poison Pill handling & DLQ architecture, customer message ordering guarantees.
+- 🗄️ **Database & SQL**: 50ms-to-10s query regression RCA, 100% DB CPU incident response, concurrent row update isolation, 100M+ row table optimization (Partitioning/Keyset), Optimistic vs Pessimistic locking for inventory flash sales.
+- ☁️ **System Design & AWS**: 100k req/min scaling blueprint, distributed sliding window rate limiting, Redis crash fail-open behavior, zero-credential EC2-to-S3 IAM Instance Profiles, Canary deployment rollback & APM root-cause analysis.
+
+---
+
+### 🔹 [18. Senior Core Java, Spring Boot, Kafka, Code Quality & WebClient Guide](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/18_senior_core_java_spring_kafka_and_code_quality_interview_guide/README.md)
+- ☕ **Core Java (8 vs 17)**: Records, Sealed Classes, Pattern Matching, Stream API internals, Default/Static methods, sorting Person by age, `map()` vs `flatMap()`.
+- 🍃 **Spring Boot & Microservices**: Auto-Configuration internals (`@ConditionalOnClass`), `@SpringBootApplication`, `@ComponentScan`, Circuit Breaker state machines, and dynamic Service Discovery registration/routing flows.
+- 📬 **Apache Kafka**: Spring Kafka architecture, Consumer Groups, partition assignment strategies (`CooperativeStickyAssignor`), and multi-group broadcast mechanics.
+- 🛡️ **Code Quality & Modern JVM**: JaCoCo Maven bytecode instrumentation, SonarQube Quality Gates, and Java 8 to 17 performance (ZGC/Compact Strings) & security (JEP 403 encapsulation) rationale.
+- 🌐 **API Communication**: WebSocket full-duplex TCP framing, Spring WebFlux `WebClient` reactive Netty event loops, and `WebClient` vs `RestTemplate` concurrency benchmarks.
+
+---
+
+### 🔹 [19. 20 Modern Production Scenarios & Backend Interview Deep-Dives (2026 Edition)](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/19_twenty_2026_modern_production_scenarios_and_interview_deep_dives/README.md)
+- ☕ **Core Java & JVM**: Floating-point drift (IEEE 754 & `BigDecimal.compareTo()`), `ForkJoinPool.commonPool()` HTTP exhaustion, Native Off-Heap OOM-Kills, UTC vs IST timezone drift.
+- 🍃 **Spring Boot Internals**: Shared mutable lists in Singleton beans, Prototype-in-Singleton `@Lookup` trap, `@Async` unbounded queue memory spikes, Jackson recursion, Kubernetes 502 deployment race conditions.
+- 🗄️ **Database Mechanics**: Deep `OFFSET` scan degradation vs Keyset pagination, `READ COMMITTED` non-repeatable reads, massive delete replication lag & partitioning.
+- 🌐 **Distributed Systems**: Kafka Poison Pill DLQ recovery, `max.poll.interval.ms` rebalance eviction, compound failure mathematics ($0.999^{50}$), Transactional Outbox pattern, Redis `KEYS *` event loop freeze, ShedLock distributed scheduling, and Expand-Contract API evolution.
+
+---
+
 ## 🏛️ Chronological Interview Rounds
 - 📁 [Round 1 Archive](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/round-1/README.md)
 - 📁 [Round 2 Archive](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/round-2/README.md)
