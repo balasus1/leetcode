@@ -6,6 +6,7 @@
 
 | Track | Spoken Drills | Total Questions | Focus Areas | Master Guide Link |
 |:---|:---:|:---:|:---|:---|
+| 🎯 **Resume & AI Scenarios** | **32 Spoken Drills** | **50+ Scenarios** | 15k QPS Bottlenecks, Dual-Writes, Deadlocks, Outbox CDC, Redis XFetch, RAG, Envelope Encryption | [Resume Scenarios Master Guide](./interview_prep_mastery/experience_drills/MERCOR_MICRO1_RESUME_SCENARIOS_AI_DRILLS.md) |
 | 🐍 **Python & AI Fullstack** | **150 Drills** | **150 Questions** | Fundamentals, Differences, GIL, Asyncio, Memory, FastAPI, RAG, Vector DBs, LangGraph | [Python Master Guide](./python/README.md) |
 | 🚀 **Node.js Enterprise** | **100 Drills** | **235 Questions** | V8, Libuv, Streams, Worker Threads, 10k RPS Scaling, Fastify, AI Streaming | [Node.js Master Guide](./nodejs/README.md) |
 | ⚛️ **React 19 & Next.js** | **100 Drills** | **250 Questions** | Fiber, Concurrent Mode, React 19 Actions, RSC, PPR, AI Chat UI, Optimization | [React.js Master Guide](./reactjs/README.md) |
