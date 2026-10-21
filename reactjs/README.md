@@ -19,6 +19,7 @@ This directory contains an exhaustive, production-tested collection of **250 Rea
 | **Part 9** | **Production Scaling, Testing & Enterprise SaaS** | Q201 – Q210 | 100% Covered | [09_production_scaling_testing_and_enterprise_saas.md](./09_production_scaling_testing_and_enterprise_saas.md) |
 | **Part 10** | **Re-Render Elimination, Loading Strategies & Cloudinary/Media** | Q211 – Q230 | 100% Covered | [10_rerender_elimination_and_media_optimization.md](./10_rerender_elimination_and_media_optimization.md) |
 | **Part 11** | **API Fetching, Re-Fetch Elimination & Pagination Architectures** | Q231 – Q250 | 100% Covered | [11_api_fetching_refetch_elimination_and_pagination.md](./11_api_fetching_refetch_elimination_and_pagination.md) |
+| 🎙️ **AI Prep** | **Top 100 Mercor & Micro1 1-Minute Spoken Verbal Drills** | **Top 100** | 100% Snippets | [MERCOR_MICRO1_AI_INTERVIEW_TOP_100.md](./MERCOR_MICRO1_AI_INTERVIEW_TOP_100.md) |
 | 🌟 **Master** | **Single Combined Master Guide (All 250 Questions)** | **Q1 – Q250** | **100% Snippets** | [ALL_200_REACTJS_QUESTIONS_MASTER.md](./ALL_200_REACTJS_QUESTIONS_MASTER.md) |
 
 ---

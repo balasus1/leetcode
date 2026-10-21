@@ -18,6 +18,7 @@ This directory contains an exhaustive, production-tested collection of **235 Nod
 | **Part 8** | **Security, Cryptography, Auth & Hardening** | Q166 – Q185 | [08_security_auth_and_cryptography.md](./08_security_auth_and_cryptography.md) |
 | **Part 9** | **Production Scale, Observability, Modern Node (v18–v22+) & 100-to-10,000 RPS Scaling Playbook** | Q186 – Q220 | [09_production_scale_observability_and_modern_features.md](./09_production_scale_observability_and_modern_features.md) |
 | **Part 10** | **Advanced Caching, Zero-Miss Topologies & Recency Policies** | Q221 – Q235 | [10_caching_strategies_and_recency_mechanisms.md](./10_caching_strategies_and_recency_mechanisms.md) |
+| 🎙️ **AI Prep** | **Top 100 Mercor & Micro1 1-Minute Spoken Verbal Drills** | **Top 100** | [MERCOR_MICRO1_AI_INTERVIEW_TOP_100.md](./MERCOR_MICRO1_AI_INTERVIEW_TOP_100.md) |
 | 🌟 **Master** | **Single Combined Master Guide (All 235 Questions)** | **Q1 – Q235** | [ALL_200_NODEJS_QUESTIONS_MASTER.md](./ALL_200_NODEJS_QUESTIONS_MASTER.md) |
 
 ---

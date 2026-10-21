@@ -1,5 +1,17 @@
 # LeetCode patterns & daily practice
 
+## 🎙️ Mercor, Micro1 & Senior Full Stack AI Interview Mastery Suite (300+ Questions)
+
+> **Battle-tested verbal scripts and deep architectural drills designed specifically to pass automated AI interviewers (Mercor, Micro1, Karat, HireVue)** for Senior Full Stack, Backend, and Full Stack AI Engineer roles. Every question provides a **60–90 second spoken answer script**, **under-the-hood engine mechanics**, **production code**, and **senior gotchas**.
+
+| Track | Spoken Drills | Total Questions | Focus Areas | Master Guide Link |
+|:---|:---:|:---:|:---|:---|
+| 🐍 **Python & AI Fullstack** | **100 Drills** | **100 Questions** | GIL, Asyncio, Memory, FastAPI, RAG, Vector DBs, LangGraph, vLLM | [Python Master Guide](./python/README.md) |
+| 🚀 **Node.js Enterprise** | **100 Drills** | **235 Questions** | V8, Libuv, Streams, Worker Threads, 10k RPS Scaling, Fastify, AI Streaming | [Node.js Master Guide](./nodejs/README.md) |
+| ⚛️ **React 19 & Next.js** | **100 Drills** | **250 Questions** | Fiber, Concurrent Mode, React 19 Actions, RSC, PPR, AI Chat UI, Optimization | [React.js Master Guide](./reactjs/README.md) |
+
+---
+
 ## Following the advice mentioned in # https://blog.algomaster.io/p/15-leetcode-patterns
 
 ### Before that I am understanding DSA from Bro code https://www.youtube.com/watch?v=CBYHwZcbD-s in 4 hrs.  Skipping and skimming few of the concepts which I already knew to complete them in 2 hrs.
