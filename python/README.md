@@ -14,12 +14,13 @@
 
 | Module | Focus Area | Questions | Link |
 |:---|:---|:---:|:---|
+| **Part 0** | **Fundamentals, "Difference Between", Features & Problem-Solving** | Q1 – Q50 | [00_python_basics_differences_and_core_features.md](./00_python_basics_differences_and_core_features.md) |
 | **Part 1** | **Python Core Internals, Memory Management & CPython Mechanics** | Q1 – Q20 | [01_core_internals_and_memory.md](./01_core_internals_and_memory.md) |
 | **Part 2** | **Concurrency, Asyncio, Multiprocessing & Multi-Threading** | Q21 – Q40 | [02_concurrency_asyncio_and_multiprocessing.md](./02_concurrency_asyncio_and_multiprocessing.md) |
 | **Part 3** | **Web Frameworks, REST/gRPC, ORMs & Database Scaling (FastAPI, SQLAlchemy)** | Q41 – Q60 | [03_fastapi_web_and_database_scaling.md](./03_fastapi_web_and_database_scaling.md) |
 | **Part 4** | **Full Stack AI, LLMs, RAG & Vector Systems (Mercor AI Frontier)** | Q61 – Q80 | [04_fullstack_ai_llms_rag_and_vector_systems.md](./04_fullstack_ai_llms_rag_and_vector_systems.md) |
 | **Part 5** | **Production Engineering, Testing, Profiling & Security** | Q81 – Q100 | [05_production_testing_profiling_and_security.md](./05_production_testing_profiling_and_security.md) |
-| 🌟 **Master** | **Single Combined Master Guide (All 100 Questions)** | **Q1 – Q100** | [ALL_100_PYTHON_AI_FULLSTACK_QUESTIONS_MASTER.md](./ALL_100_PYTHON_AI_FULLSTACK_QUESTIONS_MASTER.md) |
+| 🌟 **Master** | **Single Combined Master Guide (All Advanced 100 Questions)** | **Q1 – Q100** | [ALL_100_PYTHON_AI_FULLSTACK_QUESTIONS_MASTER.md](./ALL_100_PYTHON_AI_FULLSTACK_QUESTIONS_MASTER.md) |
 
 ---
 

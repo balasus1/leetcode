@@ -6,7 +6,7 @@
 
 | Track | Spoken Drills | Total Questions | Focus Areas | Master Guide Link |
 |:---|:---:|:---:|:---|:---|
-| 🐍 **Python & AI Fullstack** | **100 Drills** | **100 Questions** | GIL, Asyncio, Memory, FastAPI, RAG, Vector DBs, LangGraph, vLLM | [Python Master Guide](./python/README.md) |
+| 🐍 **Python & AI Fullstack** | **150 Drills** | **150 Questions** | Fundamentals, Differences, GIL, Asyncio, Memory, FastAPI, RAG, Vector DBs, LangGraph | [Python Master Guide](./python/README.md) |
 | 🚀 **Node.js Enterprise** | **100 Drills** | **235 Questions** | V8, Libuv, Streams, Worker Threads, 10k RPS Scaling, Fastify, AI Streaming | [Node.js Master Guide](./nodejs/README.md) |
 | ⚛️ **React 19 & Next.js** | **100 Drills** | **250 Questions** | Fiber, Concurrent Mode, React 19 Actions, RSC, PPR, AI Chat UI, Optimization | [React.js Master Guide](./reactjs/README.md) |
 
