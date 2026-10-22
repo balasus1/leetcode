@@ -57,6 +57,18 @@
 | **Q31** | [Rate Limiting vs Load Shedding vs Throttling](#q31-compare-rate-limiting-vs-load-shedding-vs-throttling-in-high-scale-distributed-systems) | Client Quotas (Redis 429) vs Flow Regulation vs Server Self-Preservation (503) |
 | **Q32** | [PostgreSQL (OLTP) vs ClickHouse (OLAP) vs Redis (Cache) Polyglot Persistence](#q32-compare-postgresql-oltp-vs-clickhouse-olap-vs-redis-cache-how-do-you-architect-polyglot-persistence) | Row ACID vs Columnar SIMD Vectorized vs In-Memory Microsecond Lookups |
 
+### 🌐 Category 4: High-Scale Infrastructure & Distributed Systems Scenarios
+| # | Infrastructure & Messaging Scenario | Core Systems & Production Mechanics |
+|:---|:---|:---|
+| **Q33** | [CDN Multi-Region Caching, Origin Shield & Instant Invalidation](#q33-walk-me-through-how-you-designed-a-multi-region-cdn-caching-architecture-achieved-a-98-cache-hit-ratio-and-handled-instant-global-cache-invalidation-without-stampeding-origins) | Cloudflare Edge, Origin Shielding, `stale-while-revalidate`, Surrogate-Keys |
+| **Q34** | [L4 vs L7 Load Balancer Architecture, Health Probes & Connection Draining](#q34-how-did-you-architect-your-l4-vs-l7-load-balancing-layer-to-distribute-100000-qps-across-multi-az-backend-services-handle-connection-draining-during-deployments-and-mitigate-cross-zone-latency) | NLB (eBPF/IPVS) vs ALB/Envoy L7, Deregistration Delay, Consistent Hashing |
+| **Q35** | [PostgreSQL Range & Hash Partitioning with Partition Pruning](#q35-describe-a-scenario-where-you-implemented-database-partitioning-on-a-multi-terabyte-transactional-table-in-postgresql-to-sustain-fast-queries-and-efficient-data-archival) | Declarative Range/Hash Partitioning, Partition Pruning, O(1) Drop Archival |
+| **Q36** | [Horizontal Database Sharding, Consistent Hashing & Hot Shard Elimination](#q36-how-did-you-design-and-implement-horizontal-database-sharding-across-10-database-clusters-and-how-did-you-resolve-hot-shard-imbalance-and-cross-shard-queries) | Consistent Hashing (256 vnodes), Shard Key Salt-Splitting, Scatter-Gather |
+| **Q37** | [Node.js Worker Threads, CPU Offloading & `SharedArrayBuffer`](#q37-walk-me-through-a-production-scenario-where-heavy-cpu-computation-blocked-the-nodejs-event-loop-and-how-you-architected-worker-threads-with-zero-copy-shared-memory) | `node:worker_threads` Piscina pool, `SharedArrayBuffer` & `Atomics`, Event Loop Lag |
+| **Q38** | [Kafka Broker Architecture, Partition Sizing & Zero Data Loss (`acks=all`)](#q38-how-did-you-size-and-tune-kafka-brokers-topics-partitions-and-replication-to-guarantee-zero-data-loss-acksall-while-processing-500k-eventssec) | Throughput Partition Formula, `min.insync.replicas=2`, `acks=all`, Zero-copy `sendfile` |
+| **Q39** | [Kafka Consumer Groups, Rebalance Storm Prevention & Lag Remediation](#q39-describe-an-incident-where-a-kafka-consumer-group-experienced-continuous-rebalance-storms-and-mounting-lag-and-how-you-fine-tuned-consumer-configurations-to-resolve-it) | Cooperative Sticky Assignor, Worker Queue Decoupling, `max.poll.interval.ms` |
+| **Q40** | [Distributed Throttles, Broker Quotas & Adaptive Backpressure Tuning](#q40-how-did-you-fine-tune-rate-limiting-throttles-and-broker-quotas-across-producers-brokers-and-consumers-to-protect-downstream-services-from-cascading-collapse) | Kafka Broker Client Quotas, Producer `buffer.memory`, Redis Token Bucket |
+
 ---
 
 ### Q1. "Describe a critical production latency spike you investigated in your 15,000 QPS microservice and how you resolved it."
@@ -1475,7 +1487,413 @@ public class LoadSheddingFilter implements Filter {
 
 ---
 
-## 🎙️ Category 4: The 1-Minute Spoken Delivery Framework for Mercor & Micro1 AI Screeners
+## 🌐 Category 4: High-Scale Infrastructure & Distributed Systems Scenarios
+
+### Q33. "Walk me through how you designed a multi-region CDN caching architecture, achieved a 98% cache hit ratio, and handled instant global cache invalidation without stampeding origins."
+
+#### 🎙️ The 60-90 Second Verbal Script (Speak Aloud)
+> "In our global e-commerce and media platform serving **120 Million daily page views**, regional traffic spikes across 300 global edge locations thrashed our origin servers in US-East with duplicate cache misses, causing origin CPU to spike to 95%.
+> 
+> I re-architected our edge delivery layer using **Cloudflare / CloudFront** across three pillars:
+> 1. **Origin Shielding (Tiered Caching)**: We placed a dedicated Regional Origin Shield between global edge PoPs and our origin data center. Cache misses from edge nodes route through the shield first; duplicate concurrent misses are collapsed via request coalescing into a single origin fetch.
+> 2. **Stale-While-Revalidate**: We returned `Cache-Control: public, max-age=3600, stale-while-revalidate=86400`. Users receive edge responses instantly in **under 25ms**, while the CDN revalidates expired content asynchronously in the background.
+> 3. **Surrogate-Keys (Cache-Tags) for Instant Invalidation**: Instead of purging entire URL directories, we tagged responses with fine-grained headers (`Cache-Tag: product-10293, category-laptops`). When inventory or price changes, an event triggers an API call that purges that specific surrogate key globally within **150 milliseconds**.
+> 
+> **Result**: Cache Hit Ratio increased from **74% to 98.4%**, origin egress costs dropped by **$18,000/month**, and global P95 latency dropped from 480ms to 28ms."
+
+#### ⚙️ Under-The-Hood Mechanics (AI Grader Keywords)
+* Origin Shielding / Tiered Caching consolidating regional cache misses.
+* `stale-while-revalidate` asynchronous edge background revalidation.
+* Surrogate-Keys / Cache-Tags targeted purge vs URL purges.
+* Request coalescing (SingleFlight at CDN edge).
+* HTTP/3 QUIC 0-RTT connection establishment.
+
+#### 💻 Production Code & Header Configuration
+```http
+// Production Edge Cache Headers returned by Origin
+HTTP/1.1 200 OK
+Content-Type: application/json
+Cache-Control: public, max-age=3600, stale-while-revalidate=86400, stale-if-error=3600
+Surrogate-Key: product-10293 merchant-44 category-electronics
+ETag: W/"d41d8cd98f00b204e9800998ecf8427e"
+Vary: Accept-Encoding
+```
+```bash
+# Instant Targeted Global Purge via Cache-Tag API (< 150ms)
+curl -X POST "https://api.cloudflare.com/client/v4/zones/{zone_id}/purge_cache" \
+     -H "Authorization: Bearer $CDN_TOKEN" \
+     -H "Content-Type: application/json" \
+     --data '{"tags":["product-10293"]}'
+```
+
+#### ⚠️ The Follow-Up Trap & Senior Edge Case
+* *Interviewer asks*: *"What happens if your Origin Shield server itself suffers a crash or regional outage?"*
+* *Your response*: *"Cloudflare and CloudFront handle this with automatic multi-tiered failover: if the designated origin shield does not respond within a 1-second timeout, edge PoPs bypass the shield and route directly to the primary and secondary origins, while our `stale-if-error=3600` directive instructs edges to continue serving cached content for up to 1 hour during origin downtime."*
+
+---
+
+### Q34. "How did you architect your L4 vs L7 Load Balancing layer to distribute 100,000 QPS across multi-AZ backend services, handle connection draining during deployments, and mitigate cross-zone latency?"
+
+#### 🎙️ The 60-90 Second Verbal Script (Speak Aloud)
+> "When scaling our ingress architecture to support **100,000 QPS** across 60 Kubernetes pods in 3 AWS Availability Zones, a naive single load balancer suffered from high CPU saturation, connection drops during rollouts, and cross-AZ data transfer fees.
+> 
+> I architected a **Two-Tier Load Balancing Hierarchy**:
+> 1. **Layer 4 Transport Tier (AWS NLB)**: Sits at the edge, utilizing **eBPF and Linux IPVS** for line-rate TCP routing. It terminates zero HTTP or TLS state, passing raw packets to Layer 7 proxies with sub-millisecond overhead and ultra-high packet-per-second scalability.
+> 2. **Layer 7 Application Tier (Envoy / ALB)**: Handles CPU-heavy tasks: **TLS 1.3 termination**, HTTP/2 multiplexing, path-based routing (`/api/v1/checkout` vs `/api/v1/search`), and gRPC header routing.
+> 3. **Consistent Hashing for Session Affinity**: For WebSocket and streaming connections, we use Consistent Hashing with virtual nodes on client IP/cookie to prevent connection flapping.
+> 4. **Connection Draining (Deregistration Delay)**: Configured a **30-second Deregistration Delay**. When a pod terminates during a rolling deployment, the load balancer stops sending *new* connections immediately while allowing existing in-flight HTTP requests up to 30 seconds to finish.
+> 
+> **Result**: Eliminated HTTP 502 Bad Gateway errors entirely during mid-day deployments, and reduced cross-zone network latency by **40%** using AZ-affinity routing."
+
+#### ⚙️ Under-The-Hood Mechanics (AI Grader Keywords)
+* Layer 4 NLB (eBPF / Linux IPVS transport routing) vs Layer 7 ALB/Envoy.
+* TLS 1.3 hardware-accelerated termination & HTTP/2 multiplexing.
+* Connection Draining / Deregistration Delay lifecycle hooks.
+* Consistent Hashing with virtual nodes for sticky sessions.
+* Cross-Zone Load Balancing vs AZ-Affinity routing.
+
+#### 💻 Production Kubernetes & ALB Terraform Manifest
+```hcl
+# AWS ALB Target Group Connection Draining & Health Probe
+resource "aws_lb_target_group" "api_tg" {
+  name                 = "api-prod-target-group"
+  port                 = 8080
+  protocol             = "HTTP"
+  vpc_id               = var.vpc_id
+  target_type          = "ip"
+  deregistration_delay = 30 # 30s Connection Draining: ZERO 502 ERRORS!
+
+  health_check {
+    enabled             = true
+    path                = "/actuator/health/readiness"
+    protocol            = "HTTP"
+    matcher             = "200"
+    interval            = 5  # Probe every 5s
+    timeout             = 2  # Fail fast after 2s
+    healthy_threshold   = 2
+    unhealthy_threshold = 2  # Evict pod after 2 consecutive failures
+  }
+}
+```
+
+#### ⚠️ The Follow-Up Trap & Senior Edge Case
+* *Interviewer asks*: *"Why shouldn't you just enable Cross-Zone Load Balancing across all availability zones unconditionally?"*
+* *Your response*: *"Cross-Zone load balancing routes traffic randomly across zones, which adds 1 to 2 milliseconds of cross-AZ network hop latency to every request and generates massive AWS inter-zone data transfer costs ($0.01 per GB). In production, we enable Zone Affinity: the load balancer directs traffic strictly to pods in the same AZ unless an AZ experiences an outage, keeping latency and data transfer costs minimal."*
+
+---
+
+### Q35. "Describe a scenario where you implemented Database Partitioning on a multi-terabyte transactional table in PostgreSQL to sustain fast queries and efficient data archival."
+
+#### 🎙️ The 60-90 Second Verbal Script (Speak Aloud)
+> "In our financial ledger service, the `transactions` table grew to **4 Terabytes (over 120 Million rows)**. A single global B+Tree index consumed 90 GB of RAM, causing buffer cache eviction, slow queries (> 2,500ms), and maintenance autovacuum runs taking 36 hours.
+> 
+> I resolved this by migrating to **PostgreSQL Declarative Table Partitioning**:
+> 1. **Partition Strategy**: We partitioned the table by **RANGE on `created_at`** into monthly partitions (e.g., `transactions_2024_01`), with local composite B+Tree indexes on `(account_id, created_at)` per partition.
+> 2. **Partition Pruning**: Enabled `enable_partition_pruning = on`. When queries include date bounds (`WHERE created_at >= '2024-03-01'`), PostgreSQL's query optimizer eliminates unneeded tables, scanning **only that single month's partition**.
+> 3. **Instant Archival via Detach Partition**:
+>    Running `DELETE FROM transactions WHERE created_at < '2021-01-01'` historically generated 40M dead tuples and table bloat. With partitioning, archival executes as:
+>    `ALTER TABLE transactions DETACH PARTITION transactions_2021_01;`
+>    followed by dropping the table in **$O(1)$ constant time with zero table locks and zero vacuum overhead**.
+> 
+> **Result**: Query P99 latency dropped from **2,500ms down to 14ms**, index size per active partition fit entirely in RAM (3 GB), and autovacuum runtimes dropped from 36 hours to 15 minutes."
+
+#### ⚙️ Under-The-Hood Mechanics (AI Grader Keywords)
+* PostgreSQL Declarative Range Partitioning.
+* Query Optimizer Partition Pruning (`enable_partition_pruning`).
+* Local B+Tree indexes fitting in RAM buffer pool vs bloated global indexes.
+* `ALTER TABLE ... DETACH PARTITION` $O(1)$ zero-lock archival.
+* Elimination of PostgreSQL dead tuple bloat and transaction ID wraparound.
+
+#### 💻 Production PostgreSQL DDL Script
+```sql
+-- 1. Create Master Partitioned Table
+CREATE TABLE transactions (
+    id BIGSERIAL,
+    account_id BIGINT NOT NULL,
+    amount NUMERIC(15, 2) NOT NULL,
+    status VARCHAR(20) NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL,
+    PRIMARY KEY (id, created_at)
+) PARTITION BY RANGE (created_at);
+
+-- 2. Create Monthly Partitions with Local Indexes
+CREATE TABLE transactions_2026_03 PARTITION OF transactions
+    FOR VALUES FROM ('2026-03-01 00:00:00+00') TO ('2026-04-01 00:00:00+00');
+
+CREATE INDEX idx_tx_2026_03_account ON transactions_2026_03 (account_id, created_at);
+
+-- 3. Verification of Partition Pruning
+EXPLAIN (ANALYZE, BUFFERS)
+SELECT * FROM transactions
+WHERE account_id = 100293 AND created_at >= '2026-03-10';
+-- QUERY PLAN: Scans ONLY transactions_2026_03! All other partitions PRUNED!
+```
+
+#### ⚠️ The Follow-Up Trap & Senior Edge Case
+* *Interviewer asks*: *"What happens if an `UPDATE` statement modifies `created_at` such that the record moves to a different month's partition?"*
+* *Your response*: *"In PostgreSQL 11+, PostgreSQL supports **Row Movement** (`enable_row_movement`). When an `UPDATE` crosses partition boundaries, PostgreSQL atomically performs a `DELETE` on the source partition and an `INSERT` on the target partition within the same ACID transaction. However, this creates dead tuples on the source partition, so partition key updates should be minimized."*
+
+---
+
+### Q36. "How did you design and implement horizontal database sharding across 10 database clusters, and how did you resolve hot shard imbalance and cross-shard queries?"
+
+#### 🎙️ The 60-90 Second Verbal Script (Speak Aloud)
+> "When our core user database reached 35,000 writes/sec and 10 Terabytes of storage, vertical scaling hit physical hardware limits.
+> 
+> I designed and executed horizontal database sharding across **10 PostgreSQL database clusters**:
+> 1. **Shard Key & Routing**: We selected `account_id` as the shard key, using **Consistent Hashing with 256 Virtual Nodes (vnodes)** per physical shard on a ring topology. The application routing layer hashes `account_id` via MurmurHash3 to determine target shard in $O(1)$ time.
+> 2. **Eliminating Hot Shard Imbalance**: A few enterprise clients (celebrity accounts) generated 35% of all traffic, overloading Shard 4. We implemented **Salted Shard Keys**: For enterprise accounts with $> 1\text{M}$ records, the router appends a salt (`account_id#1`, `account_id#2`), striping their records evenly across 4 physical shards.
+> 3. **Eliminating Cross-Shard Joins**: We completely eliminated distributed Two-Phase Commit (2PC) joins. Static reference tables (currencies, countries) are replicated to **all 10 shards** via CDC.
+> 4. **Scatter-Gather for Global Queries**: When querying across shards, an async orchestrator issues parallel queries to all 10 shards via `CompletableFuture` with a strict 2-second timeout and merges results in application memory.
+> 
+> **Result**: Sustained **160,000 writes/sec** with linear horizontal scalability and zero database CPU bottlenecks."
+
+#### ⚙️ Under-The-Hood Mechanics (AI Grader Keywords)
+* Consistent Hashing ring with 256 virtual nodes (vnodes).
+* MurmurHash3 deterministic routing in $O(1)$ time.
+* Salted Shard Keys for celebrity / enterprise tenant load distribution.
+* Elimination of distributed Two-Phase Commit (2PC) transactions.
+* Scatter-Gather parallel asynchronous query orchestration.
+
+#### 💻 Production Consistent Hashing Router (Java)
+```java
+public class ConsistentHashRouter {
+    private final HashFunction hashFunc = Hashing.murmur3_128();
+    private final SortedMap<Long, String> ring = new ConcurrentSkipListMap<>();
+    private final int numberOfReplicas = 256; // 256 Virtual Nodes per Shard
+
+    public void addShard(String shardName) {
+        for (int i = 0; i < numberOfReplicas; i++) {
+            long hash = hashFunc.hashString(shardName + "-vnode-" + i, StandardCharsets.UTF_8).asLong();
+            ring.put(hash, shardName);
+        }
+    }
+
+    public String routeToShard(String accountId) {
+        if (ring.isEmpty()) throw new IllegalStateException("No shards available");
+        long hash = hashFunc.hashString(accountId, StandardCharsets.UTF_8).asLong();
+        if (!ring.containsKey(hash)) {
+            SortedMap<Long, String> tailMap = ring.tailMap(hash);
+            hash = tailMap.isEmpty() ? ring.firstKey() : tailMap.firstKey();
+        }
+        return ring.get(hash);
+    }
+}
+```
+
+#### ⚠️ The Follow-Up Trap & Senior Edge Case
+* *Interviewer asks*: *"How do you add an 11th shard to the cluster without taking the database offline for hours?"*
+* *Your response*: *"Because we use Consistent Hashing, adding an 11th shard does NOT reshuffle all data. It migrates only $1/11\text{th}$ (approx. 9%) of keys from existing nodes. We deploy a background Change Data Capture (Debezium) worker to backfill that key range to Shard 11 in parallel, run dual-reads to verify data integrity, and flip the routing table pointer with zero downtime."*
+
+---
+
+### Q37. "Walk me through a production scenario where heavy CPU computation blocked the Node.js event loop, and how you architected Worker Threads with zero-copy shared memory."
+
+#### 🎙️ The 60-90 Second Verbal Script (Speak Aloud)
+> "In our document processing service processing 10,000 HTTP requests/sec, generating cryptographic digital signatures (Argon2 / RSA) and parsing large 15MB PDF invoices caused the single-threaded Node.js **Libuv Event Loop lag to spike past 850 milliseconds**, causing incoming HTTP requests to time out with 504 Gateway errors.
+> 
+> I solved this by offloading CPU-intensive tasks using **`node:worker_threads`** with an enterprise thread pool (**Piscina**):
+> 1. **Worker Pool Sizing**: We initialized a thread pool sized to `os.cpus().length - 1`, preserving 1 full CPU core strictly for the primary Libuv event loop.
+> 2. **Eliminating Structured Clone Serialization Latency**: Standard `worker.postMessage()` uses the Structured Clone algorithm, which took 35ms to serialize large 15MB file buffers. We replaced this with **`SharedArrayBuffer`** and **`Atomics`** (and Transferable Objects). The main thread and worker threads share the exact same physical memory pointer in RAM with **zero copy and zero serialization latency**.
+> 3. **Crash Supervision**: If a worker crashes or exceeds memory limits, the pool supervisor automatically restarts the worker thread without crashing the main process.
+> 
+> **Result**: Event Loop Lag dropped from **850ms down to 1.6 milliseconds**, and HTTP throughput quadrupled under peak load."
+
+#### ⚙️ Under-The-Hood Mechanics (AI Grader Keywords)
+* Libuv event loop starvation and event loop delay metrics.
+* `node:worker_threads` with Piscina thread pool manager.
+* `SharedArrayBuffer` with `Atomics.wait()` / `Atomics.notify()`.
+* Structured Clone algorithm CPU serialization penalty.
+* Transferable Objects (`ArrayBuffer`) transferring memory ownership with zero copy.
+
+#### 💻 Production Worker Thread Implementation
+```typescript
+// worker.ts: Dedicated CPU Worker
+import { parentPort } from 'node:worker_threads';
+import crypto from 'node:crypto';
+
+parentPort?.on('message', ({ sharedBuffer }: { sharedBuffer: SharedArrayBuffer }) => {
+  // Direct zero-copy memory access via TypedArray!
+  const view = new Uint8Array(sharedBuffer);
+  
+  // CPU-heavy cryptographic hash execution
+  const hash = crypto.createHash('sha256').update(view).digest();
+  
+  // Notify main thread of completion
+  parentPort?.postMessage({ status: 'DONE', hash: hash.toString('hex') });
+});
+```
+```typescript
+// main.ts: Event loop remains 100% non-blocking!
+import { Worker } from 'node:worker_threads';
+
+export function executeCpuTask(data: Buffer): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const sharedBuffer = new SharedArrayBuffer(data.length);
+    new Uint8Array(sharedBuffer).set(data); // Shared RAM pointer
+
+    const worker = new Worker('./worker.js');
+    worker.postMessage({ sharedBuffer });
+    worker.on('message', (res) => { resolve(res.hash); worker.terminate(); });
+    worker.on('error', reject);
+  });
+}
+```
+
+#### ⚠️ The Follow-Up Trap & Senior Edge Case
+* *Interviewer asks*: *"Why not just use `child_process.fork()` instead of `worker_threads`?"*
+* *Your response*: *"`child_process.fork()` creates an entirely separate OS process. Each child process runs its own full V8 runtime instance, consuming 35MB to 60MB of RAM and requiring costly OS IPC context switching. `worker_threads` run inside the SAME process, share the same V8 engine memory space, consume only ~1MB RAM per thread, and enable true zero-copy data exchange via `SharedArrayBuffer`."*
+
+---
+
+### Q38. "How did you size and tune Kafka brokers, topics, partitions, and replication to guarantee zero data loss (`acks=all`) while processing 500k events/sec?"
+
+#### 🎙️ The 60-90 Second Verbal Script (Speak Aloud)
+> "When architecting our payment event streaming backbone to sustain **500,000 events/sec (250 MB/sec throughput)**, our requirements mandated **absolute Zero Data Loss** and high availability.
+> 
+> I sized and tuned the cluster across four architectural vectors:
+> 1. **Partition Sizing**: We calculated topic partitions using the formula:
+>    $$P = \max\left(\frac{500{,}000 \text{ target msg/s}}{50{,}000 \text{ producer limit}}, \frac{500{,}000 \text{ target msg/s}}{15{,}000 \text{ consumer capacity}}\right) \approx \mathbf{36 \text{ partitions}}$$
+>    We distributed the 36 partitions evenly across 6 Kafka brokers (6 partitions per broker).
+> 2. **Zero Data Loss Guarantee (`acks=all`)**:
+>    - Producer configured with `acks=all` (`-1`) and `enable.idempotence=true` (assigning sequence numbers to prevent duplicate writes).
+>    - Topic configured with **Replication Factor $RF=3$** and **`min.insync.replicas=2`**. A write succeeds only when at least two in-sync replicas commit to disk.
+>    - Broker configured with **`unclean.leader.election.enable=false`**, strictly preventing out-of-sync replicas from ever becoming leader.
+> 3. **OS-Level Tuning**:
+>    Utilized Linux page cache with sequential disk writes and **zero-copy `sendfile()`**, moving network packets directly from OS cache to network socket without copying to JVM heap.
+> 
+> **Result**: Processed **40 billion messages with 100% zero data loss**, surviving automated chaos engineering broker termination drills with zero downtime."
+
+#### ⚙️ Under-The-Hood Mechanics (AI Grader Keywords)
+* Partition sizing formula based on consumer throughput constraints.
+* Producer `acks=all` (`-1`) and `enable.idempotence=true`.
+* `min.insync.replicas=2` and Replication Factor $RF=3$.
+* `unclean.leader.election.enable=false` durability guardrail.
+* Linux zero-copy `sendfile()` bypassing JVM user-space memory.
+
+#### 💻 Production Kafka Properties Configuration
+```properties
+# 1. Producer Zero-Data-Loss Configuration
+acks=all
+enable.idempotence=true
+retries=2147483647
+max.in.flight.requests.per.connection=5
+compression.type=lz4
+linger.ms=20
+batch.size=65536
+
+# 2. Broker & Topic Durability Configuration
+default.replication.factor=3
+min.insync.replicas=2
+unclean.leader.election.enable=false
+num.partitions=36
+log.flush.interval.messages=9223372036854775807 # Rely on OS page cache + replicas!
+```
+
+#### ⚠️ The Follow-Up Trap & Senior Edge Case
+* *Interviewer asks*: *"Why shouldn't you configure `log.flush.interval.messages=1` to force disk sync on every single message?"*
+* *Your response*: *"Calling `fsync()` on disk for every message forces synchronous disk spindle seeks, collapsing Kafka throughput from 500,000 msg/sec down to less than 2,000 msg/sec. Kafka's durability model relies on **memory replication across multiple independent machines (`min.insync.replicas=2`)**, combined with Linux OS page cache. Even if 1 broker loses power, the data already resides in RAM and disk on the other 2 in-sync brokers."*
+
+---
+
+### Q39. "Describe an incident where a Kafka Consumer Group experienced continuous rebalance storms and mounting lag, and how you fine-tuned consumer configurations to resolve it."
+
+#### 🎙️ The 60-90 Second Verbal Script (Speak Aloud)
+> "In an order fulfillment consumer group of 24 consumers processing 50,000 events/sec, downstream payment gateway timeouts caused consumer lag to suddenly spike past **2.5 million records**.
+> 
+> Then, the consumer group entered a catastrophic **Rebalance Storm**:
+> All consumers stopped processing, the Group Coordinator revoked all partitions, rebalanced, and repeated this in an infinite loop.
+> 
+> **The Root Cause**:
+> Downstream HTTP calls took 320 seconds. This breached Kafka's default **`max.poll.interval.ms` (300 seconds)**. The Group Coordinator assumed the consumer thread died, ejected it from the group, and reassigned its partitions. As remaining consumers inherited the backlog, they also breached the interval, causing a cascading rebalance loop.
+> 
+> **How I Remediated in Production**:
+> 1. **Cooperative Sticky Assignor**: We switched partition assignment from legacy Eager Assignor to **`CooperativeStickyAssignor`**. This enables incremental rebalances: healthy consumers continue consuming their assigned partitions uninterrupted.
+> 2. **Decoupled Poll Loop & Worker Pool**: We refactored the consumer: the Kafka polling thread *only* polls records and enqueues them into an **internal bounded Java `ThreadPoolExecutor`**, ensuring `poll()` executes every 500ms regardless of business processing time.
+> 3. **Fine-Tuning**: Set `max.poll.records = 100`, `session.timeout.ms = 45000`, and `heartbeat.interval.ms = 15000`.
+> 
+> **Result**: Rebalance storms eliminated completely, and 2.5 million backlogged records drained in under **10 minutes**."
+
+#### ⚙️ Under-The-Hood Mechanics (AI Grader Keywords)
+* `max.poll.interval.ms` threshold breach triggering eviction.
+* Cascading Rebalance Storm across consumer group.
+* `CooperativeStickyAssignor` incremental rebalancing vs Eager Assignor.
+* Decoupled single-thread polling loop with worker thread pool.
+* Heartbeat thread vs processing thread (`session.timeout.ms`).
+
+#### 💻 Production Decoupled Consumer Pattern (Java)
+```java
+@Component
+public class ResilientOrderConsumer {
+    private final KafkaConsumer<String, OrderEvent> consumer;
+    private final ExecutorService workerPool = new ThreadPoolExecutor(
+        16, 16, 60L, TimeUnit.SECONDS, new ArrayBlockingQueue<>(1000), new ThreadPoolExecutor.CallerRunsPolicy()
+    );
+
+    public void startPolling() {
+        while (running) {
+            // SAFE: poll() executes every 200ms; max.poll.interval.ms NEVER breached!
+            ConsumerRecords<String, OrderEvent> records = consumer.poll(Duration.ofMillis(200));
+            for (ConsumerRecord<String, OrderEvent> record : records) {
+                workerPool.submit(() -> processBusinessLogic(record));
+            }
+            consumer.commitAsync();
+        }
+    }
+}
+```
+
+#### ⚠️ The Follow-Up Trap & Senior Edge Case
+* *Interviewer asks*: *"Why not simply increase `max.poll.interval.ms` from 5 minutes to 2 hours?"*
+* *Your response*: *"Setting `max.poll.interval.ms` to 2 hours is dangerous. If a worker pod genuinely crashes, runs out of memory, or deadlocks, Kafka will wait an entire 2 hours before recognizing that the worker is dead and reassigning its partitions. For two full hours, those partitions remain completely frozen, accumulating millions of unconsumed messages."*
+
+---
+
+### Q40. "How did you fine-tune rate limiting throttles and broker quotas across producers, brokers, and consumers to protect downstream services from cascading collapse?"
+
+#### 🎙️ The 60-90 Second Verbal Script (Speak Aloud)
+> "When a batch data ingestion job unexpectedly generated **80 MB/sec of traffic** into our shared Kafka cluster, it saturated network interfaces and starved our real-time checkout pipeline, degrading checkout P99 latency from 12ms to 1,400ms.
+> 
+> I engineered a multi-tiered **Throttling, Quota, and Backpressure Architecture**:
+> 1. **Kafka Broker Client Quotas**: We applied byte-rate produce quotas based on `client-id`:
+>    `kafka-configs.sh --alter --entity-type clients --entity-name batch-importer --add-config producer_byte_rate=10485760` (10 MB/sec cap). If the client breaches this, the Kafka broker deliberately delays ACK packets, creating **TCP window backpressure** that physically slows down the producer socket.
+> 2. **Producer Memory Throttles**: Configured `buffer.memory = 64MB` and **`max.block.ms = 2000`**. If the local producer buffer fills up under network saturation, it blocks the calling thread up to 2 seconds before throwing a `TimeoutException`.
+> 3. **Consumer Adaptive Backpressure**: On consumers writing to PostgreSQL, we dynamically monitor the **HikariCP connection pool queue depth**. If queue depth exceeds 15, the consumer pauses polling via `consumer.pause(partitions)` and resumes via `consumer.resume(partitions)` when queue clears.
+> 
+> **Result**: Rogue ingestion strictly capped at 10 MB/s, checkout P99 latency stayed under **12ms**, and downstream database connection pool starvation was completely eliminated."
+
+#### ⚙️ Under-The-Hood Mechanics (AI Grader Keywords)
+* Kafka Broker Dynamic Client Quotas (`producer_byte_rate`, `consumer_byte_rate`).
+* TCP Window backpressure via broker response delay.
+* Producer `buffer.memory` and `max.block.ms` backpressure mechanics.
+* Dynamic consumer flow control: `consumer.pause()` and `consumer.resume()`.
+* HikariCP connection pool queue depth saturation monitoring.
+
+#### 💻 Production Broker Quota & Consumer Pause Code
+```bash
+# 1. Apply Dynamic Broker Producer Quota (10 MB/sec) via CLI
+kafka-configs.sh --bootstrap-server kafka:9092 --alter \
+  --entity-type clients --entity-name data-importer-service \
+  --add-config producer_byte_rate=10485760
+```
+```java
+// 2. Consumer Adaptive Backpressure based on DB Pool Saturation
+if (hikariPoolMXBean.getThreadsAwaitingConnection() > 15) {
+    // DOWNSTREAM SATURATED: Temporarily pause polling from Kafka!
+    consumer.pause(consumer.assignment());
+} else if (consumer.paused().size() > 0 && hikariPoolMXBean.getThreadsAwaitingConnection() == 0) {
+    // RECOVERED: Resume polling
+    consumer.resume(consumer.assignment());
+}
+```
+
+#### ⚠️ The Follow-Up Trap & Senior Edge Case
+* *Interviewer asks*: *"How does Kafka broker quota throttling physically slow down a producer without dropping messages?"*
+* *Your response*: *"When a client exceeds its byte-rate quota, the Kafka broker calculates the throttle delay (e.g. 250ms). Rather than rejecting the produce request, the broker holds the response and delays returning the ACK. Because `max.in.flight.requests.per.connection` is limited (e.g. 5), the producer's internal TCP socket send window fills up, mechanically forcing the client thread to wait without dropping a single byte."*
+
+---
+
+## 🎙️ Category 5: The 1-Minute Spoken Delivery Framework for Mercor & Micro1 AI Screeners
 
 ### 🎯 How AI Screeners (Mercor, Micro1, Karat, HireVue) Score Candidates
 Automated AI voice interviewers convert your speech into text via Whisper/ASR and pass the transcript to LLM evaluators (GPT-4o / Claude 3.5 Sonnet). The LLM grades your responses using structured rubric checkpoints:
