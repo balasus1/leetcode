@@ -2,6 +2,8 @@
 ### 15-Year Battle-Tested Production Scenarios, Spring Boot Internals, Distributed Systems, Concurrency, and Leadership Q&A
 
 > **Format & Time Target**: Every answer is structured for a **1–2 minute verbal delivery** in interviews. It blends high-level architecture with deep implementation details, concrete metrics (QPS, TBs, latency ms), and industry-standard jargons to demonstrate authentic 15-year engineering leadership.
+>
+> 🎙️ **New**: See also the dedicated [Mercor & micro1 (Zara AI) Senior/Staff Technical & Behavioral Playbook](file:///Users/balashan/Workspace/dev/github/leetcode/interview_prep_mastery/experience_drills/mercor-micro1-ai-interviews.md) for full-stack architecture, high-stakes project delivery, and AI trainer prompts.
 
 ---
 
