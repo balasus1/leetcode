@@ -244,6 +244,14 @@ This repository contains battle-tested, high-impact answers, 60-second verbal sc
 - 🛡️ **Failures & Deduplication**: Kafka vs RabbitMQ architectural differences, broker crash recovery & ISR leader election, consumer crash commit timing (at-least-once vs at-most-once), multi-tier failure handling, non-blocking retry topics & DLT replay state machines, and end-to-end deduplication (`enable.idempotence=true` + DB idempotency keys).
 - 🌐 **Microservices & Schema Evolution**: Point-to-point worker queues vs pub-sub broadcast fan-out, and Confluent Schema Registry + Avro BACKWARD compatibility rules.
 
+### 🔹 [21. Java Full-Stack & Backend Master Questions Bank (56 Q&A)](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/21_java_questions_bank_core_oop_concurrency_spring_and_collections/README.md)
+- 📌 **Master Playbook Reference**: Complete 56-question interview bank with 1-2 minute verbal pitches, diagrams, and runnable code in [ALL_JAVA_QUESTIONS_BANK_MASTER.md](file:///Volumes/Workspace/bala/interview-prep/leetcode/java-interview/ALL_JAVA_QUESTIONS_BANK_MASTER.md).
+- ☕ **Java Core & OOP**: JVM vs JRE (WORA), ClassLoader delegation hierarchy, `ClassNotFoundException` vs `NoClassDefFoundError`, String Pool & `intern()`, Encapsulation, `Serializable` & `transient`, class modifiers, OOP vs Scripting.
+- 🛑 **Exceptions & Language Features**: `Throwable` hierarchy, Error vs Exception, Checked vs Unchecked, Try-with-resources with suppressed exceptions, Autoboxing Integer cache trap, Java 8 lambdas & `invokedynamic`, interface constructor rules, for-loop vs for-each performance.
+- 🧵 **Concurrency & Design Patterns**: 5 threads printing in sequence (`ReentrantLock` + 5 `Condition`s), `volatile` vs `Atomic` (JMM vs CAS), Immutable Builder, Bill Pugh / DCL / Enum Singletons, Factory pattern, inventing design patterns.
+- 🍃 **Spring Boot & JPA**: Starters, Auto-configuration, `@Component` vs `@Bean` vs `@Qualifier` vs `@Value`, `@Controller` vs `@RestController`, `@Mock` vs `@InjectMocks`, OAuth 2.0 PKCE + RBAC, Spring Data JPA interfaces, `@RestControllerAdvice`, Transaction propagation (`REQUIRED`, `REQUIRES_NEW`, `NESTED`), `application.properties` precedence, SQL derivation AST, MVC layers, `Page` vs `Slice`.
+- 📦 **Collections, Streams & Functional**: `HashMap` internal array & Red-Black treeification, `ConcurrentHashMap` CAS + bucket lock, `LinkedList` cache miss trap, `Comparable` vs `Comparator`, `hashCode`/`equals` contract, Streams API internals, `map` vs `flatMap`, checked exceptions in lambdas, parallel stream $N \times Q$ rules, functional interfaces & default/static methods.
+
 ---
 
 ## 🏛️ Chronological Interview Rounds
