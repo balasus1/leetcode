@@ -2,6 +2,9 @@
 
 This repository contains battle-tested, high-impact answers, 60-second verbal scripts, JVM bytecode mechanics, system architecture blueprints, concurrency traps, and runnable production code snippets tailored for Senior/Lead/Architect Java Backend & Full-Stack Developer interviews (Human & AI avatar technical rounds).
 
+> 🌟 **Featured Master Coaching Guide**:  
+> 👉 [**Senior Backend Architect Interview Coaching Guide**](./SENIOR_BACKEND_ARCHITECT_INTERVIEW_COACH.md) — 5-part executive blueprint featuring elegant summaries to say aloud, 12-year-old intuitive mental models, 11 core questions rewritten, 20 high-impact technical answers, a 90-second "Tell Me About Yourself" script, and STAR-R project narratives.
+
 ---
 
 ## 📅 Senior Java Backend 1-Day Timetable & Study Protocol
