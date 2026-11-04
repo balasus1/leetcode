@@ -3,10 +3,10 @@
 This directory contains the comprehensive, 50-question master interview preparation guide tailored specifically for **Balasubramanian Shanmugham** (16+ years IT, 8+ years as Technical Architect) targeting the **Technical Architect / Solutions Architect** role at **EPAM Systems**.
 
 ## Primary Master Guide
-👉 **[`epam_technical_architect_50_master_qa.md`](./epam_technical_architect_50_master_qa.md)**: Contains 50 detailed interview questions with:
-- **Why EPAM Asks It**: Strategic consulting and evaluation context.
-- **College-Student Concept Breakdown**: Crystal-clear real-world analogies (restaurants, airline tickets, electrical circuit breakers, city zoning).
-- **Candidate Spoken Response**: Elaborate 1–2 minute first-person answers (~160–250 words) with natural phrasing.
+👉 **[`epam_technical_architect_50_master_qa.md`](./epam_technical_architect_50_master_qa.md)**: Contains 50 detailed interview questions structured for maximum verbal clarity and impact:
+- **🎙️ Elegant Spoken Anchor (Say Aloud in 5 Seconds)**: Immediate executive one-liner to take command of the room instantly.
+- **🧒 12-Year-Old Intuitive Mental Model**: Relatable, non-technical everyday metaphors (restaurants, traffic lights, airport gates, relay races) that eliminate textbook dryness.
+- **🗣️ Candidate Spoken Response (60–90 Seconds)**: Natural, first-person conversational cadence with clear problem-action-result structure (~140–200 words).
 - **Embedded STAR Analysis**: Explicit Situation, Task, Action, and Result mapping.
 - **Concrete Computable Numbers**: Real production scale metrics (1M users/day, 7K ops/sec, 12M records, 6 servers, 4x speedup, 850 users, 50k visitors, P99 from 680ms to 210ms, 99.99% accuracy).
 - **Zero Omissions**: Covers every technology, pattern, project, and certification from the candidate's resume and coaching prompts.
