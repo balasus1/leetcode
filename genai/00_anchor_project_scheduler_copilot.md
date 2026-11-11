@@ -100,6 +100,8 @@ flowchart LR
 
 ---
 
+> AWS-only deep dive: [04_aws_specific_genai_architecture.md](04_aws_specific_genai_architecture.md). How this layer is attached to the scheduler (and other apps) as a governed **sidecar**, with Temporal / Spring Batch / OTel: [05_sidecar_pattern_ai_governance.md](05_sidecar_pattern_ai_governance.md).
+
 ## 4. Multi-tenancy model
 
 | Tier | Isolation | Used for |

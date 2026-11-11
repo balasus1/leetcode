@@ -211,6 +211,7 @@ public class RemediationOrchestrator {
 | In-memory agent state | Pod restart loses context and can re-execute actions |
 | Approval by "reply yes in chat" | Not bound to plan content. Plan-hash binding prevents swap-after-approve |
 | Fully autonomous | Regulated tenants require four-eyes on destructive changes |
+| Keep the FSM in a DB table forever | Phase 2 ported this FSM to a **Temporal workflow** (approval = signal, state = query, LLM calls = activities). Same states, with durable timers and replay for free. See [05](05_sidecar_pattern_ai_governance.md) §5 |
 
 ---
 
@@ -310,7 +311,7 @@ onFailure: dead-letter-and-page
 ### ⚖️ Why not…?
 | Option | Why / why not |
 |---|---|
-| Temporal | Excellent durable-execution model. We'd pick it for a greenfield. We reused our scheduler because it was already tenant-aware, audited and operated by the team |
+| Temporal | **Phase 1** reused the scheduler's chained jobs (already tenant-aware and audited). **Phase 2** moved agent workflows that need HITL waits of hours, signals and exact replay to **Temporal**, while Quartz still owns time-based *triggering*. See [05_sidecar_pattern_ai_governance.md](05_sidecar_pattern_ai_governance.md) §5 |
 | AWS Step Functions / GCP Workflows | Great managed option. Cost per state transition at high fan-out and weaker local testability tipped it for us |
 | Celery-style fire-and-forget tasks | No first-class checkpoints/compensation. Duplicates on retry |
 | Retry everything N times | Burns tokens on deterministic failures. The taxonomy is the cost control |
