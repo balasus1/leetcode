@@ -8,7 +8,7 @@ Use this to **survive follow-ups**: "why not model X?", "what guardrails exactly
 
 "I'm a Technical Architect with 16+ years in IT and about ten years hands-on full-stack with Java, Spring Boot and React. For the last few years I've focused on GenAI and agentic systems built on solid distributed-systems foundations.
 
-My latest work is a centralized, multi-tenant job scheduler on OpenShift. It runs about 1.2 million job executions a day with circuit breakers, dual-channel HTTP-plus-Kafka failover, and pessimistic locking that brought state-transition P99 from 1.8 seconds to about 220 milliseconds. On top of it I architected a GenAI copilot: hybrid RAG for failure triage, natural-language job operations, and a guard-railed remediation agent with on-behalf-of permissions and human approval for destructive actions. MTTR for failed jobs went from about 47 minutes to 12, at around six-tenths of a cent per query.
+My latest work is a centralized, multi-tenant job scheduler on OpenShift. It runs about 1.2 million job executions a day with circuit breakers, dual-channel HTTP-plus-Kafka failover, and pessimistic locking that brought state-transition P99 from 680 milliseconds to about 210. On top of it I architected a GenAI copilot: hybrid RAG for failure triage, natural-language job operations, and a guard-railed remediation agent with on-behalf-of permissions and human approval for destructive actions. MTTR for failed jobs went from about 47 minutes to 12, at around six-tenths of a cent per query.
 
 Outside work, I built getConsenso, a contract-first API governance SaaS with 850 users, plus a production RAG document agent and ZeroMem, an open-source agent-memory orchestrator with an MCP server. I like owning the hard decisions (isolation, evals, cost, security) and writing them down as ADRs."
 
@@ -138,7 +138,7 @@ Outside work, I built getConsenso, a contract-first API governance SaaS with 850
 |---|---|
 | Experience | 16+ yrs IT, ~10 yrs hands-on full-stack |
 | Scheduler scale | ~40 tenants, ~18k job definitions, ~1.2M executions/day, peak ~350 triggers/s |
-| State-transition P99 | 1.8 s → **220 ms** |
+| State-transition P99 | 680 ms → **210 ms** |
 | MTTR failed jobs | 47 → **12 min** |
 | Auto-remediated | **~38%** of failures |
 | Recall@10 | 0.71 → **0.89** |

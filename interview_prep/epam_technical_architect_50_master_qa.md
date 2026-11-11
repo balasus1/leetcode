@@ -108,7 +108,7 @@
   > 
   > Our primary bottleneck was database write throughput. When market volatility spiked, interaction volume surged past 6,500 events per second. Individual synchronous JDBC inserts overwhelmed database connections, causing thread pool exhaustion and severe memory pressure on the JVM.
   > 
-  > To solve this, I redesigned the ingestion pipeline using advanced Java concurrency principles. I replaced synchronized blocking queues with bounded, non-blocking LMAX Disruptor ring buffers utilizing worker thread affinity. Instead of individual row commits, I implemented an adaptive micro-batching mechanism that flushed records to PostgreSQL using optimized JDBC batch writes (`rewriteBatchedStatements=true`) whenever a batch reached 500 records or a 50-millisecond time window elapsed.
+  > To solve this, I redesigned the ingestion pipeline using advanced Java concurrency principles. I replaced synchronized blocking queues with bounded, non-blocking LMAX Disruptor ring buffers utilizing worker thread affinity. Instead of individual row commits, I implemented an adaptive micro-batching mechanism that flushed records to PostgreSQL using optimized JDBC batch writes (`reWriteBatchedInserts=true` for PostgreSQL) whenever a batch reached 500 records or a 50-millisecond time window elapsed.
   > 
   > This delivered a 4x throughput increase, comfortably handled 7,000 interactions per second, reduced CPU utilization to a stable 65%, and eliminated memory pressure during peak trading hours."
 * **Embedded STAR Analysis:**
@@ -447,7 +447,7 @@
   > 
   > Second, I tuned thread allocations with dedicated consumer threads bound to specific partitions, preventing CPU cache bouncing across cores.
   > 
-  > Third, at the database tier, I replaced single-row inserts with adaptive micro-batching. The worker threads buffered incoming events in memory and flushed them using JDBC batch execution (`rewriteBatchedStatements=true`) whenever a batch reached 500 records or a 50-millisecond threshold elapsed.
+  > Third, at the database tier, I replaced single-row inserts with adaptive micro-batching. The worker threads buffered incoming events in memory and flushed them using JDBC batch execution (`reWriteBatchedInserts=true` for PostgreSQL) whenever a batch reached 500 records or a 50-millisecond threshold elapsed.
   > 
   > Combined with PostgreSQL declarative range partitioning by month, this slashed disk I/O and locks, delivering a 4x write speedup and maintaining sub-second ingestion with zero data loss across 12 million daily records."
 * **Embedded STAR Analysis:**

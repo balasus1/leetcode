@@ -11,7 +11,7 @@
 |---|---|---|
 | Job types | Fire-and-forget, recurring (cron), chained (DAG-lite) | Quartz-based scheduler on OpenShift |
 | State machine | `SCHEDULED → RUNNING → PAUSED / STOPPED / FAILED / COMPLETED / DELETED` | Pessimistic locking on pause/resume/stop/delete |
-| Latency | P99 of state-transition API went from **~1.8 s to ~220 ms** | Pessimistic locks + cache-eviction TTL tuning |
+| Latency | P99 of state-transition API went from **680 ms to 210 ms** | Pessimistic locks + cache-eviction TTL tuning |
 | Resilience | Circuit breakers; **dual-channel HTTP + Kafka** with runtime switching | Circuit breakers, dual-channel |
 | Security | OAuth2/JWT, RBAC, tenant-aware audit (`tenant_id`, `api_key_id`) | Kafka + OAuth2/JWT + RBAC; getConsenso audit |
 | Observability | OpenTelemetry → Prometheus / Loki / Grafana | Skills + getConsenso |
@@ -140,7 +140,7 @@ Embedding refresh is **event-driven and incremental**: only changed chunks are r
 | Metric | Value |
 |---|---|
 | Tenants / job definitions / executions per day | ~40 / ~18k / ~1.2M |
-| State-transition P99 | 1.8 s → **220 ms** |
+| State-transition P99 | 680 ms → **210 ms** |
 | MTTR for failed jobs | ~47 min → **~12 min** |
 | Failed jobs auto-remediated (allow-listed classes) | **~38%** |
 | Retrieval Recall@10 | 0.71 (vector only) → **0.89** (hybrid + rerank) |

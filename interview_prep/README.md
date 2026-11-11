@@ -36,3 +36,8 @@ This directory contains the comprehensive, 50-question master interview preparat
 - **Target Compensation:** 45 – 55 LPA Fixed (aligned with senior architect band)
 - **Time-Zone Flexibility:** 2–3 Hours Daily Overlap with CET (Central European Time) and EST (US East Coast)
 - **Target Practice:** Enterprise Java, Cloud-Native Platform Engineering & Generative AI Solutions
+
+## Related
+
+- **EPAM Solution Architect pack (JD-mapped, ~400 Q&As + 26 STAR stories):** [../epam_solution_architect/README.md](../epam_solution_architect/README.md)
+- **GenAI & Agentic AI Architect pack:** [../genai/README.md](../genai/README.md)

@@ -426,7 +426,7 @@ And I record all of these as ADRs, so in two years someone knows *why* we chose 
 | **S** | Early pilot: the copilot shared the scheduler's Tomcat thread pool. During an LLM provider slowdown, scheduler API P99 climbed |
 | **T** | Guarantee the GenAI layer can never degrade tier-0 scheduling |
 | **A** | Applied principle 4: split into a separate deployment, a thread-pool bulkhead, a circuit breaker, and a "search-only" degraded mode |
-| **R** | Scheduler P99 stayed at **~220 ms** through later provider incidents; copilot degraded gracefully with **0** scheduler impact |
+| **R** | Scheduler P99 stayed at **~210 ms** through later provider incidents; copilot degraded gracefully with **0** scheduler impact |
 
 ### 💻 Code: the contract (OpenAPI excerpt) + the provider port
 
