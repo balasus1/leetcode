@@ -19,8 +19,9 @@
 | 10 | [10_architecture_modelling_governance.md](10_architecture_modelling_governance.md) | **C4, 4+1**, HLD/LLD, **SAD, SARR**, deployment/integration/security docs, tech selection matrix, governance, ADR sample, **full C4 + 4+1 of the scheduler** | 21 |
 | 11 | [11_production_ai_llmops.md](11_production_ai_llmops.md) | MLOps/LLMOps, **model serving engines** (Bedrock, vLLM, TGI, Triton, KServe), RAG, evals, secure AI, agents | 24 |
 | 12 | [12_design_patterns_decisions_leadership.md](12_design_patterns_decisions_leadership.md) | GoF patterns tied to projects, enterprise/cloud patterns, **decisions made vs better** table, leadership & behavioural STAR, questions for EPAM | 34 |
+| 13 | [13_saga_2pc_temporal_outbox_cdc_implementation.md](13_saga_2pc_temporal_outbox_cdc_implementation.md) | **Implementation deep dive**: Saga (choreography + Temporal), 2PC/XA in Spring Boot, dual-write, outbox **poller vs Debezium CDC**, TCC, **Quartz → Temporal feasibility & migration**, other OSS tools, testing, failure traps | 23 |
 
-**Total: ~400 questions/stories.** For deeper GenAI coverage: [../genai/](../genai/README.md). Earlier EPAM 50 Q&A: [../interview_prep/epam_technical_architect_50_master_qa.md](../interview_prep/epam_technical_architect_50_master_qa.md).
+**Total: ~420 questions/stories.** For deeper GenAI coverage: [../genai/](../genai/README.md). Earlier EPAM 50 Q&A: [../interview_prep/epam_technical_architect_50_master_qa.md](../interview_prep/epam_technical_architect_50_master_qa.md).
 
 ---
 
@@ -40,9 +41,9 @@
 | **2. Application Architecture & Distributed Systems** | | |
 | Distributed / SOA / event-driven; modularization; decomposition | S7 | 04-M1, 04-M2, 04-M14, 04-A9 |
 | Circuit Breaker | S8 | 04-B2, 03-SC5, 06-K-A1 |
-| Saga | S9 | 04-B3, 04-M4, 04-A1, 04-A2 |
-| Choreography vs orchestration | S10 | 04-M3 |
-| 2PC / 3PC trade-offs | S11 | 04-M6, 04-M7, 04-M8 |
+| Saga | S9 | 04-B3, 04-M4, 04-A1, 04-A2, 13-D1, 13-D2, 13-D8 |
+| Choreography vs orchestration | S10 | 04-M3, 13-D0, 13-D15 |
+| 2PC / 3PC trade-offs | S11 | 04-M6, 04-M7, 04-M8, 13-D3, 13-D4 |
 | CQRS | S12 | 04-B4, 04-M9, 04-A3 |
 | Modernization approaches | S13 | 04-A4, 02-M14, 02-A8, 08-A1 |
 | **3. Reliability, Performance & Scalability** | | |
