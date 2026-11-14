@@ -1,15 +1,21 @@
 # Interview Preparation: EPAM Technical Architect Master Question Bank
 
-This directory contains the comprehensive, 50-question master interview preparation guide tailored specifically for **Balasubramanian Shanmugham** (16+ years IT, 8+ years as Technical Architect) targeting the **Technical Architect / Solutions Architect** role at **EPAM Systems**.
+This directory contains comprehensive, master interview preparation guides tailored specifically for **Balasubramanian Shanmugham** (16+ years IT, 8+ years as Technical Architect) targeting the **Technical Architect / Solutions Architect** role at **EPAM Systems**.
 
-## Primary Master Guide
-👉 **[`epam_technical_architect_50_master_qa.md`](./epam_technical_architect_50_master_qa.md)**: Contains 50 detailed interview questions structured for maximum verbal clarity and impact:
-- **🎙️ Elegant Spoken Anchor (Say Aloud in 5 Seconds)**: Immediate executive one-liner to take command of the room instantly.
-- **🧒 12-Year-Old Intuitive Mental Model**: Relatable, non-technical everyday metaphors (restaurants, traffic lights, airport gates, relay races) that eliminate textbook dryness.
-- **🗣️ Candidate Spoken Response (60–90 Seconds)**: Natural, first-person conversational cadence with clear problem-action-result structure (~140–200 words).
-- **Embedded STAR Analysis**: Explicit Situation, Task, Action, and Result mapping.
-- **Concrete Computable Numbers**: Real production scale metrics (1M users/day, 7K ops/sec, 12M records, 6 servers, 4x speedup, 850 users, 50k visitors, P99 from 680ms to 210ms, 99.99% accuracy).
-- **Zero Omissions**: Covers every technology, pattern, project, and certification from the candidate's resume and coaching prompts.
+## Primary Master Guides
+1. 👉 **[`epam_technical_architect_50_master_qa.md`](./epam_technical_architect_50_master_qa.md)**: Contains 50 detailed interview questions structured for maximum verbal clarity and impact:
+   - **🎙️ Elegant Spoken Anchor (Say Aloud in 5 Seconds)**: Immediate executive one-liner to take command of the room instantly.
+   - **🧒 12-Year-Old Intuitive Mental Model**: Relatable, non-technical everyday metaphors (restaurants, traffic lights, airport gates, relay races) that eliminate textbook dryness.
+   - **🗣️ Candidate Spoken Response (60–90 Seconds)**: Natural, first-person conversational cadence with clear problem-action-result structure (~140–200 words).
+   - **Embedded STAR Analysis**: Explicit Situation, Task, Action, and Result mapping.
+   - **Concrete Computable Numbers**: Real production scale metrics (1M users/day, 7K ops/sec, 12M records, 6 servers, 4x speedup, 850 users, 50k visitors, P99 from 680ms to 210ms, 99.99% accuracy).
+   - **Zero Omissions**: Covers every technology, pattern, project, and certification from the candidate's resume and coaching prompts.
+
+2. 👉 **[`twenty_four_master_dsa_backend_system_design.md`](./twenty_four_master_dsa_backend_system_design.md)**: 24 targeted interview modules across DSA (1-8), Java Backend (9-16), and System Design (17-24):
+   - **1–2 Minute Spoken Verbal Responses** for each problem statement.
+   - **Mermaid & ASCII Architecture Diagrams** for each design and data structure.
+   - **Production-Grade Working Java Code** in copyable blocks with `<code>` tags.
+   - **Complexity, Edge Cases & Interview Traps**.
 
 ---
 
@@ -36,8 +42,3 @@ This directory contains the comprehensive, 50-question master interview preparat
 - **Target Compensation:** 45 – 55 LPA Fixed (aligned with senior architect band)
 - **Time-Zone Flexibility:** 2–3 Hours Daily Overlap with CET (Central European Time) and EST (US East Coast)
 - **Target Practice:** Enterprise Java, Cloud-Native Platform Engineering & Generative AI Solutions
-
-## Related
-
-- **EPAM Solution Architect pack (JD-mapped, ~400 Q&As + 26 STAR stories):** [../epam_solution_architect/README.md](../epam_solution_architect/README.md)
-- **GenAI & Agentic AI Architect pack:** [../genai/README.md](../genai/README.md)
