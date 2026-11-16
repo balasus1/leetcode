@@ -1,21 +1,15 @@
-# Interview Preparation: EPAM Technical Architect Master Question Bank
+# Interview Preparation Master Repository
 
-This directory contains comprehensive, master interview preparation guides tailored specifically for **Balasubramanian Shanmugham** (16+ years IT, 8+ years as Technical Architect) targeting the **Technical Architect / Solutions Architect** role at **EPAM Systems**.
+This directory contains comprehensive, master interview preparation guides tailored specifically for **Balasubramanian Shanmugham** (16+ years IT, 8+ years as Technical Architect) targeting premier **AI Architect, Solutions Architect, and Engineering Leadership** positions.
 
 ## Primary Master Guides
-1. 👉 **[`epam_technical_architect_50_master_qa.md`](./epam_technical_architect_50_master_qa.md)**: Contains 50 detailed interview questions structured for maximum verbal clarity and impact:
-   - **🎙️ Elegant Spoken Anchor (Say Aloud in 5 Seconds)**: Immediate executive one-liner to take command of the room instantly.
-   - **🧒 12-Year-Old Intuitive Mental Model**: Relatable, non-technical everyday metaphors (restaurants, traffic lights, airport gates, relay races) that eliminate textbook dryness.
-   - **🗣️ Candidate Spoken Response (60–90 Seconds)**: Natural, first-person conversational cadence with clear problem-action-result structure (~140–200 words).
-   - **Embedded STAR Analysis**: Explicit Situation, Task, Action, and Result mapping.
-   - **Concrete Computable Numbers**: Real production scale metrics (1M users/day, 7K ops/sec, 12M records, 6 servers, 4x speedup, 850 users, 50k visitors, P99 from 680ms to 210ms, 99.99% accuracy).
-   - **Zero Omissions**: Covers every technology, pattern, project, and certification from the candidate's resume and coaching prompts.
+1. 🌟 👉 **[`tringapps_ai_architect_50_master_prep.md`](./tringapps_ai_architect_50_master_prep.md)**: **50 High-Yield AI Architect Interview Questions & Spoken Responses** tailored specifically for the **tringapps AI Architect** role:
+   - Progressive complexity from enterprise fundamentals (OAuth/OIDC, React, Spring Boot, DB, Spring AOP, Sidecars, Temporal, ADRs, SRS, SBOM) to cutting-edge AI architecture (KV Cache, PagedAttention vLLM, GQA, HNSW Vector DBs, Hybrid Search RRF, LangGraph, MCP, ZeroMem, Guardrails, Hallucination defense, Back-of-the-envelope calculations, and tringapps enterprise scenarios).
+   - Each question includes an architectural model/diagram, open-source tooling, and an elaborate 1–2 minute candidate spoken response (~180–250 words).
 
-2. 👉 **[`twenty_four_master_dsa_backend_system_design.md`](./twenty_four_master_dsa_backend_system_design.md)**: 24 targeted interview modules across DSA (1-8), Java Backend (9-16), and System Design (17-24):
-   - **1–2 Minute Spoken Verbal Responses** for each problem statement.
-   - **Mermaid & ASCII Architecture Diagrams** for each design and data structure.
-   - **Production-Grade Working Java Code** in copyable blocks with `<code>` tags.
-   - **Complexity, Edge Cases & Interview Traps**.
+2. 👉 **[`epam_technical_architect_50_master_qa.md`](./epam_technical_architect_50_master_qa.md)**: 50 detailed interview questions structured for Staff Architect & Engineering Manager rounds (AI vision, 10+ person team leadership, distributed Sagas, Kafka EOS, P99 tuning, FinOps).
+
+3. 👉 **[`twenty_four_master_dsa_backend_system_design.md`](./twenty_four_master_dsa_backend_system_design.md)**: 24 targeted interview modules across DSA (1-8), Java Backend (9-16), and System Design (17-24) with Mermaid/ASCII architecture diagrams and working Java code.
 
 ---
 
