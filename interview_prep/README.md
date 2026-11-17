@@ -3,6 +3,10 @@
 This directory contains comprehensive, master interview preparation guides tailored specifically for **Balasubramanian Shanmugham** (16+ years IT, 8+ years as Technical Architect) targeting premier **AI Architect, Solutions Architect, and Engineering Leadership** positions.
 
 ## Primary Master Guides
+0. 🗓️ 🏆 **[`TEN_DAY_MASTER_AI_ARCHITECT_STUDY_PLAN.md`](./TEN_DAY_MASTER_AI_ARCHITECT_STUDY_PLAN.md)**: **The Complete 10-Day Full-Stack to Enterprise AI Solution Architect Master Curriculum**
+   - Hour-by-hour structured daily schedule (07:30 to 22:30) with morning deep dives, midday coding sprints, afternoon architecture design, and nightly spoken drills.
+   - 100% self-contained roadmap with direct clickable links to all DSA algorithms, React 18/19, Spring Boot 3, Kafka Sagas, System Design, OpenShift/Temporal, Capacity math, KV Cache/PagedAttention, Vector DBs/Hybrid RRF, LangGraph/MCP, and FinOps.
+
 1. 🌟 👉 **[`tringapps_ai_architect_50_master_prep.md`](./tringapps_ai_architect_50_master_prep.md)**: **50 High-Yield AI Architect Interview Questions & Spoken Responses** tailored specifically for the **tringapps AI Architect** role:
    - Progressive complexity from enterprise fundamentals (OAuth/OIDC, React, Spring Boot, DB, Spring AOP, Sidecars, Temporal, ADRs, SRS, SBOM) to cutting-edge AI architecture (KV Cache, PagedAttention vLLM, GQA, HNSW Vector DBs, Hybrid Search RRF, LangGraph, MCP, ZeroMem, Guardrails, Hallucination defense, Back-of-the-envelope calculations, and tringapps enterprise scenarios).
    - Each question includes an architectural model/diagram, open-source tooling, and an elaborate 1–2 minute candidate spoken response (~180–250 words).
