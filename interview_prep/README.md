@@ -11,9 +11,17 @@ This directory contains comprehensive, master interview preparation guides tailo
    - Progressive complexity from enterprise fundamentals (OAuth/OIDC, React, Spring Boot, DB, Spring AOP, Sidecars, Temporal, ADRs, SRS, SBOM) to cutting-edge AI architecture (KV Cache, PagedAttention vLLM, GQA, HNSW Vector DBs, Hybrid Search RRF, LangGraph, MCP, ZeroMem, Guardrails, Hallucination defense, Back-of-the-envelope calculations, and tringapps enterprise scenarios).
    - Each question includes an architectural model/diagram, open-source tooling, and an elaborate 1–2 minute candidate spoken response (~180–250 words).
 
-2. 👉 **[`epam_technical_architect_50_master_qa.md`](./epam_technical_architect_50_master_qa.md)**: 50 detailed interview questions structured for Staff Architect & Engineering Manager rounds (AI vision, 10+ person team leadership, distributed Sagas, Kafka EOS, P99 tuning, FinOps).
+2. 🤖 🚀 **[`production-rag/`](./production-rag/)**: **Production RAG Interview Master Suite (60 High-Yield Questions & Spoken Responses)**
+   - Complete 4-tier production RAG interview curriculum (freeCodeCamp / Paulo Dichone + enterprise production patterns) targeting Senior AI Engineer & Enterprise AI Solution Architect roles:
+     - 📋 [`00-cheatsheet.md`](./production-rag/00-cheatsheet.md): 60-question one-liner cheatsheet (3 key terms each), end-to-end tool stack, design-decision trade-offs matrix, and 8-stage 60–90 second architect answer frame.
+     - 🟢 [`01-basic.md`](./production-rag/01-basic.md): Questions B1–B15 covering foundational concepts (RAG vs fine-tuning, dual pipelines, embeddings, vector DBs vs normal DBs, cosine/dot/L2, chunking & overlap, top-k, Chroma, LCEL).
+     - 🟡 [`02-intermediate.md`](./production-rag/02-intermediate.md): Questions I1–I15 covering building & debugging (chunk size tuning, recursive vs semantic, Matryoshka dimensions, step-by-step LangSmith trace debugging stories for I5 & I6, hybrid search, RRF fusion, token budgeting, MMR, cross-encoder re-ranking, HyDE, updates/deletes).
+     - 🟠 [`03-advanced.md`](./production-rag/03-advanced.md): Questions A1–A15 covering production operations (three pillars of visibility, Ragas evaluations, Chroma to Supabase/pgvector, IVFFlat vs HNSW, real costs & memory formulas, 10M+ scale, multi-tier caching, multi-tenant RLS, direct & indirect prompt injection, security checklists, FastAPI async SSE, CI testing with pgvector).
+     - 🔴 [`04-architect.md`](./production-rag/04-architect.md): Questions S1–S15 covering architecture & system design (1M-token context vs RAG, contextual retrieval, late chunking, LangGraph agentic self-correcting RAG, GraphRAG, ColPali multimodal, 10k policy PDFs system design with Mermaid, <3s SLA customer support with Mermaid, zero-downtime embedding migration with Mermaid, vector DB selection, and a detailed STAR incident post-mortem on FastAPI + Neon pgvector + Upstash Redis + Gemini).
 
-3. 👉 **[`twenty_four_master_dsa_backend_system_design.md`](./twenty_four_master_dsa_backend_system_design.md)**: 24 targeted interview modules across DSA (1-8), Java Backend (9-16), and System Design (17-24) with Mermaid/ASCII architecture diagrams and working Java code.
+3. 👉 **[`epam_technical_architect_50_master_qa.md`](./epam_technical_architect_50_master_qa.md)**: 50 detailed interview questions structured for Staff Architect & Engineering Manager rounds (AI vision, 10+ person team leadership, distributed Sagas, Kafka EOS, P99 tuning, FinOps).
+
+4. 👉 **[`twenty_four_master_dsa_backend_system_design.md`](./twenty_four_master_dsa_backend_system_design.md)**: 24 targeted interview modules across DSA (1-8), Java Backend (9-16), and System Design (17-24) with Mermaid/ASCII architecture diagrams and working Java code.
 
 ---
 
